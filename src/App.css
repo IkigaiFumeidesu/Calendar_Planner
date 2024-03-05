@@ -1,0 +1,99 @@
+* {
+    box-sizing: content-box;
+}
+
+body {
+    background-color: #fff;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.pagetop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.cal {
+    font-size: 22px;
+    padding: 15px 0 15px 15px;
+}
+
+.todaybutton {
+    padding: 10px 15px;
+    border: 0.5px solid black;
+    background-color: white;
+}
+
+.ultoppage {
+    margin: 0;
+    padding: 0;
+    border: 0.5px solid black;
+}
+
+.litopinline {
+    display: inline-block;
+}
+
+.topbutton {
+    padding: 10px 15px;
+    border: 0;
+    background-color: inherit;
+}
+
+.changeofbg {
+    width: 40px;
+    height: 40px;
+}
+
+.svg {
+    display: flex;
+    align-items: center;
+}
+
+.profile {
+    height: 40px;
+    width: 40px;
+}
+
+.profilediv {
+    padding: 10px 10px;
+    border-left: 0.5px solid black;
+}
+
+.hrmargin {
+    margin: 0;
+}
+#calendartable {
+    width: 300px;
+    text-align: center;
+    margin: 10px 10px;
+    max-height: 287px;
+}
+#next, #previous {
+    user-select: none;
+    cursor: pointer;
+}
+#monthsetting {
+    text-align: left;
+    padding-left: 10px;
+    font-size: 20px;
+}
+td {
+    padding: 7px 5px;
+}
+.nextmonth, .previousmonth {
+    opacity: 50%;
+}
+.calendarbody {
+    display: flex;
+}
+.tablecontent {
+    width: 80vw;
+    border-bottom: 0.5px solid black;
+    text-align: center;
+}
+.tablebordercontent {
+    border: 0.5px solid black;
+}
