@@ -25,18 +25,18 @@ export function Calendar() {
     const [initialMonth, setMonth] = useState(months[currentdate.getMonth()]);
     const [initialMonthNumber, setMonthNumber] = useState(currentdate.getMonth());
     const [initialYearNumber, setYearNumber] = useState(currentdate.getFullYear());
-    
+
     // Change to the previous month and update the element
 
     const previousmonth = () => {
         if (initialMonthNumber == 0) {
             setMonth(months[initialMonthNumber + 11]);
-            setMonthNumber(11); 
+            setMonthNumber(11);
             setYearNumber(initialYearNumber - 1);
         } else {
             setMonth(months[initialMonthNumber - 1]);
             setMonthNumber(initialMonthNumber - 1);
-        }  
+        }
     };
 
     // Change to the next month and update the element
@@ -72,13 +72,13 @@ export function Calendar() {
     // Object to hold an arrays of dates
 
     const tablerows = {
-        row0: [],
-        rowCreation: [],
         row1: [],
         row2: [],
         row3: [],
         row4: [],
         row5: [],
+        row6: [],
+        rowCreation: [],
     };
 
     // When we reach January, the array element index is 0, so by subtracting -1 to get the previous month,
@@ -120,11 +120,11 @@ export function Calendar() {
         firstrowprevious = numberofdays[datesofprevious] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
-            tablerows.row0.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.row0.push(<td key={rowkeys}>{date}</td>)
+        tablerows.row1.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{date}</td>)
         date++
 
     } else if (firstday == 1) { // Condition if the month starts on Monday
@@ -132,7 +132,7 @@ export function Calendar() {
         firstrowprevious = numberofdays[datesofprevious] - 6;
         for (let fr = 0; fr < 7; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
-            tablerows.row0.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
             firstrowprevious++
         }
 
@@ -141,27 +141,49 @@ export function Calendar() {
         firstrowprevious = numberofdays[datesofprevious] - firstday + 2;
         for (let fr = 0; fr < firstday - 1; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
-            tablerows.row0.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         for (let fr = 0; fr < 8 - firstday; fr++) {
             rowkeys = yearstring + monthstringcurrent + date;
-            tablerows.row0.push(<td key={rowkeys}>{date}</td>);
+            tablerows.row1.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{date}</td>);
             date++;
         }
     }
 
-    // A for loop to get all the remaining dates of the current month into arrays of 7 elements (7 dates)
+    // I needed to add onClick event to all other dates so that I could display the table row in the table content 
 
-    for (; date <= monthtablenumber; date++) {
+    for (let i = 0; i < 7; i++) {
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.rowCreation.push(<td key={rowkeys}>{date}</td>)
+        tablerows.row2.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row2); }}>{date}</td>)
+        date++
     }
-    tablerows.row1 = tablerows.rowCreation.slice(0, 7);
-    tablerows.row2 = tablerows.rowCreation.slice(7, 14);
-    tablerows.row3 = tablerows.rowCreation.slice(14, 21);
-    tablerows.row4 = tablerows.rowCreation.slice(21, 28);
-    tablerows.row5 = tablerows.rowCreation.slice(28, 31);
+    for (let i = 0; i < 7; i++) {
+        rowkeys = yearstring + monthstringcurrent + date;
+        tablerows.row3.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row3); }}>{date}</td>)
+        date++
+    }
+    for (let i = 0; i < 7; i++) {
+        rowkeys = yearstring + monthstringcurrent + date;
+        tablerows.row4.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row4); }}>{date}</td>)
+        date++
+    }
+    if ((monthtablenumber - date) >= 7) { // with first 3 rows are guaranteed to be filled this checks whether there is still enough dates or not
+        for (let i = 0; i < 7; i++) {
+            rowkeys = yearstring + monthstringcurrent + date;
+            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>)
+            date++
+        }
+        for (; date <= monthtablenumber; date++) {
+            rowkeys = yearstring + monthstringcurrent + date;
+            tablerows.row6.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{date}</td>)
+        }
+    } else {
+        for (; date <= monthtablenumber; date++) {
+            rowkeys = yearstring + monthstringcurrent + date;
+            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>)
+        }
+    }
 
     // Next month passed into string
 
@@ -173,46 +195,69 @@ export function Calendar() {
     // Filling whatever empty space there is in the last 2 rows (last 2 arrays)
 
     let lastrownext = 1;
-    let lastrow = tablerows.row4.length;
-    let lastlastrow = tablerows.row5.length;
+    let lastrow = tablerows.row5.length;
+    let lastlastrow = tablerows.row6.length;
 
     if (lastrow <= 7) { // If there is less elements in the 4th array than 7 fill it out with the dates of the next month
         for (; lastrow < 7; lastrow++) {
             rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row4.push(<td className="nextmonth" key={rowkeys}>{lastrownext}</td>)
+            tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{lastrownext}</td>)
             lastrownext++
         }
         for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 5th array with the dates of the next month
             rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row5.push(<td className="nextmonth" key={rowkeys}>{lastrownext}</td>)
+            tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
             lastrownext++
         }
     } else {
         for (; lastlastrow < 7; lastlastrow++) { // or just fill out the rest of the 5th array with the dates of the next month
             rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row5.push(<td key={rowkeys}>{lastrownext}</td>)
+            tablerows.row6.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
             lastrownext++
         }
     }
 
-    const idkwhat = [...tablerows.row0, ...tablerows.rowCreation, ...tablerows.row5];
-    console.log(idkwhat)
-    const [test1, settest] = useState();
+    // Here I am getting the todays date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
+    
+    const interactiverows = () => {
+    const alldates = [...tablerows.row1, ...tablerows.row2, ...tablerows.row3, ...tablerows.row4, ...tablerows.row5, ...tablerows.row6];
+    const todaysdate = currentdate.getDate();
+        if (tablerows.row3[6].key.slice(6) >= todaysdate) {
+            if (tablerows.row2[6].key.slice(6) < todaysdate) {
+                return tablerows.row3
+            } else if (tablerows.row1[6].key.slice(6) < todaysdate) {
+                return tablerows.row2
+            } else {
+                return tablerows.row1
+            }
+        } else {
+            if (tablerows.row5[0].key.slice(6) > todaysdate) {
+                return tablerows.row4
+            } else if (tablerows.row6[0].key.slice(6) > todaysdate) {
+                return tablerows.row5
+            } else {
+                return tablerows.row6
+            }
+        }
+    };
 
+    // This was a bit problematic, since the initial state is the only thing I need to get, even though it updates I need to preserve the initial so that I can call it 
 
-
+    const [daterow, setDifferentRow] = useState(interactiverows);
+    const [preserveinitial, setWhatever] = useState(daterow)
 
     return (
         <>
             <div className="pagetop">
-
+            
 
                 <span className="cal">Calendar</span>
 
-                <button className="todaybutton" type="button" onClick={() => {
+                <button className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
                     setMonth(months[currentdate.getMonth()]);
                     setMonthNumber(currentdate.getMonth());
                     setYearNumber(currentdate.getFullYear());
+                    setDifferentRow(preserveinitial)
                 }}>Today</button>
 
                 <ul className="ultoppage">
@@ -256,16 +301,16 @@ export function Calendar() {
                     </tr>
                 </thead>
                 <tbody>
-                        <tr>{tablerows.row0}</tr>
                         <tr>{tablerows.row1}</tr>
                         <tr>{tablerows.row2}</tr>
                         <tr>{tablerows.row3}</tr>
                         <tr>{tablerows.row4}</tr>
                         <tr>{tablerows.row5}</tr>
+                        <tr>{tablerows.row6}</tr>
                 </tbody>
             </table>
             <div className="tcontent">
-                    <CalendarContent tablerow={tablerows} />
+                    <CalendarContent daterow={daterow} />
             </div>
             <div className="secondside">
 
@@ -278,11 +323,37 @@ export function Calendar() {
 
 function CalendarContent(props) {
 
-    const days1 = ["Monday", "Tuesday", "Wednesday", "Thursday", "Saturday", "Sunday"];
+    // Setting the content of table 
+
+    const days1 = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const weekdays1 = days1.map((day) => { return <td key={day}>{day}</td> });
     let contentrows = [];
-    const sharekeys = props.tablerow;
-    console.log(sharekeys);
+    const datesofweekdays = [];
+    let contentkeys;
+    
+    /* Here I want to add the dates in XX.XX format day-month into the head of the table, 
+    I use keys of the delivered array to slice them and revert them to get the individual dates of each day*/
+
+    for (let zz = 0; zz < props.daterow.length; zz++) {
+        contentkeys = props.daterow[zz].key.slice(4);
+        if (contentkeys[0] == "0") {
+            contentkeys = contentkeys.slice(1);
+            if (contentkeys.length == 2) {
+                contentkeys = contentkeys[1] + "." + contentkeys[0];
+            } else {
+                contentkeys = contentkeys[1] + contentkeys[2] + "." + contentkeys[0];
+            }
+        } else {
+            if (contentkeys.length == 3) {
+                contentkeys = contentkeys[2] + "." + contentkeys[0] + contentkeys[1];
+            } else {
+                contentkeys = contentkeys[3] + contentkeys[2] + "." + contentkeys[1] + contentkeys[0];
+            }
+        }
+        datesofweekdays.push(<td key={props.daterow[zz].key}>{contentkeys}</td>)
+    }
+
+    // Here I am creating rows and cells for each day and each hour with special keys
 
     for (let p = 0; p < 24; p++) {  
         contentrows.push(
@@ -298,18 +369,27 @@ function CalendarContent(props) {
         )
     }
 
+
+
     return (
         <>
             <table className="tablecontent">
                 <thead>
                     <tr>
-                        {weekdays1}
+                        {datesofweekdays}
                     </tr>
                 </thead>
                 <tbody className="tablebordercontent">
-                    
+
+                    <tr>
+                        {weekdays1}
+                    </tr> 
+                    <tr>
+                        
+                    </tr>
                 </tbody>
             </table>
+
         </>
     )
 }
