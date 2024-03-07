@@ -97,3 +97,10 @@ td {
 .tablebordercontent {
     border: 0.5px solid black;
 }
+.tbody {
+    user-select: none;
+    cursor: pointer;
+}
+.tbody tr td:hover {
+    background-color: lightskyblue;
+}
