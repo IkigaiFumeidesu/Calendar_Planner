@@ -2,7 +2,7 @@
     box-sizing: content-box;
 }
 
-body {
+html, body {
     background-color: #fff;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -64,12 +64,23 @@ body {
 
 .hrmargin {
     margin: 0;
+    border-collapse: collapse;
+    border: 1px solid grey;
+}
+.bla {
+    display: flex;
+    justify-content: space-between;
+}
+.calendarbody {
+    width: 20%;
 }
 #calendartable {
-    width: 300px;
+    width: 100%;
     text-align: center;
     margin: 10px 10px;
     max-height: 287px;
+    display: table;
+    table-layout: fixed;
 }
 #next, #previous {
     user-select: none;
@@ -86,16 +97,35 @@ td {
 .nextmonth, .previousmonth {
     opacity: 50%;
 }
-.calendarbody {
-    display: flex;
+.tcontent {
+    width: 75%;
+}
+.kok {
+    height: 80vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
 }
 .tablecontent {
-    width: 80vw;
+    width: 98.3%;
+    border-left: 0.5px solid black;
+    border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     text-align: center;
+    display: table;
+    table-layout: fixed;
 }
-.tablebordercontent {
-    border: 0.5px solid black;
+#tablebordercontent {
+    text-align: center;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+#tablebordercontent tr td {
+    border-spacing: 0px;
+    content: "";
+    height: 25px;
+    outline: 0.5px solid grey;
 }
 .tbody {
     user-select: none;

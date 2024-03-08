@@ -34,16 +34,23 @@ function CalendarContent(props) {
 
     // Here I am creating rows and cells for each day and each hour with special keys
 
-    for (let p = 0; p < 24; p++) {
+    for (let p = 10; p < 34; p++) { // So I want to create keys here in a special way so that I can use them later on, its ugly tho I am ngl
+        let day1 = p + props.daterow[0].key;
+        let day2 = p + props.daterow[1].key;
+        let day3 = p + props.daterow[2].key;
+        let day4 = p + props.daterow[3].key;
+        let day5 = p + props.daterow[4].key;
+        let day6 = p + props.daterow[5].key;
+        let day7 = p + props.daterow[6].key;
         contentrows.push(
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr key={p}>
+                <td key={day1 }></td>
+                <td key={day2 }></td>
+                <td key={day3 }></td>
+                <td key={day4 }></td>
+                <td key={day5 }></td>
+                <td key={day6 }></td>
+                <td key={day7 }></td>
             </tr>
         )
     }
@@ -57,18 +64,18 @@ function CalendarContent(props) {
                     <tr>
                         {datesofweekdays}
                     </tr>
-                </thead>
-                <tbody className="tablebordercontent">
-
                     <tr>
                         {weekdays1}
                     </tr>
-                    <tr>
-
-                    </tr>
+                </thead>
+            </table>
+            <div className="kok">
+            <table id="tablebordercontent">
+                <tbody >
+                    {contentrows }
                 </tbody>
             </table>
-
+            </div>
         </>
     )
 }

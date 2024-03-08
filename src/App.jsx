@@ -288,6 +288,7 @@ export function Calendar() {
 
             </div>
             <hr className="hrmargin"></hr>
+            <div className="bla">
             <div className="calendarbody">
             <table id="calendartable">
                 <thead>
@@ -309,14 +310,13 @@ export function Calendar() {
                         <tr>{tablerows.row5}</tr>
                         <tr>{tablerows.row6}</tr>
                 </tbody>
-            </table>
+                </table>
+            </div>
             <div className="tcontent">
                     <CalendarContent daterow={daterow} />
+                </div>
             </div>
-            <div className="secondside">
 
-            </div>
-            </div>
         </>
     )
 }
