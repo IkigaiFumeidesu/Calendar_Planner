@@ -3,16 +3,8 @@ import ProfilePicture from './assets/profile-picture.svg'
 import React, { useState } from 'react'
 import { useRef, setState } from 'react';
 import CalendarContent from './CalendarContent';
-// Top of the page
-function App() {
-    return (
-        <>
-        <Calendar/>
-        </>
-    )
-}
-export default App
 
+// Top of the page
 export function Calendar() {
 
     const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
@@ -22,7 +14,7 @@ export function Calendar() {
     const weekdays = days.map((day) => { return <td key={day}><strong>{day}</strong></td> });
 
     // Nastavení základních hodnot pro Mìsíc, jeho èíslo a rok
-    // currentdate.getFullYear()
+
     const [initialMonth, setMonth] = useState(months[currentdate.getMonth()]);
     const [initialMonthNumber, setMonthNumber] = useState(currentdate.getMonth());
     const [initialYearNumber, setYearNumber] = useState(currentdate.getFullYear());
@@ -245,7 +237,25 @@ export function Calendar() {
     // This was a bit problematic, since the initial state is the only thing I need to get, even though it updates I need to preserve the initial so that I can call it 
 
     const [daterow, setDifferentRow] = useState(interactiverows);
-    const [preserveinitial, setWhatever] = useState(daterow)
+    const [preserveinitial, setWhatever] = useState(daterow);
+
+    /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
+    console.log(coby)
+    if (daterow === preserveinitial) {
+        console.log(daterow)
+        console.log(preserveinitial)
+        let monthnow = (currentdate.getMonth() + 1).toString();
+        if (monthnow.length == 1) {
+            monthnow = "0" + monthnow;
+        }   
+        let makekey = "" + currentdate.getFullYear() + monthnow + currentdate.getDate();
+        makekey = Number(makekey)
+        for (let i = 0; i < daterow.length; i++) {
+            if (preserveinitial[i].key == makekey) {
+                daterow[i] = <td key={makekey} style={{ backgroundColor: "indianred" }} onClick={() => { setDifferentRow(daterow); }}>{currentdate.getDate()}</td>;
+            }
+        }
+    }*/
 
     return (
         <>
@@ -254,7 +264,7 @@ export function Calendar() {
 
                 <span className="cal">Calendar</span>
 
-                <button className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
+                <button id="todaybutton" className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
                     setMonth(months[currentdate.getMonth()]);
                     setMonthNumber(currentdate.getMonth());
                     setYearNumber(currentdate.getFullYear());
@@ -311,12 +321,13 @@ export function Calendar() {
                         <tr>{tablerows.row6}</tr>
                 </tbody>
                 </table>
-            </div>
-            <div className="tcontent">
-                    <CalendarContent daterow={daterow} />
                 </div>
+            <div className="tcontent">
+                <CalendarContent daterow={daterow} />
+            </div>
             </div>
 
         </>
     )
 }
+export default Calendar

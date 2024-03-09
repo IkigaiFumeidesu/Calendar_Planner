@@ -39,9 +39,7 @@ html, body {
 .topbutton {
     padding: 10px 15px;
     border: 0;
-    background-color: inherit;
 }
-
 .changeofbg {
     width: 40px;
     height: 40px;
@@ -86,6 +84,9 @@ html, body {
     user-select: none;
     cursor: pointer;
 }
+#next:hover, #previous:hover, #todaybutton:hover {
+    background-color: lightskyblue;
+}
 #monthsetting {
     text-align: left;
     padding-left: 10px;
@@ -115,6 +116,12 @@ td {
     display: table;
     table-layout: fixed;
 }
+.tablecontent thead tr td:first-child {
+    width: 5%;
+}
+.tablecontent thead tr tr td:first-child {
+    width: 5%;
+}
 #tablebordercontent {
     text-align: center;
     width: 100%;
@@ -126,6 +133,9 @@ td {
     content: "";
     height: 25px;
     outline: 0.5px solid grey;
+}
+#tablebordercontent tr td:first-child {
+    width: 5%;
 }
 .tbody {
     user-select: none;

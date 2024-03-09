@@ -4,12 +4,12 @@ function CalendarContent(props) {
 
     // Setting the content of table 
 
-    const days1 = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const days1 = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const weekdays1 = days1.map((day) => { return <td key={day}>{day}</td> });
     let contentrows = [];
-    const datesofweekdays = [];
+    const datesofweekdays = [<td key={0}></td>];
     let contentkeys;
-
+    let hours = 0;
     /* Here I want to add the dates in XX.XX format day-month into the head of the table, 
     I use keys of the delivered array to slice them and revert them to get the individual dates of each day*/
 
@@ -35,6 +35,8 @@ function CalendarContent(props) {
     // Here I am creating rows and cells for each day and each hour with special keys
 
     for (let p = 10; p < 34; p++) { // So I want to create keys here in a special way so that I can use them later on, its ugly tho I am ngl
+        let displayhours = hours + ":00";
+        let day0 = "";
         let day1 = p + props.daterow[0].key;
         let day2 = p + props.daterow[1].key;
         let day3 = p + props.daterow[2].key;
@@ -44,6 +46,7 @@ function CalendarContent(props) {
         let day7 = p + props.daterow[6].key;
         contentrows.push(
             <tr key={p}>
+                <td key={day0}>{displayhours}</td>
                 <td key={day1 }></td>
                 <td key={day2 }></td>
                 <td key={day3 }></td>
@@ -53,6 +56,7 @@ function CalendarContent(props) {
                 <td key={day7 }></td>
             </tr>
         )
+        hours++
     }
 
 
