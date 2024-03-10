@@ -3,6 +3,7 @@ import ProfilePicture from './assets/profile-picture.svg'
 import React, { useState } from 'react'
 import { useRef, setState } from 'react';
 import CalendarContent from './CalendarContent';
+import DisplayUI from './DisplayComponents';
 
 // Top of the page
 export function Calendar() {
@@ -239,6 +240,11 @@ export function Calendar() {
     const [daterow, setDifferentRow] = useState(interactiverows);
     const [preserveinitial, setWhatever] = useState(daterow);
 
+    // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
+
+    const [displayinitial, setDisplayDifferent] = useState("displayweek");
+    const [preservedisplay, setDisplayback] = useState(displayinitial);
+
     /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
     console.log(coby)
     if (daterow === preserveinitial) {
@@ -268,13 +274,14 @@ export function Calendar() {
                     setMonth(months[currentdate.getMonth()]);
                     setMonthNumber(currentdate.getMonth());
                     setYearNumber(currentdate.getFullYear());
-                    setDifferentRow(preserveinitial)
+                    setDifferentRow(preserveinitial);
+                    setDisplayDifferent(preservedisplay);
                 }}>Today</button>
 
                 <ul className="ultoppage">
-                    <li className="litopinline"><button className="topbutton">Week</button></li>
-                    <li className="litopinline"><button className="topbutton">Month</button></li>
-                    <li className="litopinline"><button className="topbutton">Year</button></li>
+                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent(preservedisplay) } }>Week</button></li>
+                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent("displaymonth") } }>Month</button></li>
+                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent("displayyear") } }>Year</button></li>
                 </ul>
 
                 <input></input>
@@ -322,9 +329,7 @@ export function Calendar() {
                 </tbody>
                 </table>
                 </div>
-            <div className="tcontent">
-                <CalendarContent daterow={daterow} />
-            </div>
+                <DisplayUI displayinitial={displayinitial} daterow={daterow} tablerows={tablerows} weekdays={weekdays} />
             </div>
 
         </>

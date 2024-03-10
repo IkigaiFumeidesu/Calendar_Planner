@@ -15,6 +15,7 @@ function CalendarContent(props) {
 
     for (let zz = 0; zz < props.daterow.length; zz++) {
         contentkeys = props.daterow[zz].key.slice(4);
+        console.log(contentkeys)
         if (contentkeys[0] == "0") {
             contentkeys = contentkeys.slice(1);
             if (contentkeys.length == 2) {
@@ -26,7 +27,7 @@ function CalendarContent(props) {
             if (contentkeys.length == 3) {
                 contentkeys = contentkeys[2] + "." + contentkeys[0] + contentkeys[1];
             } else {
-                contentkeys = contentkeys[3] + contentkeys[2] + "." + contentkeys[1] + contentkeys[0];
+                contentkeys = contentkeys[2] + contentkeys[3] + "." + contentkeys[0] + contentkeys[1];
             }
         }
         datesofweekdays.push(<td key={props.daterow[zz].key}>{contentkeys}</td>)
@@ -63,6 +64,7 @@ function CalendarContent(props) {
 
     return (
         <>
+            <div className="tcontent">
             <table className="tablecontent">
                 <thead>
                     <tr>
@@ -79,6 +81,7 @@ function CalendarContent(props) {
                     {contentrows }
                 </tbody>
             </table>
+                </div>
             </div>
         </>
     )
