@@ -15,7 +15,6 @@ function CalendarContent(props) {
 
     for (let zz = 0; zz < props.daterow.length; zz++) {
         contentkeys = props.daterow[zz].key.slice(4);
-        console.log(contentkeys)
         if (contentkeys[0] == "0") {
             contentkeys = contentkeys.slice(1);
             if (contentkeys.length == 2) {

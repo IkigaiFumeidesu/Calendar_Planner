@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useRef, setState } from 'react';
 import CalendarContent from './CalendarContent';
 import DisplayUI from './DisplayComponents';
+import Addtask from './Addtask';
 
 // Top of the page
 export function Calendar() {
@@ -57,7 +58,6 @@ export function Calendar() {
 
     // Passing props and variables to set a date to 1.XX.XXXX to get the number of the day (0-6) to know when one month ends and other starts
 
-    const daysoftheweek = days;
     const monthtablenumber = numberofdays[initialMonthNumber];
     const currentMonth = new Date();
     currentMonth.setFullYear(initialYearNumber, initialMonthNumber, 1);
@@ -114,7 +114,7 @@ export function Calendar() {
         firstrowprevious = numberofdays[datesofprevious] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
-            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
+            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setNewTask(true);setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         rowkeys = yearstring + monthstringcurrent + date;
@@ -245,6 +245,10 @@ export function Calendar() {
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
 
+    // This state is used to render/not render a component Addtask which also returns the state update so that it can be destructed when neccessary
+
+    const [initialaddtask, setNewTask] = useState(false);
+
     /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
     console.log(coby)
     if (daterow === preserveinitial) {
@@ -267,7 +271,7 @@ export function Calendar() {
         <>
             <div className="pagetop">
             
-
+                {initialaddtask == true && <Addtask componentchanger={setNewTask} />}
                 <span className="cal">Calendar</span>
 
                 <button id="todaybutton" className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
@@ -329,7 +333,8 @@ export function Calendar() {
                 </tbody>
                 </table>
                 </div>
-                <DisplayUI displayinitial={displayinitial} daterow={daterow} tablerows={tablerows} weekdays={weekdays} />
+                <DisplayUI displayinitial={displayinitial} daterow={daterow} tablerows={tablerows}
+                    weekdays={weekdays} days={days} months={months} numberofdays={numberofdays} initialYearNumber={initialYearNumber} />
             </div>
 
         </>

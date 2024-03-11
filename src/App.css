@@ -163,3 +163,7 @@ td {
 .tablemonthcontent thead tr:first-child {
     outline: 1px solid grey;
 }
+.newtask {
+    position: absolute;
+    background-color: white;
+}
