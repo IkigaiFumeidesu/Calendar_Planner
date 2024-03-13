@@ -167,3 +167,17 @@ td {
     position: absolute;
     background-color: white;
 }
+.yearcontent {
+    width: 75%;
+    overflow-y: scroll;
+    height: 91vh;
+}
+.monthflexbox {
+    display: flex;
+    justify-content: space-evenly;
+}
+.yearlytable {
+    display: table;
+    table-layout: fixed;
+    width: 90%;
+}

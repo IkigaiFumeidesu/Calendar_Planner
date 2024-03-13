@@ -69,18 +69,25 @@ function YearContent(props) {
     let firstrowprevious;
     let rowkeys;
     let date = 1;
+    let whichrow;
 
-    // Object to hold an arrays of dates
+    // Constructor for objects to hold an arrays of dates
+    function MonthDates(row1, row2, row3, row4, row5, row6, rowCreation) {
+        this.row1 = row1;
+        this.row2 = row2;
+        this.row3 = row3;
+        this.row4 = row4;
+        this.row5 = row5;
+        this.row6 = row6;
+        this.rowCreation = rowCreation;
+    }
 
-    const tablerows = {
-        row1: [],
-        row2: [],
-        row3: [],
-        row4: [],
-        row5: [],
-        row6: [],
-        rowCreation: [],
-    };
+    // I want my objects to be in one 
+
+    const Objects = {};
+    for (let x = 0; x < 12; x++) {
+        Objects[x] = { name: new MonthDates([], [], [], [], [], [], []) };
+    }
 
     // one runtime per render, to get the start of the chain - calendar
 
@@ -89,11 +96,11 @@ function YearContent(props) {
         firstrowprevious = props.numberofdays[11] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
-            tablerows.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         rowkeys = currentyear + 1 + date;
-        tablerows.row1.push(<td key={rowkeys}>{date}</td>)
+        Objects[0].name.row1.push(<td key={rowkeys}>{date}</td>)
         date++
 
     } else if (firstday == 1) { // Condition if the month starts on Monday
@@ -101,7 +108,7 @@ function YearContent(props) {
         firstrowprevious = props.numberofdays[11] - 6;
         for (let fr = 0; fr < 7; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
-            tablerows.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
             firstrowprevious++
         }
 
@@ -110,51 +117,171 @@ function YearContent(props) {
         firstrowprevious = props.numberofdays[11] - firstday + 2;
         for (let fr = 0; fr < firstday - 1; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
-            tablerows.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
+            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         for (let fr = 0; fr < 8 - firstday; fr++) {
             rowkeys = currentyear + 1 + date;
-            tablerows.row1.push(<td key={rowkeys}>{date}</td>);
+            Objects[0].name.row1.push(<td key={rowkeys}>{date}</td>);
             date++;
         }
     }
-    
+
     // Here I will create all 12 months with the same function, inputting different variables as the useRef gets updated
     
-    const createYearTable = (a) => {
-        const test = a;
+    const createYearTable = (Month) => {
+
         const displaymonth = props.months[ref.current];
         const displayweek = props.days.map((day) => { return <td key={day}>{day}</td> })
-        tablerows.row2.push(<td key={rowkeys}>{date}</td>);
-        date++
-        rowref.current = tablerows.row2;
+        let nextdate;
+
+        // passing rows between objects (aka months), condition is to exclude January AND I also wanted to change the style per say
+        
+        if (Month != Objects[0].name) { // So in the case the 5th row is when the month ends I want to get the number at the start of the array
+            if (whichrow == true) {
+
+                let p = 1;
+                let z = (Objects[ref.current - 1].name.row5[0].key).slice(-2); // Im getting the date at the first position of the array
+                 for (let i = 0; i < 7; i++) {
+                     if (Objects[ref.current - 1].name.row5[i].key == (currentyear + (ref.current + 1) + p)) {
+                         Month.row1.push(<td key={Objects[ref.current - 1].name.row5[i].key}>{p}</td>);
+                         p++;   // when the key is equal to the first day of the month I want to push that date and others into the array
+                     } else {
+                         Month.row1.push(<td key={Objects[ref.current - 1].name.row5[i].key} className="previousmonth">{z}</td>)
+                         z++;   // with the gotten date I want to push that date and increase it until I encounter a key which equals to the first day of the month
+                     }
+                 }
+                 date = date - 7; // -7 because of what nextdate number is, if the month doesnt extend beyond 5th row
+            } else {
+
+                let p = 1;
+                let z = (Objects[ref.current - 1].name.row6[0].key).slice(-2); // here I am doing the same thing, but for the 6th row instead of 5th
+                for (let i = 0; i < 7; i++) {
+                    if (Objects[ref.current - 1].name.row6[i].key == (currentyear + (ref.current + 1) + p)) {
+                        Month.row1.push(<td key={Objects[ref.current - 1].name.row6[i].key}>{p}</td>);
+                        p++; // same logic is applied here but with the 6th row
+                    } else {
+                        Month.row1.push(<td key={Objects[ref.current - 1].name.row6[i].key} className="previousmonth">{z}</td>)
+                        z++;
+                    }
+                }
+            }
+        }
+
+        // Just filling array with all the dates of the month
+
+        for (; date <= props.numberofdays[ref.current]; date++) {
+            rowkeys = currentyear + (ref.current + 1) + date;
+            Month.rowCreation.push(<td key={rowkeys}>{date}</td>)
+        }
+
+        Month.row2 = Month.rowCreation.slice(0, 7);
+        Month.row3 = Month.rowCreation.slice(7, 14);
+        Month.row4 = Month.rowCreation.slice(14, 21);
+        Month.row5 = Month.rowCreation.slice(21, 28);
+        Month.row6 = Month.rowCreation.slice(28, 31);
+
+        // For the dates of the next month to fill up row 5 and 6
+
+        nextdate = 1;
+        let lastrow = Month.row5.length;
+        let lastlastrow = Month.row6.length;
+
+        // This right here is to check whether I want to import row 5 or row 6 into the next month's row 1
+
+        if (lastlastrow > 0 ) {
+            whichrow = false;
+        } else {
+            whichrow = true;
+        }
+        for (; lastrow < 7; lastrow++) {
+            rowkeys = currentyear + (ref.current + 2) + nextdate;
+            Month.row5.push(<td className="nextmonth" key={rowkeys} >{nextdate}</td>)
+            nextdate++
+        }
+        for (; lastlastrow < 7; lastlastrow++) { 
+            rowkeys = currentyear + (ref.current + 2) + nextdate;
+            Month.row6.push(<td className="nextmonth" key={rowkeys}>{nextdate}</td>)
+            nextdate++
+        }
+
+        // date gets to the point where its mroe than the number of days in the current month, so I want to make it so that it
+        // gets the number which is equal to the total number of days which I took from the other month to fill rows 5 and 6
+        // then I set the nextdate back to 1 and increase ref.current
+
+        date = nextdate;
+        nextdate = 1;
         ref.current++
         return (
             <>
-                <table>
+                <table className="yearlytable">
                     <thead>
                         <tr>
-                            <td>{displaymonth}</td>
+                            <td colSpan="7"><strong>{displaymonth}</strong></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>{displayweek}</tr>
-                        <tr>{tablerows.row1}</tr>
-                        <tr>{tablerows.row2}</tr>
+                        <tr>{Month.row1}</tr>
+                        <tr>{Month.row2}</tr>
+                        <tr>{Month.row3}</tr>
+                        <tr>{Month.row4}</tr>
+                        <tr>{Month.row5}</tr>
+                        <tr>{Month.row6}</tr>
                     </tbody>
                 </table>   
             </>
         )
     }
-    
 
 
-    return (
+    return ( // I humbly present, the ugliest code ever known to man
         <>
-            <div className="tcontent">
-                {createYearTable()}
-                {createYearTable(rowref.current)}
+            <div className="yearcontent">
+                <div className="monthflexbox">
+                    <div className="monthdiv">
+                        {createYearTable(Objects[0].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[1].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[2].name)} 
+                    </div>
+                </div>
+                <div className="monthflexbox">
+                    <div className="monthdiv">
+                        {createYearTable(Objects[3].name)}     
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[4].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[5].name)}
+                    </div>
+                </div>
+                <div className="monthflexbox">
+                    <div className="monthdiv">
+                        {createYearTable(Objects[6].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[7].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[8].name)}
+                    </div>
+                </div>
+                <div className="monthflexbox">
+                    <div className="monthdiv">
+                        {createYearTable(Objects[9].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[10].name)}
+                    </div>
+                    <div className="monthdiv">
+                        {createYearTable(Objects[11].name)}
+                    </div>
+                </div>
             </div>
         </>
     )

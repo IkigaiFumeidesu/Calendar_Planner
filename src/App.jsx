@@ -182,6 +182,9 @@ export function Calendar() {
     // Next month passed into string
 
     let monthstringnext = (initialMonthNumber + 2).toString();
+    if (monthstringnext == 13) {
+        monthstringnext = "1";
+    }
     if (monthstringnext.length == 1) {
         monthstringnext = "0" + monthstringnext;
     }
@@ -192,24 +195,17 @@ export function Calendar() {
     let lastrow = tablerows.row5.length;
     let lastlastrow = tablerows.row6.length;
 
-    if (lastrow <= 7) { // If there is less elements in the 4th array than 7 fill it out with the dates of the next month
+    // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
         for (; lastrow < 7; lastrow++) {
             rowkeys = yearstring + monthstringnext + lastrownext;
             tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{lastrownext}</td>)
             lastrownext++
         }
-        for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 5th array with the dates of the next month
+        for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 6th array with the dates of the next month
             rowkeys = yearstring + monthstringnext + lastrownext;
             tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
             lastrownext++
         }
-    } else {
-        for (; lastlastrow < 7; lastlastrow++) { // or just fill out the rest of the 5th array with the dates of the next month
-            rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row6.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
-            lastrownext++
-        }
-    }
 
     // Here I am getting the todays date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
     

@@ -10,6 +10,7 @@ function CalendarContent(props) {
     const datesofweekdays = [<td key={0}></td>];
     let contentkeys;
     let hours = 0;
+
     /* Here I want to add the dates in XX.XX format day-month into the head of the table, 
     I use keys of the delivered array to slice them and revert them to get the individual dates of each day*/
 
