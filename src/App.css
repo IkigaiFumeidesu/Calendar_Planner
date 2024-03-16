@@ -105,7 +105,7 @@ td {
     width: 75%;
 }
 .kok {
-    height: 80vh;
+    height: 81.8vh;
     overflow-x: hidden;
     overflow-y: scroll;
     width: 100%;
@@ -165,12 +165,15 @@ td {
 }
 .newtask {
     position: absolute;
+    top: 50vh;
+    left: 2vh;
     background-color: white;
+    width: 22%;
 }
 .yearcontent {
     width: 75%;
     overflow-y: scroll;
-    height: 91vh;
+    height: 91.2vh;
 }
 .monthflexbox {
     display: flex;

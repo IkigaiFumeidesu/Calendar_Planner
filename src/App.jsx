@@ -114,7 +114,7 @@ export function Calendar() {
         firstrowprevious = numberofdays[datesofprevious] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
-            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setNewTask(true);setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
+            tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
             firstrowprevious++
         }
         rowkeys = yearstring + monthstringcurrent + date;
@@ -198,12 +198,12 @@ export function Calendar() {
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
         for (; lastrow < 7; lastrow++) {
             rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{lastrownext}</td>)
+            tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => {setDifferentRow(tablerows.row5); }}>{lastrownext}</td>)
             lastrownext++
         }
         for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 6th array with the dates of the next month
             rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
+            tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => {setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
             lastrownext++
         }
 
@@ -241,10 +241,6 @@ export function Calendar() {
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
 
-    // This state is used to render/not render a component Addtask which also returns the state update so that it can be destructed when neccessary
-
-    const [initialaddtask, setNewTask] = useState(false);
-
     /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
     console.log(coby)
     if (daterow === preserveinitial) {
@@ -263,11 +259,24 @@ export function Calendar() {
         }
     }*/
 
+    const cookies = document.cookie;
+    if (cookies != "") {
+        console.log(cookies)
+    }
+
+    const changeBackground = () => {
+        if (document.body.style.backgroundColor == "white") {
+            document.body.style.backgroundColor = "black";
+            document.body.style.color = "white";
+        } else {
+            document.body.style.backgroundColor = "white";
+            document.body.style.color = "black";
+        }
+    }
     return (
         <>
             <div className="pagetop">
             
-                {initialaddtask == true && <Addtask componentchanger={setNewTask} />}
                 <span className="cal">Calendar</span>
 
                 <button id="todaybutton" className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
@@ -288,7 +297,7 @@ export function Calendar() {
 
                 {/*Icon for a change between white / black background*/}
 
-                <div className="svg">
+                <div className="svg" onClick={changeBackground}>
 
                     <svg className="changeofbg">
                         <circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>

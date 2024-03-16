@@ -1,8 +1,15 @@
 import React from 'react';
+import { useState } from 'react'; 
+import Addtask from './Addtask';
 
 function CalendarContent(props) {
 
-    // Setting the content of table 
+    // This state is used to render/not render a component Addtask which also returns the state update so that it can be destructed when neccessary
+
+    const [initialaddtask, setNewTask] = useState(false);
+    const [gethourandday, setHourandDay] = useState();
+
+    // Setting the content of table
 
     const days1 = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const weekdays1 = days1.map((day) => { return <td key={day}>{day}</td> });
@@ -48,22 +55,22 @@ function CalendarContent(props) {
         contentrows.push(
             <tr key={p}>
                 <td key={day0}>{displayhours}</td>
-                <td key={day1 }></td>
-                <td key={day2 }></td>
-                <td key={day3 }></td>
-                <td key={day4 }></td>
-                <td key={day5 }></td>
-                <td key={day6 }></td>
-                <td key={day7 }></td>
+                <td key={day1} onClick={() => { setNewTask(true); setHourandDay(day1) }}></td>
+                <td key={day2} onClick={() => { setNewTask(true); setHourandDay(day2) }}></td>
+                <td key={day3} onClick={() => { setNewTask(true); setHourandDay(day3) }}></td>
+                <td key={day4} onClick={() => { setNewTask(true); setHourandDay(day4) }}></td>
+                <td key={day5} onClick={() => { setNewTask(true); setHourandDay(day5) }}></td>
+                <td key={day6} onClick={() => { setNewTask(true); setHourandDay(day6) }}></td>
+                <td key={day7} onClick={() => { setNewTask(true); setHourandDay(day7) }}></td>
             </tr>
         )
         hours++
     }
 
 
-
     return (
         <>
+            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} />}
             <div className="tcontent">
             <table className="tablecontent">
                 <thead>
