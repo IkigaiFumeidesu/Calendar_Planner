@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function Addtask(props) {
 
-    document.cookie = "try= Is it working?"
+    document.cookie += "Is it working?"
 
     const selectedDate = props.gethourandday.slice(2);
     const selectedyear = selectedDate.slice(0, 4);

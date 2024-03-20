@@ -3,7 +3,7 @@
 }
 
 html, body {
-    background-color: #fff;
+    background-color: white;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -51,6 +51,33 @@ html, body {
 .svg {
     display: flex;
     align-items: center;
+    background-color: white;
+}
+.logindiv {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    opacity: 50%;
+}
+#loginUI {
+    opacity: 100%;
+    background-color: white;
+    position: absolute;
+    left: 35vw;
+    top: 10vh;
+    z-index: 1;
+    width: 30vw;
+    height: 80vh;
+    border: 1px solid grey;
+    text-align: center;
+    color: black;
+}
+.profilepicturelogin {
+    width: 15vw;
+    height: 30vh;
+    margin: 5vh auto;
+    display: block;
 }
 
 .profile {
@@ -99,7 +126,7 @@ td {
     padding: 7px 5px;
 }
 .nextmonth, .previousmonth {
-    opacity: 50%;
+    color: grey;
 }
 .tcontent {
     width: 75%;

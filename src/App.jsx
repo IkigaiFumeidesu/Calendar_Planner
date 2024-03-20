@@ -1,10 +1,7 @@
-import './App.css'
-import ProfilePicture from './assets/profile-picture.svg'
-import React, { useState } from 'react'
-import { useRef, setState } from 'react';
-import CalendarContent from './CalendarContent';
+import React, { useState } from 'react';
+import './App.css';
 import DisplayUI from './DisplayComponents';
-import Addtask from './Addtask';
+import ProfilePicture from './assets/profile-picture.svg';
 
 // Top of the page
 export function Calendar() {
@@ -241,6 +238,20 @@ export function Calendar() {
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
 
+    // State to juggle if Login component should render or not
+
+    const [userNotLogged, setUserIsLogged] = useState(false);
+
+    // If user has already logged in, cookie with the name "name" is present therefore I dont need to log the user again
+    const checkIfUserIsLogged = () => {
+        if (document.cookie.includes("name")) {
+            alert("You are logged in.");
+            return
+        } else {
+            setUserIsLogged(true);
+        }
+    }
+
     /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
     console.log(coby)
     if (daterow === preserveinitial) {
@@ -265,7 +276,7 @@ export function Calendar() {
     }
 
     const changeBackground = () => {
-        if (document.body.style.backgroundColor == "white") {
+        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") { // this just changes the background from white to black
             document.body.style.backgroundColor = "black";
             document.body.style.color = "white";
         } else {
@@ -273,8 +284,10 @@ export function Calendar() {
             document.body.style.color = "black";
         }
     }
+
     return (
         <>
+            {userNotLogged == true && <Login dontDisplayUI={setUserIsLogged} /> }
             <div className="pagetop">
             
                 <span className="cal">Calendar</span>
@@ -297,16 +310,16 @@ export function Calendar() {
 
                 {/*Icon for a change between white / black background*/}
 
-                <div className="svg" onClick={changeBackground}>
-
-                    <svg className="changeofbg">
-                        <circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>
-                    </svg>
-                    <svg className="changeofbg">
-                        <circle cx="0" cy="20" r="10" stroke="black" strokeWidth="3" fill="white">Can't Load SVG</circle>
-                    </svg>
-
-                    <div className="profilediv">
+                <div className="svg">
+                    <div onClick={changeBackground}>
+                        <svg className="changeofbg">
+                            <circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>
+                        </svg>
+                        <svg className="changeofbg">
+                            <circle cx="0" cy="20" r="10" stroke="black" strokeWidth="3" fill="white">Can't Load SVG</circle>
+                        </svg>
+                    </div>
+                    <div className="profilediv" onClick={checkIfUserIsLogged}>
                         <img src={ProfilePicture} alt="Profile" className="profile" />
                     </div>
 
@@ -346,3 +359,64 @@ export function Calendar() {
     )
 }
 export default Calendar
+
+function Login(props) {
+
+    function checkUserInput(e) {
+
+        // Preventing the form to refresh on submit
+        e.preventDefault(); 
+
+        // Gathering data from entries and pushing it into an object
+        const form = e.target; 
+        const formData = new FormData(form); 
+        const formJson = Object.fromEntries(formData.entries()); 
+
+        // I wanted to allow special characters like èììèøšáøííé etc. but \W would take them out, so this is the way around it "^\\pL+$" is from the XRegExp lib
+        const regex = /["^\\pL+$"\s\d\(^\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?\.\,\°\´)]/g;
+        const inputCleansed = formJson.name.replace(regex, "");
+
+        // This works in 2 ways, first to catch if user gave invalid input, and also if user was feeling funky and removed "required" from his client side
+        if (inputCleansed == "") {
+            alert("Aha ! You thought so? A valid input is required!");
+            return
+        }
+
+        // Here I am setting the cookie and destroying the component 
+        setCookie("name", inputCleansed, 1);
+        props.dontDisplayUI(false);
+
+    }
+    
+    return (
+        <>
+            <div className="logindiv" onClick={() => { props.dontDisplayUI(false) }}>
+            </div>
+            <div id="loginUI">
+                <div>
+                    <img src={ProfilePicture} className="profilepicturelogin"></img>
+                </div>
+                <h2>Sign up:</h2>
+                <form method="post" onSubmit={checkUserInput}>
+                    <label htmlFor="username">Name: </label>
+                    <input id="username" name="name" type="text" required maxLength="20"></input>
+                    <br />
+                    <br/>
+                 <button type="submit">Complete your registration!</button>
+                </form>
+                <br/>
+               
+            </div>
+
+        </>
+    )
+}
+
+function setCookie(cname, cvalue, exdays) {
+
+    //props are name, value for the name, and days which will always be 1 - I want a year long expiration
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000 ));
+    let expire = "expires=" + d.toDateString();
+    document.cookie = cname + "=" + cvalue + ";" + expire + ";path=/";
+}
