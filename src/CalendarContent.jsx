@@ -66,11 +66,14 @@ function CalendarContent(props) {
         )
         hours++
     }
-
+    console.log(props.daterow)
+    if (document.cookie.includes("title")) {
+        
+    }
 
     return (
         <>
-            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} />}
+            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask} />}
             <div className="tcontent">
             <table className="tablecontent">
                 <thead>

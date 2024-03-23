@@ -205,9 +205,8 @@ export function Calendar() {
         }
 
     // Here I am getting the todays date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
-    
+
     const interactiverows = () => {
-    const alldates = [...tablerows.row1, ...tablerows.row2, ...tablerows.row3, ...tablerows.row4, ...tablerows.row5, ...tablerows.row6];
     const todaysdate = currentdate.getDate();
         if (tablerows.row3[6].key.slice(6) >= todaysdate) {
             if (tablerows.row2[6].key.slice(6) < todaysdate) {
@@ -269,11 +268,6 @@ export function Calendar() {
             }
         }
     }*/
-
-    const cookies = document.cookie;
-    if (cookies != "") {
-        console.log(cookies)
-    }
 
     const changeBackground = () => {
         if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") { // this just changes the background from white to black
@@ -361,7 +355,6 @@ export function Calendar() {
 export default Calendar
 
 function Login(props) {
-
     function checkUserInput(e) {
 
         // Preventing the form to refresh on submit
@@ -372,7 +365,7 @@ function Login(props) {
         const formData = new FormData(form); 
         const formJson = Object.fromEntries(formData.entries()); 
 
-        // I wanted to allow special characters like טללטרברםםי etc. but \W would take them out, so this is the way around it "^\\pL+$" is from the XRegExp lib
+        // I wanted to allow special characters like טלרברםי etc. but \W would take them out, so this is the way around it "^\\pL+$" is from the XRegExp lib
         const regex = /["^\\pL+$"\s\d\(^\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?\.\,\°\´)]/g;
         const inputCleansed = formJson.name.replace(regex, "");
 
@@ -385,9 +378,9 @@ function Login(props) {
         // Here I am setting the cookie and destroying the component 
         setCookie("name", inputCleansed, 1);
         props.dontDisplayUI(false);
-
     }
-    
+
+    console.log(document.cookie)
     return (
         <>
             <div className="logindiv" onClick={() => { props.dontDisplayUI(false) }}>

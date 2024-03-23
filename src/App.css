@@ -193,9 +193,17 @@ td {
 .newtask {
     position: absolute;
     top: 50vh;
-    left: 2vh;
+    left: 1vw;
     background-color: white;
-    width: 22%;
+    width: 22vw;
+    border: 1px solid black;
+    text-align: center;
+}
+.newTaskBackground {
+    width: 100vw;
+    height: 91.2vh;
+    position: absolute;
+    z-index: 0;
 }
 .yearcontent {
     width: 75%;
