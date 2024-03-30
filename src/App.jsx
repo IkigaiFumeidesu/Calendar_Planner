@@ -192,6 +192,11 @@ export function Calendar() {
     let lastrow = tablerows.row5.length;
     let lastlastrow = tablerows.row6.length;
 
+    // When I updated month to January I also need to up the year parameter
+    if (monthstringnext == "01") {
+        yearstring = (initialYearNumber + 1).toString();
+    }
+
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
         for (; lastrow < 7; lastrow++) {
             rowkeys = yearstring + monthstringnext + lastrownext;
@@ -208,10 +213,10 @@ export function Calendar() {
 
     const interactiverows = () => {
     const todaysdate = currentdate.getDate();
-        if (tablerows.row3[6].key.slice(6) >= todaysdate) {
-            if (tablerows.row2[6].key.slice(6) < todaysdate) {
+        if (tablerows.row3[6].key.slice(6) >= todaysdate) { // If this condition is met, then I know that the date is in the first 3 rows
+            if (tablerows.row2[6].key.slice(6) < todaysdate) { 
                 return tablerows.row3
-            } else if (tablerows.row1[6].key.slice(6) < todaysdate) {
+            } else if (tablerows.row2[0].key.slice(6) >= todaysdate) {
                 return tablerows.row2
             } else {
                 return tablerows.row1
@@ -219,13 +224,17 @@ export function Calendar() {
         } else {
             if (tablerows.row5[0].key.slice(6) > todaysdate) {
                 return tablerows.row4
-            } else if (tablerows.row6[0].key.slice(6) > todaysdate) {
+            } else if (tablerows.row6[0].key.slice(6) < tablerows.row6[6].key.slice(6)) {
+
+                // Here the logic is: if the first element in the row is LOWER than the last one, it means the month has ended on the previous one 
+                // If it wouldnt have ended, the first element will belong to the current month and therefore will be bigger 
                 return tablerows.row5
             } else {
                 return tablerows.row6
             }
         }
     };
+
 
     // This was a bit problematic, since the initial state is the only thing I need to get, even though it updates I need to preserve the initial so that I can call it 
 
@@ -269,13 +278,31 @@ export function Calendar() {
         }
     }*/
 
+    // expiration for background cookie
+    const d = new Date();
+    d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+    let expire = "expires=" + d.toDateString();
+
+    // This is the default setting for the user I want to hold this setting so that it doesnt go back to normal when the site refreshes
+    if (document.cookie.includes("background=white")) {
+        document.body.style.backgroundColor = "white";
+        document.body.style.color = "black";
+    } else if (document.cookie.includes("background=black")) {
+        document.body.style.backgroundColor = "black";
+        document.body.style.color = "white";
+    } 
+
+    // this just changes the background from white to black
     const changeBackground = () => {
-        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") { // this just changes the background from white to black
+        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") { 
             document.body.style.backgroundColor = "black";
             document.body.style.color = "white";
+            document.cookie = "background=black" + "_;" + expire + ";path=/";
+
         } else {
             document.body.style.backgroundColor = "white";
             document.body.style.color = "black";
+            document.cookie = "background=white" + "_;" + expire + ";path=/";
         }
     }
 
@@ -411,5 +438,5 @@ function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000 ));
     let expire = "expires=" + d.toDateString();
-    document.cookie = cname + "=" + cvalue + ";" + expire + ";path=/";
+    document.cookie = cname + "=" + cvalue + "_;_" + expire + ";path=/";
 }

@@ -6,6 +6,7 @@ html, body {
     background-color: white;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
 }
 
 .pagetop {
@@ -59,6 +60,7 @@ html, body {
     width: 100vw;
     background-color: white;
     opacity: 50%;
+    z-index: 3;
 }
 #loginUI {
     opacity: 100%;
@@ -66,7 +68,7 @@ html, body {
     position: absolute;
     left: 35vw;
     top: 10vh;
-    z-index: 1;
+    z-index: 3;
     width: 30vw;
     height: 80vh;
     border: 1px solid grey;
@@ -136,6 +138,7 @@ td {
     overflow-x: hidden;
     overflow-y: scroll;
     width: 100%;
+    position: relative;
 }
 .tablecontent {
     width: 98.3%;
@@ -194,16 +197,18 @@ td {
     position: absolute;
     top: 50vh;
     left: 1vw;
+    height: 45vh;
     background-color: white;
     width: 22vw;
     border: 1px solid black;
     text-align: center;
+    z-index: 2;
 }
 .newTaskBackground {
-    width: 100vw;
-    height: 91.2vh;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    z-index: 0;
+    z-index: 2;
 }
 .yearcontent {
     width: 75%;
@@ -218,4 +223,32 @@ td {
     display: table;
     table-layout: fixed;
     width: 90%;
+}
+.Taskdiv {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    display: inline-block;
+    margin-left: 6%;
+    z-index: 1;
+    user-select: none;
+    cursor: pointer;
+}
+.taskdetails {
+    position: absolute;
+    top: 50vh;
+    left: 1vw;
+    height: 45vh;
+    background-color: white;
+    width: 22vw;
+    border: 1px solid black;
+    text-align: center;
+    z-index: 2;
+    color: black;
+}
+.taskdetailsbackground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
 }
