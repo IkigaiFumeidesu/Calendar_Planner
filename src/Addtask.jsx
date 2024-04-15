@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRef } from "react"
 
 function Addtask(props) {
@@ -55,39 +55,74 @@ function Addtask(props) {
         // days end with 01-09 so I am accounting for it by removing 0
         const cleanString = "" + replacedString.slice(0, 6) + replacedString[6].replace(0, "") + replacedString[7];
 
+        // omitting "_" in the title and description of task, because I need this character for the slicing of a cookie
+        const regex = /_/g;
+        const title = formJson.title.replace(regex, "");
+        if (title == "") {
+            alert("Please set a title without special characters");
+            return
+        }
+
+        let description = formJson.description.replace(regex, "");
+        if (description.length == 0) {
+            description = " ";
+        }
+
         // omitting ":00"
-        let fromHourReplaced = Number(formJson.fromHour.replace(":00", ""));
-        let toHourReplaced = Number(formJson.toHour.replace(":00", ""));
+        const fromHourReplaced = Number(formJson.fromHour.replace(":00", ""));
+        const toHourReplaced = Number(formJson.toHour.replace(":00", ""));
 
         // sorting hours in order
-        let lowerHour = (fromHourReplaced < toHourReplaced) ? fromHourReplaced : toHourReplaced;
-        let higherHour = (toHourReplaced < fromHourReplaced) ? fromHourReplaced : toHourReplaced;
-        console.log(lowerHour)
-        console.log(higherHour)
+        const lowerHour = (fromHourReplaced < toHourReplaced) ? fromHourReplaced : toHourReplaced;
+        const higherHour = (toHourReplaced < fromHourReplaced) ? fromHourReplaced : toHourReplaced;
+
         // Check if cookie with the date exists 
-        if (document.cookie.includes(cleanString)) {
+        if (localStorage.getItem("Cookies").includes(cleanString)) {
 
             // get the index and create and array from date to cover the hours
-            const indexOfDate = document.cookie.indexOf(cleanString) + 11;
-            const extractHours = document.cookie.slice(indexOfDate, indexOfDate + 10).split("___");
 
-            /* check algorithm for edge cases in case a user tries to create a task within a range of hours in contrary to an existing task: 
-            1. searches for numbers lower than the start of set task and at the same searches for higher numbers than the start of set task
-            2. searches for numbers lower than the end of our set task and at the same time searches for higher numbers than the end of set task
-            3. searches for numbers within the set task
-            */
-            if ((lowerHour <= Number(extractHours[0]) && Number(extractHours[0]) <= higherHour) || 
-                (lowerHour <= Number(extractHours[1]) && Number(extractHours[1]) <= higherHour) ||
-                (lowerHour >= Number(extractHours[0]) && higherHour <= Number(extractHours[1]))
-            ) {
-                alert("You cannot assign a task over an existing task")
-            } else {
-                setCookie(formJson.title, cleanString, lowerHour, higherHour, formJson.colour, formJson.description, 1);
-                props.componentchanger(false)
+            let newCookieString = localStorage.getItem("Cookies");
+            let indexOfDate;
+            let extractHours;
+            let indexOfTwoNumbers;
+
+            // This loops through the cookie string in order to catch every task associated with given date
+            for (let i = 10; i !== -1;) {
+
+                // get the first index, then take the part from date - to second hour number, use these hour numbers and then shorten the string and test it again
+                indexOfTwoNumbers = newCookieString.indexOf(cleanString);
+                indexOfDate = newCookieString.slice(indexOfTwoNumbers, indexOfTwoNumbers + 21);
+                extractHours = indexOfDate.split("___");
+                newCookieString = newCookieString.slice(indexOfTwoNumbers + 10);
+
+                /* check algorithm for edge cases in case a user tries to create a task within a range of hours in contrary to an existing task: 
+                1. searches for numbers lower than the start of set task and at the same searches for higher numbers than the start of set task
+                2. searches for numbers lower than the end of our set task and at the same time searches for higher numbers than the end of set task
+                3. searches for numbers within the set task
+                */
+                if ((lowerHour <= Number(extractHours[1]) && Number(extractHours[1]) <= higherHour) ||
+                    (lowerHour <= Number(extractHours[2]) && Number(extractHours[2]) <= higherHour) ||
+                    (lowerHour >= Number(extractHours[1]) && higherHour <= Number(extractHours[2]))
+                ) {
+                    alert("You cannot assign a task over an existing task");
+                    return
+                } else if (newCookieString.includes(cleanString)) {
+
+                } else {
+                    localStorage.setItem("Date", localStorage.getItem("Date") + cleanString + "___");
+                    localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") + title + "___" + description + "___");
+                    setCookie(title, cleanString, lowerHour, higherHour, formJson.colour, description);
+                    props.componentchanger(false);
+                    return
+                }
             }
         } else {
-            setCookie(formJson.title, cleanString, lowerHour, higherHour, formJson.colour, formJson.description, 1);
-            props.componentchanger(false)
+            localStorage.setItem("Date", localStorage.getItem("Date") + cleanString + "___");
+            localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") + title + "___" + description + "___");
+            setCookie(title, cleanString, lowerHour, higherHour, formJson.colour, description);
+            props.componentchanger(false);
+            return
+
         }
     }
 
@@ -95,6 +130,7 @@ function Addtask(props) {
         <>
             <div className="newTaskBackground" onClick={() => { props.addtaskbackground(false) }}></div>
             <div className="newtask">
+                <h3 className="h3newTask">Create a Plan</h3>
                 <form onSubmit={addEntryIntoCookie} method="post">
                     <input placeholder="Add title" required name="title" maxLength="20"></input>
                 <div>
@@ -124,16 +160,18 @@ function Addtask(props) {
 }
 export default Addtask
 
-function setCookie(title, date, fromHour, toHour, colour, description, exdays) {
 
-    //props are name, value for the name, and days which will always be 1 - I want a year long expiration
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    const expire = "expires=" + d.toDateString();
+function setCookie(title, date, fromHour, toHour, colour, description) {
+
 
     // At first there are no cookies, so I cant split because that the length would be 1, 
-    const setNewCookie = (document.cookie.at(0) == undefined) ? document.cookie : document.cookie.split("_;");
-    document.cookie =
-        "Task" + setNewCookie.length + "=" + "___" + title + "___" + date + "___" + fromHour + "___" +
-    toHour + "___" + colour + "___" + description + "_;" + expire + ";path=/";
+    const setNewCookie = (localStorage.getItem("Cookies").at(0) == undefined) ? "" : localStorage.getItem("Cookies").split("_;");
+    let checkNewCookie = setNewCookie.length;
+
+    // in case a cookie gets deleted, the cookie with checkNewCookie default value would keep rewriting, so I need to up its value
+    while (localStorage.getItem("Cookies").includes("=" + "Task" + checkNewCookie)) {
+        checkNewCookie++;
+    }
+    localStorage.setItem("Cookies", localStorage.getItem("Cookies") + "=" + "Task" + checkNewCookie + "=" + "___" + title + "___" + date + "___" + fromHour + "___" +
+        toHour + "___" + colour + "___" + description + "_;")
 }

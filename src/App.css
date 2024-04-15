@@ -24,7 +24,6 @@ html, body {
 .todaybutton {
     padding: 10px 15px;
     border: 0.5px solid black;
-    background-color: white;
 }
 
 .ultoppage {
@@ -167,6 +166,9 @@ td {
     height: 25px;
     outline: 0.5px solid grey;
 }
+.tablecontentdetail:hover {
+    background-color: lightskyblue;
+}
 #tablebordercontent tr td:first-child {
     width: 5%;
 }
@@ -182,22 +184,26 @@ td {
     width: 100%;
     display: table;
     table-layout: fixed;
+    cursor: pointer;
 }
 .tablemonthcontent tbody tr td {
     outline: 0.5px solid grey;
     vertical-align: top;
     padding: 0;
     opacity: 100%;
-    height: 14.2vh;   
+    height: 14.2vh;  
 }
 .tablemonthcontent thead tr:first-child {
     outline: 1px solid grey;
 }
+.tablemonthcontent tbody tr td:hover {
+    background-color: lightskyblue;
+}
 .newtask {
     position: absolute;
-    top: 50vh;
+    top: 55vh;
     left: 1vw;
-    height: 45vh;
+    height: 43vh;
     background-color: white;
     width: 22vw;
     border: 1px solid black;
@@ -236,9 +242,9 @@ td {
 }
 .taskdetails {
     position: absolute;
-    top: 50vh;
+    top: 55vh;
     left: 1vw;
-    height: 45vh;
+    height: 43vh;
     background-color: white;
     width: 22vw;
     border: 1px solid black;
@@ -251,4 +257,51 @@ td {
     height: 100%;
     position: absolute;
     z-index: 1;
+}
+.monthcounter {
+    height: 91.2%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
+#taskindex {
+    z-index: 1;
+}
+.createbutton {
+    padding: 10px 15px;
+    margin-left: 1vw;
+}
+.createbutton:hover {
+    background-color: lightskyblue;
+}
+.h3newTask {
+    color: black;
+}
+.searchdiv {
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    border: 1px solid black;
+    text-align: center;
+    z-index: 2;
+    color: black;
+}
+.searchdivbackground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+.searchResult {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: central;
+    border: 1px solid black;
+}
+.searchResultsDiv {
+    overflow-y: scroll;
+    height: 30vh;
 }

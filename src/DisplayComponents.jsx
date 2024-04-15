@@ -11,7 +11,7 @@ function DisplayUI(props) {
     } else if (props.displayinitial === "displaymonth") {
         return (
             <>
-                <MonthContent tablerows={props.tablerows} weekdays={props.weekdays} />
+                <MonthContent tablerows={props.tablerows} weekdays={props.weekdays} setdisplay={props.setdisplay} setrow={props.setrow} />
             </>
         )
     } else {
@@ -25,30 +25,75 @@ function DisplayUI(props) {
 
 function MonthContent(props) {
 
+    const monthTasksCounter = [];
+    let counterForKeys = 0;
+
+    // function to count Tasks at a given day
+    const countTasks = (key, row, index) => {   
+
+        const count = [...localStorage.getItem("Cookies").matchAll(key + "_", "i")];
+        const customStyle = {
+            position: "absolute",
+            zIndex: 2,
+            top: (18 + 14 * row) + "vh",
+            left: (28 + 10.65 * index) + "vw",
+        };
+        monthTasksCounter.push(<h3 style={customStyle} key={counterForKeys}>{count.length !== 0 && count.length + " Task(s)"}</h3>)
+        counterForKeys++;
+    }
+
+    // check if any day of the month corresponds with cookies
+    for (let i = 0; i < 7; i++) {
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row1[i].key)) {
+            countTasks(props.tablerows.row1[i].key, 0, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row2[i].key)) {
+            countTasks(props.tablerows.row2[i].key, 1, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row3[i].key)) {
+            countTasks(props.tablerows.row3[i].key, 2, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row4[i].key)) {
+            countTasks(props.tablerows.row4[i].key, 3, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row5[i].key)) {
+            countTasks(props.tablerows.row5[i].key, 4, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.tablerows.row6[i].key)) {
+            countTasks(props.tablerows.row6[i].key, 5, i)
+        }
+    }
 
     return (
         <>
             <div className="tcontent">
+            {monthTasksCounter !== 0 && <CountTasks monthtasks={monthTasksCounter} />}
                 <table className="tablemonthcontent">
                     <thead>
                         <tr>{props.weekdays}</tr>
                     </thead>
                     <tbody>
-                        <tr>{props.tablerows.row1}</tr>
-                        <tr>{props.tablerows.row2}</tr>
-                        <tr>{props.tablerows.row3}</tr>
-                        <tr>{props.tablerows.row4}</tr>
-                        <tr>{props.tablerows.row5}</tr>
-                        <tr>{props.tablerows.row6}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row1) }}>{props.tablerows.row1}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row2) }}>{props.tablerows.row2}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row3) }}>{props.tablerows.row3}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row4) }}>{props.tablerows.row4}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row5) }}>{props.tablerows.row5}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row6) }}>{props.tablerows.row6}</tr>
                     </tbody>
                 </table>
             </div>
         </>
-
-
     )
 }
 
+function CountTasks(props) {
+
+    return (
+        <>
+            {props.monthtasks}
+        </>
+    )
+}
 function YearContent(props) {
 
     // I am setting useRef to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,
@@ -82,15 +127,13 @@ function YearContent(props) {
         this.rowCreation = rowCreation;
     }
 
-    // I want my objects to be in one 
-
+    // I want my objects to be in one
     const Objects = {};
     for (let x = 0; x < 12; x++) {
         Objects[x] = { name: new MonthDates([], [], [], [], [], [], []) };
     }
 
     // one runtime per render, to get the start of the chain - calendar
-
     if (firstday == 0) { // Condition if the month starts on Sunday
 
         firstrowprevious = props.numberofdays[11] - 5;
@@ -234,7 +277,7 @@ function YearContent(props) {
         )
     }
 
-
+    
     return ( // I humbly present, the ugliest code ever known to man
         <>
             <div className="yearcontent">

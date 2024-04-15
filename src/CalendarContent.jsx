@@ -51,13 +51,13 @@ function CalendarContent(props) {
         contentrows.push(
             <tr key={p}>
                 <td key={day0}>{displayhours}</td>
-                <td key={day1} onClick={() => { setNewTask(true); setHourandDay(day1) }}></td>
-                <td key={day2} onClick={() => { setNewTask(true); setHourandDay(day2) }}></td>
-                <td key={day3} onClick={() => { setNewTask(true); setHourandDay(day3) }}></td>
-                <td key={day4} onClick={() => { setNewTask(true); setHourandDay(day4) }}></td>
-                <td key={day5} onClick={() => { setNewTask(true); setHourandDay(day5) }}></td>
-                <td key={day6} onClick={() => { setNewTask(true); setHourandDay(day6) }}></td>
-                <td key={day7} onClick={() => { setNewTask(true); setHourandDay(day7) }}></td>
+                <td className="tablecontentdetail" key={day1} onClick={() => { setNewTask(true); setHourandDay(day1) }}></td>
+                <td className="tablecontentdetail" key={day2} onClick={() => { setNewTask(true); setHourandDay(day2) }}></td>
+                <td className="tablecontentdetail" key={day3} onClick={() => { setNewTask(true); setHourandDay(day3) }}></td>
+                <td className="tablecontentdetail" key={day4} onClick={() => { setNewTask(true); setHourandDay(day4) }}></td>
+                <td className="tablecontentdetail" key={day5} onClick={() => { setNewTask(true); setHourandDay(day5) }}></td>
+                <td className="tablecontentdetail" key={day6} onClick={() => { setNewTask(true); setHourandDay(day6) }}></td>
+                <td className="tablecontentdetail" key={day7} onClick={() => { setNewTask(true); setHourandDay(day7) }}></td>
             </tr>
         )
         hours++
@@ -74,15 +74,12 @@ function CalendarContent(props) {
     const [initialTitle, setTitle] = useState();
     const [initialDescription, setDescription] = useState();
     const [initialCookie, setCookie] = useState();
+    const [initialCookieDate, setCookieDate] = useState();
 
-    //const idkwhat = [contentrows]
-    //console.log(contentrows[0])
-    console.log(initialCookie)
-    console.log(document.cookie)
     return (
         <>
-            {initialTask == true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription} displaycookie={initialCookie} />}
-            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask} />}
+            {initialTask == true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription} displaycookie={initialCookie} cookiedate={initialCookieDate} />}
+            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask}/>}
             <div className="tcontent">
             <table className="tablecontent">
                 <thead>
@@ -100,8 +97,8 @@ function CalendarContent(props) {
                     {contentrows }
                         </tbody>
                     </table>
-                    {document.cookie.includes("Task") == true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
-                        displaytitle={setTitle} displaydescription={setDescription} initialcookie={setCookie} />}
+                    {localStorage.getItem("Cookies").includes("Task") == true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
+                        displaytitle={setTitle} displaydescription={setDescription} initialcookie={setCookie} cookiedate={setCookieDate} />}
                 </div>
             </div>
         </>
@@ -112,9 +109,9 @@ export default CalendarContent;
 
 
 function DisplayAllTasks(props) {
-    console.log(document.cookie)
+
     // every cookie ends with _; in order to iterate I have to split them
-    const cookieArray = document.cookie.split("_;");
+    const cookieArray = localStorage.getItem("Cookies").split("_;");
     const allTasksArray = [];
     for (let i = 0; i < cookieArray.length; i++) {
 
@@ -149,7 +146,7 @@ function DisplayAllTasks(props) {
                 left: 0 + (indexofDay * 9.89) - 9.89 + "vw",
             };
             allTasksArray.push(
-                <div key={i} style={taskStyle} onClick={() => { props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]);props.initialcookie(splitArray[0]) }}>
+                <div key={i} id="taskindex" style={taskStyle} onClick={() => { props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]); props.initialcookie(splitArray[0]); props.cookiedate(splitArray[2]); } }>
                     <p>{splitArray[1]}</p>
                 </div>)
         }
@@ -165,11 +162,19 @@ function DisplayAllTasks(props) {
 }
 
 function TaskDetails(props) {
-
+    console.log(props.cookiedate)
     const deleteCookie = () => {
 
+        // Cleaning the String =Task?= from "=", because I will use "=" to split the array
+        const cleanCookie = props.displaycookie.replace(/["="]/g, "");
+        const cookieArray = localStorage.getItem("Cookies").split("=");
 
-        document.cookie = "" + props.displaycookie + ";" + "expires=Thu, 01 Jan 1970 00:00:00 UTC; path =/;";
+        // Getting the index of clicked Cookie to get the corresponding elements positions in all localStorages
+        const cookieIndex = cookieArray.indexOf(cleanCookie);
+        const replaceCookie = "=" + cookieArray[cookieIndex] + "=" + cookieArray[cookieIndex + 1];
+        localStorage.setItem("Cookies", localStorage.getItem("Cookies").replace(replaceCookie, ""));
+        localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails").replace(props.displaytitle + "___" + props.displaydescription + "___", ""));
+        localStorage.setItem("Date", localStorage.getItem("Date").replace(props.cookiedate + "___", ""))
     }
 
     return (
