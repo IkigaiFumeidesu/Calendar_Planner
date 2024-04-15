@@ -266,24 +266,6 @@ export function Calendar() {
         }
     }
 
-    /*const coby = interactiverows; //tady budu ztrácet nervy pozdìji
-    console.log(coby)
-    if (daterow === preserveinitial) {
-        console.log(daterow)
-        console.log(preserveinitial)
-        let monthnow = (currentdate.getMonth() + 1).toString();
-        if (monthnow.length == 1) {
-            monthnow = "0" + monthnow;
-        }   
-        let makekey = "" + currentdate.getFullYear() + monthnow + currentdate.getDate();
-        makekey = Number(makekey)
-        for (let i = 0; i < daterow.length; i++) {
-            if (preserveinitial[i].key == makekey) {
-                daterow[i] = <td key={makekey} style={{ backgroundColor: "indianred" }} onClick={() => { setDifferentRow(daterow); }}>{currentdate.getDate()}</td>;
-            }
-        }
-    }*/
-
     // expiration for background cookie
     const d = new Date();
     d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));

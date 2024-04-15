@@ -277,7 +277,7 @@ function YearContent(props) {
         )
     }
 
-    
+
     return ( // I humbly present, the ugliest code ever known to man
         <>
             <div className="yearcontent">
