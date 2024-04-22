@@ -7,6 +7,7 @@ import Addtask from './Addtask';
 // Top of the page
 export function Calendar() {
 
+    // Checking if localStorage already exists
     localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") == null ? "" : localStorage.getItem("TaskDetails"));
     localStorage.setItem("Date", localStorage.getItem("Date") == null ? "" : localStorage.getItem("Date"));
     localStorage.setItem("Cookies", localStorage.getItem("Cookies") == null ? "" : localStorage.getItem("Cookies"));
@@ -18,14 +19,12 @@ export function Calendar() {
     const currentdate = new Date();
     const weekdays = days.map((day) => { return <td key={day}><strong>{day}</strong></td> });
 
-    // Nastavení základních hodnot pro Mìsíc, jeho èíslo a rok
-
+    // Setting up default values for Year, Month and corresponding month name
     const [initialMonth, setMonth] = useState(months[currentdate.getMonth()]);
     const [initialMonthNumber, setMonthNumber] = useState(currentdate.getMonth());
     const [initialYearNumber, setYearNumber] = useState(currentdate.getFullYear());
 
     // Change to the previous month and update the element
-
     const previousmonth = () => {
         if (initialMonthNumber == 0) {
             setMonth(months[initialMonthNumber + 11]);
@@ -34,11 +33,10 @@ export function Calendar() {
         } else {
             setMonth(months[initialMonthNumber - 1]);
             setMonthNumber(initialMonthNumber - 1);
-        }
+        };
     };
 
     // Change to the next month and update the element
-
     const nextmonth = () => {
         if (initialMonthNumber == 11) {
             setMonth(months[initialMonthNumber - 11]);
@@ -47,27 +45,23 @@ export function Calendar() {
         } else {
             setMonth(months[initialMonthNumber + 1]);
             setMonthNumber(initialMonthNumber + 1);
-        }
+        };
     };
 
-
     // Solution to solve the leap year = 28 and 29th of February
-
     const numberofdays = ["31", "28", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"];
     const leapyear = initialYearNumber % 4;
     if (leapyear == 0) {
         numberofdays.splice(1, 1, 29);
-    }
+    };
 
     // Passing props and variables to set a date to 1.XX.XXXX to get the number of the day (0-6) to know when one month ends and other starts
-
     const monthtablenumber = numberofdays[initialMonthNumber];
     const currentMonth = new Date();
     currentMonth.setFullYear(initialYearNumber, initialMonthNumber, 1);
     const firstday = currentMonth.getDay();
 
     // Object to hold an arrays of dates
-
     const tablerows = {
         row1: [],
         row2: [],
@@ -80,7 +74,6 @@ export function Calendar() {
 
     // When we reach January, the array element index is 0, so by subtracting -1 to get the previous month,
     // we are out of the array bounds, below is the solution for that + we are getting the number of the previous year
-
     let previousyear = "";
     let datesofprevious = initialMonthNumber - 1;
     if (datesofprevious == -1) {
@@ -88,41 +81,39 @@ export function Calendar() {
         previousyear = initialYearNumber - 1;
     } else {
         previousyear = initialYearNumber;
-    }
+    };
 
     // Preparing to set each key of every date to XXXX.XX.?? year-month(2 numbers), and whatever date
-
     let yearstring = initialYearNumber.toString();
     previousyear.toString();
     let monthstringprevious = initialMonthNumber.toString();
     if (monthstringprevious.length == 1) {
         monthstringprevious = "0" + monthstringprevious;
-    }
+    };
     if (monthstringprevious == "00") {
-        monthstringprevious = "12"
-    }
+        monthstringprevious = "12";
+    };
     let monthstringcurrent = (initialMonthNumber + 1).toString();
     if (monthstringcurrent.length == 1) {
         monthstringcurrent = "0" + monthstringcurrent;
-    }
+    };
     let rowkeys = "";
     let date = 1;   // Date of the first day of the next month
     let firstrowprevious;
 
     // Here is the solution to the first row of the calendar, where JS gives Sunday 0 as its according to JS the start of the week
     // Since the workweed is Mo-Su I need to check which day is the starting day of the month and get the dates of the previous month to fill out table row
-
     if (firstday == 0) { // Condition if the month starts on Sunday
 
         firstrowprevious = numberofdays[datesofprevious] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
             tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
-            firstrowprevious++
-        }
+            firstrowprevious++;
+        };
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.row1.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{date}</td>)
-        date++
+        tablerows.row1.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{date}</td>);
+        date++;
 
     } else if (firstday == 1) { // Condition if the month starts on Monday
 
@@ -130,8 +121,8 @@ export function Calendar() {
         for (let fr = 0; fr < 7; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
             tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
-            firstrowprevious++
-        }
+            firstrowprevious++;
+        };
 
     } else { // Solution for the rest of the week
 
@@ -139,61 +130,58 @@ export function Calendar() {
         for (let fr = 0; fr < firstday - 1; fr++) {
             rowkeys = previousyear + monthstringprevious + firstrowprevious;
             tablerows.row1.push(<td className="previousmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{firstrowprevious}</td>);
-            firstrowprevious++
-        }
+            firstrowprevious++;
+        };
         for (let fr = 0; fr < 8 - firstday; fr++) {
             rowkeys = yearstring + monthstringcurrent + date;
             tablerows.row1.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row1); }}>{date}</td>);
             date++;
-        }
-    }
-
+        };
+    };
+    
     // I needed to add onClick event to all other dates so that I could display the table row in the table content 
-
     for (let i = 0; i < 7; i++) {
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.row2.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row2); }}>{date}</td>)
-        date++
-    }
+        tablerows.row2.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row2); }}>{date}</td>);
+        date++;
+    };
     for (let i = 0; i < 7; i++) {
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.row3.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row3); }}>{date}</td>)
-        date++
-    }
+        tablerows.row3.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row3); }}>{date}</td>);
+        date++;
+    };
     for (let i = 0; i < 7; i++) {
         rowkeys = yearstring + monthstringcurrent + date;
-        tablerows.row4.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row4); }}>{date}</td>)
-        date++
-    }
+        tablerows.row4.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row4); }}>{date}</td>);
+        date++;
+    };
     if ((monthtablenumber - date) >= 7) { // with first 3 rows are guaranteed to be filled this checks whether there is still enough dates or not
         for (let i = 0; i < 7; i++) {
             rowkeys = yearstring + monthstringcurrent + date;
-            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>)
-            date++
-        }
+            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>);
+            date++;
+        };
         for (; date <= monthtablenumber; date++) {
             rowkeys = yearstring + monthstringcurrent + date;
-            tablerows.row6.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{date}</td>)
-        }
+            tablerows.row6.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{date}</td>);
+        };
     } else {
         for (; date <= monthtablenumber; date++) {
             rowkeys = yearstring + monthstringcurrent + date;
-            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>)
-        }
-    }
+            tablerows.row5.push(<td key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{date}</td>);
+        };
+    };
 
     // Next month passed into string
-
     let monthstringnext = (initialMonthNumber + 2).toString();
     if (monthstringnext == 13) {
         monthstringnext = "1";
-    }
+    };
     if (monthstringnext.length == 1) {
         monthstringnext = "0" + monthstringnext;
-    }
+    };
 
     // Filling whatever empty space there is in the last 2 rows (last 2 arrays)
-
     let lastrownext = 1;
     let lastrow = tablerows.row5.length;
     let lastlastrow = tablerows.row6.length;
@@ -201,59 +189,54 @@ export function Calendar() {
     // When I updated month to January I also need to up the year parameter
     if (monthstringnext == "01") {
         yearstring = (initialYearNumber + 1).toString();
-    }
+    };
 
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
-        for (; lastrow < 7; lastrow++) {
-            rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => {setDifferentRow(tablerows.row5); }}>{lastrownext}</td>)
-            lastrownext++
-        }
-        for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 6th array with the dates of the next month
-            rowkeys = yearstring + monthstringnext + lastrownext;
-            tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => {setDifferentRow(tablerows.row6); }}>{lastrownext}</td>)
-            lastrownext++
-        }
+    for (; lastrow < 7; lastrow++) {
+        rowkeys = yearstring + monthstringnext + lastrownext;
+        tablerows.row5.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row5); }}>{lastrownext}</td>);
+        lastrownext++;
+    };
+    for (; lastlastrow < 7; lastlastrow++) { // and then fill out whole 6th array with the dates of the next month
+        rowkeys = yearstring + monthstringnext + lastrownext;
+        tablerows.row6.push(<td className="nextmonth" key={rowkeys} onClick={() => { setDifferentRow(tablerows.row6); }}>{lastrownext}</td>);
+        lastrownext++;
+    };
         
     // Here I am getting the todays date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
-
     const interactiverows = () => {
     const todaysdate = currentdate.getDate();
         if (tablerows.row3[6].key.slice(6) >= todaysdate) { // If this condition is met, then I know that the date is in the first 3 rows
             if (tablerows.row2[6].key.slice(6) < todaysdate) { 
-                return tablerows.row3
+                return tablerows.row3;
             } else if (tablerows.row1[0].key.slice(6) < tablerows.row1[6].key.slice(6) || tablerows.row2[0].key.slice(6) <= todaysdate) {
-                return tablerows.row2
+                return tablerows.row2;
             } else {
-                return tablerows.row1
-            }
+                return tablerows.row1;
+            };
         } else {
             if (tablerows.row5[0].key.slice(6) > todaysdate) { 
-                return tablerows.row4
+                return tablerows.row4;
             } else if (tablerows.row6[0].key.slice(6) < tablerows.row6[6].key.slice(6) || tablerows.row5[6].key.slice(6) >= todaysdate) {
 
                 // Here is the logic: if the first element in the row is LOWER than the last one, it means the month has ended on the previous one 
                 // If it wouldnt have ended, the first element will belong to the current month and therefore will be bigger 
-                return tablerows.row5
+                return tablerows.row5;
             } else {
-                return tablerows.row6
-            }
-        }
+                return tablerows.row6;
+            };
+        };
     };
 
-
     // This was a bit problematic, since the initial state is the only thing I need to get, even though it updates I need to preserve the initial so that I can call it 
-
     const [daterow, setDifferentRow] = useState(interactiverows);
     const [preserveinitial, setWhatever] = useState(daterow);
 
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
-
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
 
     // State to juggle if Login component should render or not
-
     const [userNotLogged, setUserIsLogged] = useState(false);
 
     // If user has already logged in, cookie with the name "name" is present therefore I dont need to log the user again
@@ -263,8 +246,8 @@ export function Calendar() {
             return
         } else {
             setUserIsLogged(true);
-        }
-    }
+        };
+    };
 
     // expiration for background cookie
     const d = new Date();
@@ -280,7 +263,7 @@ export function Calendar() {
         document.body.style.backgroundColor = "black";
         document.body.style.color = "white";
         localStorage.setItem("Background", "background=black");
-    }
+    };
 
     // states for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
     const [initialaddtask, setNewTask] = useState(false);
@@ -292,7 +275,7 @@ export function Calendar() {
 
     // this just changes the background from white to black 
     const changeBackground = () => {
-        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") { 
+        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "white") {
             document.body.style.backgroundColor = "black";
             document.body.style.color = "white";
             localStorage.setItem("Background", "background=black");
@@ -301,8 +284,8 @@ export function Calendar() {
             document.body.style.backgroundColor = "white";
             document.body.style.color = "black";
             localStorage.setItem("Background", "background=white");
-        }
-    }
+        };
+    };
 
     // useRef to hold the corresponding values for each task
     const searchResult = useRef();
@@ -325,7 +308,7 @@ export function Calendar() {
             alert("Please enter at least 3 accepted letters");
             const searchInput = document.getElementById("searchinput").value = "";
             return
-        }
+        };
 
         // check if the storage has a plan with the given input
         if (localStorage.getItem("TaskDetails").includes(inputByUser)) {
@@ -355,8 +338,8 @@ export function Calendar() {
                         s= -1;
                     } else {
                         s++;
-                    }
-                }
+                    };
+                };
 
                 // This function sets up hits with dates and titles and buttons
                 function searchInputDisplay(thedate, index) {
@@ -391,7 +374,7 @@ export function Calendar() {
                     endOfMonth = numberofdays[slicedMonth];
                     if (endOfMonth == 28 && Number(slicedDate[0, 4]) % 4 == 0) {
                         endOfMonth = 29;
-                    }
+                    };
                     // setting states to re-render the calendar and "jump" from one month or even year if necessary
                     setYearNumber(slicedYear);
                     setMonthNumber(slicedMonth);
@@ -425,7 +408,7 @@ export function Calendar() {
                     // This one takes care of that special case mentioned above
                     } else if ((35 - day + 1) <= slicedDay && slicedDay <= endOfMonth) {
                         createRow(35 - day + 1, endOfMonth);
-                    }
+                    };
                     function createRow(start, end) {
 
                         // if the plan's week is within the month's dates - from start to end, I will just fill it with dates of the month
@@ -433,17 +416,18 @@ export function Calendar() {
                             for (let i = start; start <= end; start++) {
                                 createkey = slicedDate.slice(0, 6) + start;
                                 replaceDaterow.push(<td key={createkey}>{start}</td>);
-                            }
+                            };
                             // if the plan's week is NOT within the month's dates only, then I have to fill only a specific amount of dates of the month
                         } else {
                             for (let i = start; start <= end; start++) {
                                 createkey = slicedDate.slice(0, 6) + start;
                                 replaceDaterow.push(<td key={createkey}>{start}</td>);
-                            }
-                        }
+                            };
+                        };
 
                         // if the plan's week is in the first row - dates of that month mixes with the previous month
-                        if (replaceDaterow[replaceDaterow.length - 1].key.slice(6) < 8) {
+                        let replaceDaterowNumber = replaceDaterow.length;
+                        if (replaceDaterow[replaceDaterowNumber - 1].key.slice(6) < 8) {
 
                             // -1 because I subtracted -1 already to get the elements position in the numberofdays array, now I need the previous one
                             endOfMonth = slicedMonth - 1 == -1 ? numberofdays[slicedMonth + 11] : numberofdays[slicedMonth - 1];
@@ -452,17 +436,17 @@ export function Calendar() {
                             if (slicedMonth == 0) {
                                 slicedMonth = 12;
                                 slicedYear--;
-                            }
+                            };
                             // checking if the length is 1 if not I need to add 0 because the general way the keys are desined are with 2 digits for months
                             if (slicedMonth.toString().length == 1) {
                                 slicedMonth = "0" + slicedMonth;
-                            }
+                            };
                             // Check how many dates are needed to be filled, then fill them using unshift until the length is equal to 7
-                            for (let i = replaceDaterow.length; i < 7; i++) {
+                            for (let i = replaceDaterowNumber; i < 7; i++) {
                                 createkey = "" + slicedYear + slicedMonth + endOfMonth;
                                 replaceDaterow.unshift(<td key={createkey}>{endOfMonth}</td>);
                                 endOfMonth--;
-                            }
+                            };
                             // if the plan's week is in the later rows (5th, 6th) - dates mixes with the next month
                         } else {
                             // +2 because I already subtracted -1 when I reached the numberofdays array
@@ -471,18 +455,18 @@ export function Calendar() {
                             slicedMonth = slicedMonth.toString().length == 1 ? "0" + slicedMonth : slicedMonth;
                             let date = 1;
 
-                            for (let i = replaceDaterow.length; i < 7; i++) {
+                            for (let i = replaceDaterowNumber; i < 7; i++) {
                                 createkey = "" + slicedYear + slicedMonth + date;
                                 replaceDaterow.push(<td key={createkey}>{date}</td>);
                                 date++;
-                            }
-                        }
+                            };
+                        };
                         // updating the state of passed array - calendarContext and updating state to cause rerender
                         setDifferentRow(replaceDaterow);
                         setRenderId(id);
-                    }
-                }
-
+                    };
+                };
+                
                 // I always want to display the title of the plan, since description is not required - therefore when I get an index of an element 
                 // And with that index I want to jump from description to plan index, or not move if the index points at the title one
                 if (detailIndex % 2 !== 0) {
@@ -509,7 +493,7 @@ export function Calendar() {
                     arrayDetails = arrayDetails.slice(detailIndex + 2);
                     // for every 2 elements of arrayDetails there is 1 element in dateArray, so to slice out the element I need to divide the number
                     dateArray = dateArray.slice(detailIndex / 2 + 1);
-                }
+                };
 
                 // Here I will look at the sliced out array and look if there are any more hits, if true the loop will continue
                 if (arrayDetails.toString().includes(inputByUser)) {
@@ -523,21 +507,18 @@ export function Calendar() {
                     searchResult.current = displayDetails;
                     setSearch(true);
                     return
-                }
-            }
+                };
+            };
             // if no results are found, empty out the input, return a message and show it
         } else {
 
             // Also I will remove any input submitted from the search bar
             const searchInput = document.getElementById("searchinput").value = "";
             // Display the below message to the user
-            searchResult.current = "There are no results for your search."
+            searchResult.current = "There are no results for your search.";
             setSearch(true);
-        }
-    }
-
-
-
+        };
+    };
 
     return (
         <>
@@ -640,7 +621,7 @@ function Login(props) {
         if (inputCleansed == "") {
             alert("Aha ! You thought so? A valid input is required!");
             return
-        }
+        };
 
         // Here I am setting the cookie and destroying the component 
         setCookie("name", inputCleansed, 1);

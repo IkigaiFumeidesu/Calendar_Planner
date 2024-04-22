@@ -12,13 +12,14 @@ function CalendarContent(props) {
     const days1 = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const weekdays1 = days1.map((day) => { return <td key={day}>{day}</td> });
     const datesofweekdays = [<td key={0}></td>];
+    let propsLength = props.daterow.length;
     let contentrows = [];
     let contentkeys;
     let hours = 0;
 
     /* Here I want to add the dates in XX.XX format day-month into the head of the table, 
     I use keys of the delivered array to slice them and revert them to get the individual dates of each day*/
-    for (let zz = 0; zz < props.daterow.length; zz++) {
+    for (let zz = 0; zz < propsLength; zz++) {
         contentkeys = props.daterow[zz].key.slice(4);
         if (contentkeys[0] == "0") {
             contentkeys = contentkeys.slice(1);
@@ -26,16 +27,16 @@ function CalendarContent(props) {
                 contentkeys = contentkeys[1] + "." + contentkeys[0];
             } else {
                 contentkeys = contentkeys[1] + contentkeys[2] + "." + contentkeys[0];
-            }
+            };
         } else {
             if (contentkeys.length == 3) {
                 contentkeys = contentkeys[2] + "." + contentkeys[0] + contentkeys[1];
             } else {
                 contentkeys = contentkeys[2] + contentkeys[3] + "." + contentkeys[0] + contentkeys[1];
-            }
-        }
-        datesofweekdays.push(<td key={props.daterow[zz].key}>{contentkeys}</td>)
-    }
+            };
+        };
+        datesofweekdays.push(<td key={props.daterow[zz].key}>{contentkeys}</td>);
+    };
 
     // Here I am creating rows and cells for each day and each hour with special keys
     for (let p = 10; p < 34; p++) { // So I want to create keys here in a special way so that I can use them later on
@@ -59,15 +60,15 @@ function CalendarContent(props) {
                 <td className="tablecontentdetail" key={day6} onClick={() => { setNewTask(true); setHourandDay(day6) }}></td>
                 <td className="tablecontentdetail" key={day7} onClick={() => { setNewTask(true); setHourandDay(day7) }}></td>
             </tr>
-        )
-        hours++
-    }
+        );
+        hours++;
+    };
 
     // Getting all the currently used keys in the week
     const usedKeys = [];
     for (let i = 0; i < 7; i++) {
         usedKeys.push(props.daterow[i].key);
-    }
+    };
 
     // state for controlling TaskDetails component
     const [initialTask, setTask] = useState(false);
@@ -79,22 +80,22 @@ function CalendarContent(props) {
     return (
         <>
             {initialTask == true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription} displaycookie={initialCookie} cookiedate={initialCookieDate} />}
-            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask}/>}
+            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask} />}
             <div className="tcontent">
-            <table className="tablecontent">
-                <thead>
-                    <tr>
-                        {datesofweekdays}
-                    </tr>
-                    <tr>
-                        {weekdays1}
-                    </tr>
-                </thead>
-            </table>
-            <div className="kok">
+                <table className="tablecontent">
+                    <thead>
+                        <tr>
+                            {datesofweekdays}
+                        </tr>
+                        <tr>
+                            {weekdays1}
+                        </tr>
+                    </thead>
+                </table>
+                <div className="kok">
                     <table id="tablebordercontent">
                         <tbody>
-                    {contentrows }
+                            {contentrows}
                         </tbody>
                     </table>
                     {localStorage.getItem("Cookies").includes("Task") == true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
@@ -102,8 +103,8 @@ function CalendarContent(props) {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default CalendarContent;
 
@@ -149,8 +150,8 @@ function DisplayAllTasks(props) {
                 <div key={i} id="taskindex" style={taskStyle} onClick={() => { props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]); props.initialcookie(splitArray[0]); props.cookiedate(splitArray[2]); } }>
                     <p>{splitArray[1]}</p>
                 </div>)
-        }
-    }
+        };
+    };
 
     return (
         <>
@@ -158,11 +159,11 @@ function DisplayAllTasks(props) {
                 {allTasksArray}
             </div>
         </>
-    )
-}
+    );
+};
 
 function TaskDetails(props) {
-    console.log(props.cookiedate)
+
     const deleteCookie = () => {
 
         // Cleaning the String =Task?= from "=", because I will use "=" to split the array
@@ -174,19 +175,19 @@ function TaskDetails(props) {
         const replaceCookie = "=" + cookieArray[cookieIndex] + "=" + cookieArray[cookieIndex + 1];
         localStorage.setItem("Cookies", localStorage.getItem("Cookies").replace(replaceCookie, ""));
         localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails").replace(props.displaytitle + "___" + props.displaydescription + "___", ""));
-        localStorage.setItem("Date", localStorage.getItem("Date").replace(props.cookiedate + "___", ""))
+        localStorage.setItem("Date", localStorage.getItem("Date").replace(props.cookiedate + "___", ""));
     }
 
     return (
         <>
-            <div className="taskdetailsbackground" onClick={() => {props.displaytask(false) } }></div>
+            <div className="taskdetailsbackground" onClick={() => { props.displaytask(false) }}></div>
             <div className="taskdetails">
                 <h2>{props.displaytitle}</h2>
-                <hr/>
+                <hr />
                 <p>{props.displaydescription}</p>
                 <button onClick={() => { deleteCookie(); props.displaytask(false) }}>Delete this task!</button>
                 <button onClick={() => { props.displaytask(false) }}>Hide the details!</button>
             </div>
         </>
-    )
-} 
+    );
+};

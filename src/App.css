@@ -9,6 +9,7 @@ html, body {
     overflow: hidden;
 }
 
+/*App component CSS*/
 .pagetop {
     display: flex;
     align-items: center;
@@ -47,7 +48,6 @@ html, body {
     width: 40px;
     height: 40px;
 }
-
 .svg {
     display: flex;
     align-items: center;
@@ -100,6 +100,7 @@ html, body {
     display: flex;
     justify-content: space-between;
 }
+/*Calendar component css*/
 .calendarbody {
     width: 20%;
 }
@@ -179,6 +180,7 @@ td {
 .tbody tr td:hover {
     background-color: lightskyblue;
 }
+/*Month component css*/
 .tablemonthcontent {
     text-align: center;
     width: 100%;
@@ -199,6 +201,7 @@ td {
 .tablemonthcontent tbody tr td:hover {
     background-color: lightskyblue;
 }
+/*Task creation css*/
 .newtask {
     position: absolute;
     top: 55vh;
@@ -216,6 +219,10 @@ td {
     position: absolute;
     z-index: 2;
 }
+.newTaskInput {
+    width: 75%;
+}
+/*Year component css*/
 .yearcontent {
     width: 75%;
     overflow-y: scroll;
@@ -230,6 +237,7 @@ td {
     table-layout: fixed;
     width: 90%;
 }
+/* Task display css*/
 .Taskdiv {
     position: absolute;
     width: 100%;
@@ -277,6 +285,7 @@ td {
 .h3newTask {
     color: black;
 }
+/*Search algortihm css*/
 .searchdiv {
     position: absolute;
     top: 55vh;

@@ -11,7 +11,7 @@ function Addtask(props) {
     let selectedday = selectedDate.slice(6, 8);
     if (selectedday.length == 1) {
         selectedday = "0" + selectedday;
-    }
+    };
     const selectedByUser = selectedyear + "-" + selectedmonth + "-" + selectedday;
 
     // Default values for both selects
@@ -28,16 +28,16 @@ function Addtask(props) {
     const createOptionsForHours = () => {
         for (let i = 0; i < 24; i++) {
             arrayForHoursInTheDay.push(<option key={i}>{"" + i + ":00"}</option>);
-        }
-        return arrayForHoursInTheDay
-    }
+        };
+        return arrayForHoursInTheDay;
+    };
     // Create hours for the second select
     const createSecondOptionsForHours = () => {
         for (let i = 0; i < 24; i++) {
-            arraySecondForHoursInTheDay.push(<option key={"A" +i}>{"" + i + ":00"}</option>);
-        }
-        return arraySecondForHoursInTheDay
-    }
+            arraySecondForHoursInTheDay.push(<option key={"A" + i}>{"" + i + ":00"}</option>);
+        };
+        return arraySecondForHoursInTheDay;
+    };
 
     function addEntryIntoCookie(e) {
 
@@ -61,12 +61,12 @@ function Addtask(props) {
         if (title == "") {
             alert("Please set a title without special characters");
             return
-        }
+        };
 
         let description = formJson.description.replace(regex, "");
         if (description.length == 0) {
             description = " ";
-        }
+        };
 
         // omitting ":00"
         const fromHourReplaced = Number(formJson.fromHour.replace(":00", ""));
@@ -80,7 +80,6 @@ function Addtask(props) {
         if (localStorage.getItem("Cookies").includes(cleanString)) {
 
             // get the index and create and array from date to cover the hours
-
             let newCookieString = localStorage.getItem("Cookies");
             let indexOfDate;
             let extractHours;
@@ -114,8 +113,8 @@ function Addtask(props) {
                     setCookie(title, cleanString, lowerHour, higherHour, formJson.colour, description);
                     props.componentchanger(false);
                     return
-                }
-            }
+                };
+            };
         } else {
             localStorage.setItem("Date", localStorage.getItem("Date") + cleanString + "___");
             localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") + title + "___" + description + "___");
@@ -123,8 +122,8 @@ function Addtask(props) {
             props.componentchanger(false);
             return
 
-        }
-    }
+        };
+    };
 
     return (
         <>
@@ -132,9 +131,9 @@ function Addtask(props) {
             <div className="newtask">
                 <h3 className="h3newTask">Create a Plan</h3>
                 <form onSubmit={addEntryIntoCookie} method="post">
-                    <input placeholder="Add title" required name="title" maxLength="20"></input>
+                    <input placeholder="Add title" className="newTaskInput" required name="title" maxLength="20"></input>
                 <div>
-                    <input type="date" defaultValue={initialDayValue} onChange={e => setDayValue(e.target.value)} name="date"></input>
+                    <input type="date"  defaultValue={initialDayValue} onChange={e => setDayValue(e.target.value)} name="date"></input>
                     <select defaultValue={editedHour} name="fromHour">
                         {createOptionsForHours()}
                     </select>
@@ -142,15 +141,16 @@ function Addtask(props) {
                         {createSecondOptionsForHours()}
                     </select>
                     <select name="colour">
-                        <option>red</option>
-                        <option>yellow</option>
-                        <option>green</option>
-                        <option>blue</option>
-                        <option>pink</option>
-                        <option>purple</option>
+                        <option>indianred</option>
+                        <option>orange</option>
+                        <option>lightgreen</option>
+                        <option>deepskyblue</option>
+                        <option>lightpink</option>
+                        <option>mediumpurple</option>
                     </select>
                 </div>
-                    <textarea name="description"></textarea>
+                    <br/>
+                    <textarea name="description" rows="7" cols="32"></textarea>
                     <br/>
                     <button type="submit">Make a plan!</button>
                 </form>
@@ -163,15 +163,14 @@ export default Addtask
 
 function setCookie(title, date, fromHour, toHour, colour, description) {
 
-
     // At first there are no cookies, so I cant split because that the length would be 1, 
     const setNewCookie = (localStorage.getItem("Cookies").at(0) == undefined) ? "" : localStorage.getItem("Cookies").split("_;");
     let checkNewCookie = setNewCookie.length;
 
-    // in case a cookie gets deleted, the cookie with checkNewCookie default value would keep rewriting, so I need to up its value
+    // in case a "cookie"" gets deleted, the cookie with checkNewCookie default value would keep rewriting, so I need to up its value
     while (localStorage.getItem("Cookies").includes("=" + "Task" + checkNewCookie)) {
         checkNewCookie++;
-    }
+    };
     localStorage.setItem("Cookies", localStorage.getItem("Cookies") + "=" + "Task" + checkNewCookie + "=" + "___" + title + "___" + date + "___" + fromHour + "___" +
-        toHour + "___" + colour + "___" + description + "_;")
+        toHour + "___" + colour + "___" + description + "_;");
 }
