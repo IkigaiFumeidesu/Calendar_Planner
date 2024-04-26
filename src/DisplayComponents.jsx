@@ -5,7 +5,7 @@ function DisplayUI(props) {
     if (props.displayinitial === "displayweek") {
         return (
             <>
-                <CalendarContent daterow={props.daterow} />
+                <CalendarContent initialWeek={props.initialWeek} />
             </>
         );
     } else if (props.displayinitial === "displaymonth") {

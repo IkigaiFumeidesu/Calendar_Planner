@@ -20,17 +20,25 @@ html, body {
 .cal {
     font-size: 22px;
     padding: 15px 0 15px 15px;
+    margin-right: 9.3vw;
 }
 
 .todaybutton {
-    padding: 10px 15px;
-    border: 0.5px solid black;
+    padding: 7px 30px;
+    border: 3px solid grey;
+    border-radius: 5px;
+}
+.prkotina {
+    display: flex;
+    justify-content: space-between;
+    width: 30vw;
 }
 
 .ultoppage {
     margin: 0;
     padding: 0;
-    border: 0.5px solid black;
+    border: 3px solid grey;
+    border-radius: 5px;
 }
 
 .litopinline {
@@ -38,11 +46,20 @@ html, body {
 }
 
 .topbutton {
-    padding: 10px 15px;
+    padding: 7px 30px;
     border: 0;
 }
 .topbutton:hover {
     background-color: lightskyblue;
+}
+.inputsearch {
+    padding: 7px 0px;
+    border: 3px solid grey;
+}
+.searchbutton {
+    padding: 7px 30px;
+    border: 3px solid grey;
+    border-radius: 5px;
 }
 .changeofbg {
     width: 40px;
@@ -278,6 +295,8 @@ td {
 .createbutton {
     padding: 10px 15px;
     margin-left: 1vw;
+    border: 3px solid grey;
+    border-radius: 5px;
 }
 .createbutton:hover {
     background-color: lightskyblue;
