@@ -6,7 +6,7 @@ function CalendarContent(props) {
 
     // This state is used to render/not render a component Addtask which also returns the state update so that it can be destructed when neccessary
     const [initialaddtask, setNewTask] = useState(false);
-    const [gethourandday, setHourandDay] = useState();
+    const [getHourAndDay, setHourandDay] = useState();
 
     // Setting the content of table
     const days1 = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -80,7 +80,7 @@ function CalendarContent(props) {
     return (
         <>
             {initialTask == true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription} displaycookie={initialCookie} cookiedate={initialCookieDate} />}
-            {initialaddtask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask} />}
+            {initialaddtask == true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
             <div className="tcontent">
                 <table className="tablecontent">
                     <thead>

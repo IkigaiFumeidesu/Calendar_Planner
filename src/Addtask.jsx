@@ -4,8 +4,8 @@ import { useRef } from "react"
 function Addtask(props) {
 
     // Chopping the key of clicked table cell to match the input format for date 
-    const selectedHour = Number(props.gethourandday.slice(0, 2)) - 10;
-    const selectedDate = props.gethourandday.slice(2);
+    const selectedHour = Number(props.getHourAndDay.slice(0, 2)) - 10;
+    const selectedDate = props.getHourAndDay.slice(2);
     const selectedyear = selectedDate.slice(0, 4);
     const selectedmonth = selectedDate.slice(4, 6);
     let selectedday = selectedDate.slice(6, 8);

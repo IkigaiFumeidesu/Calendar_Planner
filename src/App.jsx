@@ -47,14 +47,12 @@ export function Calendar() {
 
     // When we reach January, the array index of January is 0, so by subtracting -1 to get the previous month, we are out of the array bounds
     // if that happens, index should instead be 11 = (December) and we also need to subtract 1 from initialYearNumber
-    let previousYear = "";
+    let previousYear = initialYearNumber;
     let previousMonthNumber = initialMonthNumber - 1;
     if (previousMonthNumber === -1) {
         previousMonthNumber = 11;
         previousYear = initialYearNumber - 1;
-    } else {
-        previousYear = initialYearNumber;
-    }
+    } 
 
     // Preparing to set each key of every date to XXXX.XX.?? year-month-date format
     // !! Change the key to be a fixed format instead - its better for overall usage !! dev. note
@@ -269,7 +267,7 @@ export function Calendar() {
     };
 
     // This is the default setting for the user I want to hold this setting so that it doesnt go back to normal when the site refreshes
-    if (localStorage.getItem("Background") == null || localStorage.getItem("Background") == "background=#FDFDFD") {
+    if (localStorage.getItem("Background") === null || localStorage.getItem("Background") === "background=#FDFDFD") {
         document.body.style.backgroundColor = "#FDFDFD";
         document.body.style.color = "#181818";
         localStorage.setItem("Background", "background=#FDFDFD");
@@ -281,7 +279,7 @@ export function Calendar() {
 
     // this just changes the background from white to black 
     const changeBackground = () => {
-        if (document.body.style.backgroundColor == "" || document.body.style.backgroundColor == "rgb(253, 253, 253)") {
+        if (document.body.style.backgroundColor === "" || document.body.style.backgroundColor === "rgb(253, 253, 253)") {
             document.body.style.backgroundColor = "#181818";
             document.body.style.color = "#FDFDFD";
             localStorage.setItem("Background", "background=#181818");
@@ -291,11 +289,11 @@ export function Calendar() {
             localStorage.setItem("Background", "background=#FDFDFD");
         }
     };
-    // PPP
+
     // states for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
     const [initialAddTask, setNewTask] = useState(false);
     const adjustMonth = currentDate.getMonth() + 1;
-    const gethourandday = currentDate.getHours() + 10 + "" + currentDate.getFullYear() + ((adjustMonth.toString().length == 1) ? "0" + adjustMonth : adjustMonth) + currentDate.getDate();
+    const getHourAndDay = currentDate.getHours() + 10 + "" + currentDate.getFullYear() + ((adjustMonth.toString().length === 1) ? "0" + adjustMonth : adjustMonth) + currentDate.getDate();
 
     // states for the apperance and disappearance of SearchUserInput component
     const [initialSearch, setSearch] = useState(false);
@@ -321,7 +319,7 @@ export function Calendar() {
             alert("Please enter at least 3 accepted letters");
             const searchInput = document.getElementById("searchinput").value = "";
             return
-        };
+        }
 
         // check if the storage has a plan with the given input
         if (localStorage.getItem("TaskDetails").includes(inputByUser)) {
@@ -351,8 +349,8 @@ export function Calendar() {
                         s= -1;
                     } else {
                         s++;
-                    };
-                };
+                    }
+                }
 
                 // This function sets up hits with dates and titles and buttons
                 function searchInputDisplay(thedate, index) {
@@ -387,7 +385,7 @@ export function Calendar() {
                     endOfMonth = numberOfDaysInMonthArray[slicedMonth];
                     if (endOfMonth == 28 && Number(slicedDate[0, 4]) % 4 == 0) {
                         endOfMonth = 29;
-                    };
+                    }
                     // setting states to re-render the calendar and "jump" from one month or even year if necessary
                     setYearNumber(slicedYear);
                     setMonthNumber(slicedMonth);
@@ -421,7 +419,7 @@ export function Calendar() {
                     // This one takes care of that special case mentioned above
                     } else if ((35 - day + 1) <= slicedDay && slicedDay <= endOfMonth) {
                         createRow(35 - day + 1, endOfMonth);
-                    };
+                    }
                     function createRow(start, end) {
 
                         // if the plan's week is within the month's dates - from start to end, I will just fill it with dates of the month
@@ -429,14 +427,14 @@ export function Calendar() {
                             for (let i = start; start <= end; start++) {
                                 createkey = slicedDate.slice(0, 6) + start;
                                 replaceDaterow.push(<td key={createkey}>{start}</td>);
-                            };
+                            }
                             // if the plan's week is NOT within the month's dates only, then I have to fill only a specific amount of dates of the month
                         } else {
                             for (let i = start; start <= end; start++) {
                                 createkey = slicedDate.slice(0, 6) + start;
                                 replaceDaterow.push(<td key={createkey}>{start}</td>);
-                            };
-                        };
+                            }
+                        }
 
                         // if the plan's week is in the first row - dates of that month mixes with the previous month
                         let replaceDaterowNumber = replaceDaterow.length;
@@ -449,17 +447,17 @@ export function Calendar() {
                             if (slicedMonth == 0) {
                                 slicedMonth = 12;
                                 slicedYear--;
-                            };
+                            }
                             // checking if the length is 1 if not I need to add 0 because the general way the keys are desined are with 2 digits for months
                             if (slicedMonth.toString().length == 1) {
                                 slicedMonth = "0" + slicedMonth;
-                            };
+                            }
                             // Check how many dates are needed to be filled, then fill them using unshift until the length is equal to 7
                             for (let i = replaceDaterowNumber; i < 7; i++) {
                                 createkey = "" + slicedYear + slicedMonth + endOfMonth;
                                 replaceDaterow.unshift(<td key={createkey}>{endOfMonth}</td>);
                                 endOfMonth--;
-                            };
+                            }
                             // if the plan's week is in the later rows (5th, 6th) - dates mixes with the next month
                         } else {
                             // +2 because I already subtracted -1 when I reached the numberOfDaysInMonthArray array
@@ -472,13 +470,13 @@ export function Calendar() {
                                 createkey = "" + slicedYear + slicedMonth + date;
                                 replaceDaterow.push(<td key={createkey}>{date}</td>);
                                 date++;
-                            };
-                        };
+                            }
+                        }
                         // updating the state of passed array - calendarContext and updating state to cause rerender
                         setDifferentWeek(replaceDaterow);
                         setRenderId(id);
-                    };
-                };
+                    }
+                }
                 
                 // I always want to display the title of the plan, since description is not required - therefore when I get an index of an element 
                 // And with that index I want to jump from description to plan index, or not move if the index points at the title one
@@ -506,7 +504,7 @@ export function Calendar() {
                     arrayDetails = arrayDetails.slice(detailIndex + 2);
                     // for every 2 elements of arrayDetails there is 1 element in dateArray, so to slice out the element I need to divide the number
                     dateArray = dateArray.slice(detailIndex / 2 + 1);
-                };
+                }
 
                 // Here I will look at the sliced out array and look if there are any more hits, if true the loop will continue
                 if (arrayDetails.toString().includes(inputByUser)) {
@@ -520,8 +518,8 @@ export function Calendar() {
                     searchResult.current = displayDetails;
                     setSearch(true);
                     return
-                };
-            };
+                }
+            }
             // if no results are found, empty out the input, return a message and show it
         } else {
 
@@ -530,13 +528,13 @@ export function Calendar() {
             // Display the below message to the user
             searchResult.current = "There are no results for your search.";
             setSearch(true);
-        };
-    };
+        }
+    }
 
     return (
         <>
             {initialSearch == true && <SearchUserInput setsearch={setSearch} searchResult={searchResult.current} />}
-            {initialAddTask == true && <Addtask componentchanger={setNewTask} gethourandday={gethourandday} addtaskbackground={setNewTask} />}
+            {initialAddTask == true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
             {userNotLogged == true && <Login dontDisplayUI={setUserIsLogged} /> }
             <div className="pagetop">
             
@@ -563,7 +561,6 @@ export function Calendar() {
                 </form>
 
                 {/*Icon for a change between white / black background*/}
-
                 <div className="svg">
                     <div onClick={changeBackground}>
                         <svg className="changeofbg">
@@ -576,9 +573,7 @@ export function Calendar() {
                     <div className="profilediv" onClick={checkIfUserIsLogged}>
                         <img src={ProfilePicture} alt="Profile" className="profile" />
                     </div>
-
                 </div>
-
             </div>
             <hr className="hrmargin"></hr>
             <div className="bla">

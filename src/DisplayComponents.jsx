@@ -7,27 +7,27 @@ function DisplayUI(props) {
             <>
                 <CalendarContent initialWeek={props.initialWeek} />
             </>
-        );
+        )
     } else if (props.displayinitial === "displaymonth") {
         return (
             <>
-                <MonthContent tablerows={props.tablerows} weekdays={props.weekdays} setdisplay={props.setdisplay} setrow={props.setrow} />
+                <MonthContent monthRowsObject={props.monthRowsObject} namesOfTheDays={props.namesOfTheDays} setdisplay={props.setdisplay} setrow={props.setrow} />
             </>
-        );
-    } else {
+        )
+    } else { 
         return (
             <>
-                <YearContent days={props.days} months={props.months} numberofdays={props.numberofdays} initialYearNumber={props.initialYearNumber} />
+                <YearContent daysOfTheWeekArray={props.daysOfTheWeekArray} monthsOfTheYearArray={props.monthsOfTheYearArray} numberOfDaysInMonthArray={props.numberOfDaysInMonthArray} initialYearNumber={props.initialYearNumber} />
             </>
-        );
-    };
-};
+        )
+    }
+}
 
 function MonthContent(props) {
 
     const monthTasksCounter = [];
     let counterForKeys = 0;
-
+    
     // function to count Tasks at a given day
     const countTasks = (key, row, index) => {
 
@@ -44,25 +44,25 @@ function MonthContent(props) {
 
     // check if any day of the month corresponds with cookies
     for (let i = 0; i < 7; i++) {
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row1[i].key)) {
-            countTasks(props.tablerows.row1[i].key, 0, i)
-        };
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row2[i].key)) {
-            countTasks(props.tablerows.row2[i].key, 1, i)
-        };
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row3[i].key)) {
-            countTasks(props.tablerows.row3[i].key, 2, i)
-        };
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row4[i].key)) {
-            countTasks(props.tablerows.row4[i].key, 3, i)
-        };
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row5[i].key)) {
-            countTasks(props.tablerows.row5[i].key, 4, i)
-        };
-        if (localStorage.getItem("Cookies").includes(props.tablerows.row6[i].key)) {
-            countTasks(props.tablerows.row6[i].key, 5, i)
-        };
-    };
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.firstRow[i].key)) {
+            countTasks(props.monthRowsObject.firstRow[i].key, 0, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.secondRow[i].key)) {
+            countTasks(props.monthRowsObject.secondRow[i].key, 1, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.thirdRow[i].key)) {
+            countTasks(props.monthRowsObject.thirdRow[i].key, 2, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.fourthRow[i].key)) {
+            countTasks(props.monthRowsObject.fourthRow[i].key, 3, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.fifthRow[i].key)) {
+            countTasks(props.monthRowsObject.fifthRow[i].key, 4, i)
+        }
+        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.sixthRow[i].key)) {
+            countTasks(props.monthRowsObject.sixthRow[i].key, 5, i)
+        }
+    }
 
     return (
         <>
@@ -70,15 +70,15 @@ function MonthContent(props) {
                 {monthTasksCounter !== 0 && <CountTasks monthtasks={monthTasksCounter} />}
                 <table className="tablemonthcontent">
                     <thead>
-                        <tr>{props.weekdays}</tr>
+                        <tr>{props.namesOfTheDays}</tr>
                     </thead>
                     <tbody>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row1) }}>{props.tablerows.row1}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row2) }}>{props.tablerows.row2}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row3) }}>{props.tablerows.row3}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row4) }}>{props.tablerows.row4}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row5) }}>{props.tablerows.row5}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.tablerows.row6) }}>{props.tablerows.row6}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.firstRow) }}>{props.monthRowsObject.firstRow}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.secondRow) }}>{props.monthRowsObject.secondRow}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.thirdRow) }}>{props.monthRowsObject.thirdRow}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.fourthRow) }}>{props.monthRowsObject.fourthRow}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.fifthRow) }}>{props.monthRowsObject.fifthRow}</tr>
+                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.sixthRow) }}>{props.monthRowsObject.sixthRow}</tr>
                     </tbody>
                 </table>
             </div>
@@ -97,7 +97,7 @@ function CountTasks(props) {
 function YearContent(props) {
 
     // I am setting useRef to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,
-    // Ref would get updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.months array
+    // Ref would get updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.monthsOfTheYearArray array
 
     const ref = useRef();
     ref.current = 0; 
@@ -136,7 +136,7 @@ function YearContent(props) {
     // one runtime per render, to get the start of the chain - calendar
     if (firstday == 0) { // Condition if the month starts on Sunday
 
-        firstrowprevious = props.numberofdays[11] - 5;
+        firstrowprevious = props.numberOfDaysInMonthArray[11] - 5;
         for (let fr = 0; fr < 6; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
             Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
@@ -148,7 +148,7 @@ function YearContent(props) {
 
     } else if (firstday == 1) { // Condition if the month starts on Monday
 
-        firstrowprevious = props.numberofdays[11] - 6;
+        firstrowprevious = props.numberOfDaysInMonthArray[11] - 6;
         for (let fr = 0; fr < 7; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
             Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
@@ -157,7 +157,7 @@ function YearContent(props) {
 
     } else { // Solution for the rest of the week
 
-        firstrowprevious = props.numberofdays[11] - firstday + 2;
+        firstrowprevious = props.numberOfDaysInMonthArray[11] - firstday + 2;
         for (let fr = 0; fr < firstday - 1; fr++) {
             rowkeys = previousyear + 12 + firstrowprevious;
             Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
@@ -170,12 +170,12 @@ function YearContent(props) {
         };
     };
 
-    // Here I will create all 12 months with the same function, inputting different variables as the useRef gets updated
+    // Here I will create all 12 monthsOfTheYearArray with the same function, inputting different variables as the useRef gets updated
     
     const createYearTable = (Month) => {
 
-        const displaymonth = props.months[ref.current];
-        const displayweek = props.days.map((day) => { return <td key={day}>{day}</td> });
+        const displaymonth = props.monthsOfTheYearArray[ref.current];
+        const displayweek = props.daysOfTheWeekArray.map((day) => { return <td key={day}>{day}</td> });
         let nextdate;
 
         // passing rows between objects (aka months), condition is to exclude January AND I also wanted to change the style per say
@@ -213,7 +213,7 @@ function YearContent(props) {
 
         // Just filling array with all the dates of the month
 
-        for (; date <= props.numberofdays[ref.current]; date++) {
+        for (; date <= props.numberOfDaysInMonthArray[ref.current]; date++) {
             rowkeys = currentyear + (ref.current + 1) + date;
             Month.rowCreation.push(<td key={rowkeys}>{date}</td>);
         };
