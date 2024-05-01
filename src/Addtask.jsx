@@ -1,76 +1,51 @@
-import { useState, useContext } from "react";
-import { useRef } from "react"
+import { useState} from "react";
 
 function Addtask(props) {
 
-    // Chopping the key of clicked table cell to match the input format for date 
-    const selectedHour = Number(props.getHourAndDay.slice(0, 2)) - 10;
-    const selectedDate = props.getHourAndDay.slice(2);
-    const selectedyear = selectedDate.slice(0, 4);
-    const selectedmonth = selectedDate.slice(4, 6);
-    let selectedday = selectedDate.slice(6, 8);
-    if (selectedday.length == 1) {
-        selectedday = "0" + selectedday;
-    };
-    const selectedByUser = selectedyear + "-" + selectedmonth + "-" + selectedday;
+    // Clicked cell return a key X:00-XXXX-??-??
+    const selectedCellArray = props.getHourAndDay.split("-");
 
-    // Default values for both selects
-    const editedHour = "" + selectedHour + ":00";
+    // To set the default value for input type date it needs to be in set format, I cannot enter one digit values without zeroes
+    if (selectedCellArray[2].length === 1) {
+        selectedCellArray[2] = "0" + selectedCellArray[2];
+    }
+    if (selectedCellArray[3].length === 1) {
+        selectedCellArray[3] = "0" + selectedCellArray[3];
+    }
 
     // Default value for date input and for manipulation of onChange action by user
-    const [initialDayValue, setDayValue] = useState(selectedByUser);
+    const [initialDayValue, setDayValue] = useState(selectedCellArray[1] + "-" + selectedCellArray[2] + "-" + selectedCellArray[3]);
 
     // Arrays for hours
     const arrayForHoursInTheDay = [];
     const arraySecondForHoursInTheDay = [];
 
-    // Create hours for the first select 
-    const createOptionsForHours = () => {
-        for (let i = 0; i < 24; i++) {
-            arrayForHoursInTheDay.push(<option key={i}>{"" + i + ":00"}</option>);
-        };
-        return arrayForHoursInTheDay;
-    };
-    // Create hours for the second select
-    const createSecondOptionsForHours = () => {
-        for (let i = 0; i < 24; i++) {
-            arraySecondForHoursInTheDay.push(<option key={"A" + i}>{"" + i + ":00"}</option>);
-        };
-        return arraySecondForHoursInTheDay;
-    };
+    // Create hours for the first and second select 
+    for (let i = 0; i < 24; i++) {
+        arrayForHoursInTheDay.push(<option key={"A" + i}>{i + ":00"}</option>);
+        arraySecondForHoursInTheDay.push(<option key={"B" + i}>{i + ":00"}</option>);
+    }
+    // DEV NOTE ADJUST OPTIONS IN THE RETURN SECTION
 
-    function addEntryIntoCookie(e) {
+    function addEntryIntoStorage(e) {
 
         // Preventing the form to refresh on submit
         e.preventDefault();
 
         // Gathering data from entries and pushing it into an object
-        const form = e.target;
-        const formData = new FormData(form);
-        const formJson = Object.fromEntries(formData.entries());
+        const submittedForm = e.target;
+        const dataForm = new FormData(submittedForm);
+        const objectForm = Object.fromEntries(dataForm.entries());
+        console.log(objectForm)
 
-        // replacing "-" from the input format to nothing - I need this to compare it with the keys 
-        const replacedString = formJson.date.replace(/-/g, "");
-
-        // days end with 01-09 so I am accounting for it by removing 0
-        const cleanString = "" + replacedString.slice(0, 6) + replacedString[6].replace(0, "") + replacedString[7];
-
-        // omitting "_" in the title and description of task, because I need this character for the slicing of a cookie
-        const regex = /_/g;
-        const title = formJson.title.replace(regex, "");
-        if (title == "") {
-            alert("Please set a title without special characters");
+        if (objectForm.title === "") {
+            alert("Please dont leave the title empty");
             return
-        };
-
-        let description = formJson.description.replace(regex, "");
-        if (description.length == 0) {
-            description = " ";
-        };
+        }
 
         // omitting ":00"
-        const fromHourReplaced = Number(formJson.fromHour.replace(":00", ""));
-        const toHourReplaced = Number(formJson.toHour.replace(":00", ""));
+        const fromHourReplaced = Number(objectForm.fromHour.replace(":00", ""));
+        const toHourReplaced = Number(objectForm.toHour.replace(":00", ""));
 
         // sorting hours in order
         const lowerHour = (fromHourReplaced < toHourReplaced) ? fromHourReplaced : toHourReplaced;
@@ -127,18 +102,18 @@ function Addtask(props) {
 
     return (
         <>
-            <div className="newTaskBackground" onClick={() => { props.addtaskbackground(false) }}></div>
+            <div className="newTaskBackground" onClick={() => { props.setNewTask(false) }}></div>
             <div className="newtask">
                 <h3 className="h3newTask">Create a Plan</h3>
-                <form onSubmit={addEntryIntoCookie} method="post">
+                <form onSubmit={addEntryIntoStorage} method="post">
                     <input placeholder="Add title" className="newTaskInput" required name="title" maxLength="20"></input>
                 <div>
                     <input type="date"  defaultValue={initialDayValue} onChange={e => setDayValue(e.target.value)} name="date"></input>
-                    <select defaultValue={editedHour} name="fromHour">
-                        {createOptionsForHours()}
+                    <select defaultValue={selectedCellArray[0] + ":00"} name="fromHour">
+                            {arrayForHoursInTheDay}
                     </select>
-                    <select defaultValue={editedHour} name="toHour">
-                        {createSecondOptionsForHours()}
+                    <select defaultValue={selectedCellArray[0] + ":00"} name="toHour">
+                            {arraySecondForHoursInTheDay}
                     </select>
                     <select name="colour">
                         <option>indianred</option>

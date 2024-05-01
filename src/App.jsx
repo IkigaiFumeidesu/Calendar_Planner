@@ -54,19 +54,12 @@ export function Calendar() {
         previousYear = initialYearNumber - 1;
     } 
 
-    // Preparing to set each key of every date to XXXX.XX.?? year-month-date format
-    // !! Change the key to be a fixed format instead - its better for overall usage !! dev. note
-    let previousMonthString = initialMonthNumber.toString();
-    if (previousMonthString.length === 1) {
-        previousMonthString = "0" + previousMonthString;
+    // Preparing to set each key of every date to XXXX-??-?? year-month-date format
+    let previousMonth = initialMonthNumber;
+    if (previousMonth === 0) {
+        previousMonth = 12;
     }
-    if (previousMonthString === "00") {
-        previousMonthString = "12";
-    }
-    let currentMonthString = (initialMonthNumber + 1).toString();
-    if (currentMonthString.length == 1) {
-        currentMonthString = "0" + currentMonthString;
-    }
+    let currentMonth = initialMonthNumber + 1;
 
     // iterator variables
     let dateUsedAsKey;
@@ -84,12 +77,12 @@ export function Calendar() {
         // Ex. 31 dates are in previous month 31 - 5 is 26 but starting from 26 to 31, there are 6 numbers, thats why i < 6, it starts at 0
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 5;
         for (let i = 0; i < 6; i++) {
-            dateUsedAsKey = previousYear + previousMonthString + previousMonthDates;
+            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
             monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
             previousMonthDates++;
         }
         // To the 6 dates from previous month, I need to add 1 from the month to be displayed
-        dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
         monthRowsObject.firstRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{dateCounter}</td>);
         dateCounter++;
 
@@ -99,7 +92,7 @@ export function Calendar() {
         // Ex. 31 dates are in previous month 31 - 6 is 25 but starting from 25 to 31, there are 7 numbers, therefore the whole first row 
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 6;
         for (let i = 0; i < 7; i++) {
-            dateUsedAsKey = previousYear + previousMonthString + previousMonthDates;
+            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
             monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
             previousMonthDates++;
         }
@@ -110,14 +103,14 @@ export function Calendar() {
         // Ex. 31 dates are in previous month 31 - 4 + 2 = 29, therefore 3 numbers, +2 because I omitted 2 cases, Mo and Su
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - firstDayNumber + 2;
         for (let i = 0; i < firstDayNumber - 1; i++) {
-            dateUsedAsKey = previousYear + previousMonthString + previousMonthDates;
+            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
             monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
             previousMonthDates++;
         }
 
         //  i starts at 0, therefore range from 0 to 8 is 9 numbers, because I added 2 before
         for (let i = 0; i < 8 - firstDayNumber; i++) {
-            dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
             monthRowsObject.firstRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{dateCounter}</td>);
             dateCounter++;
         }
@@ -125,17 +118,17 @@ export function Calendar() {
     
     // I need to add onClick event to all other dates so that the user can switch weeks simply by just clicking on a date 
     for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
         monthRowsObject.secondRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.secondRow) }}>{dateCounter}</td>);
         dateCounter++;
     }
     for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
         monthRowsObject.thirdRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.thirdRow) }}>{dateCounter}</td>);
         dateCounter++;
     }
     for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
         monthRowsObject.fourthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fourthRow) }}>{dateCounter}</td>);
         dateCounter++;
     }
@@ -143,28 +136,25 @@ export function Calendar() {
     // First 4 rows are guaranteed to be filled, now I need to check if the month ends in 5th or 6th row and fill it with dates respectively
     if (numberOfDaysInMonth - dateCounter >= 7) { 
         for (let i = 0; i < 7; i++) {
-            dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
             monthRowsObject.fifthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow) }}>{dateCounter}</td>);
             dateCounter++;
         }
         for (; dateCounter <= numberOfDaysInMonth; dateCounter++) {
-            dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
             monthRowsObject.sixthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.sixthRow) }}>{dateCounter}</td>);
         }
     } else {
         for (; dateCounter <= numberOfDaysInMonth; dateCounter++) {
-            dateUsedAsKey = initialYearNumber + currentMonthString + dateCounter;
+            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
             monthRowsObject.fifthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow) }}>{dateCounter}</td>);
         }
     }
 
     // Ex. April - initialMonthNumber would return 3, so to get the next month - May I need to add 2
-    let nextMonthString = (initialMonthNumber + 2).toString();
-    if (nextMonthString === "13") {
-        nextMonthString = "1";
-    }
-    if (nextMonthString.length === 1) {
-        nextMonthString = "0" + nextMonthString;
+    let nextMonth = initialMonthNumber + 2;
+    if (nextMonth === 13) {
+        nextMonth = 1;
     }
 
     // Filling 5th and 6th arrays so that both contain 7 elements
@@ -174,20 +164,20 @@ export function Calendar() {
 
     // When I update month to January I also need to up the year parameter
     let nextYearString = initialYearNumber;
-    if (nextMonthString === "01") {
-        nextYearString = (initialYearNumber + 1).toString();
+    if (nextMonth === 1) {
+        nextYearString = initialYearNumber + 1;
     }
 
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
     for (; numberOfDatesFifthRow < 7; numberOfDatesFifthRow++) {
-        dateUsedAsKey = nextYearString + nextMonthString + dateOfNextMonth;
+        dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
         monthRowsObject.fifthRow.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow); }}>{dateOfNextMonth}</td>);
         dateOfNextMonth++;
     }
 
     // And then fill out whole 6th array with the dates of the next month
     for (; numberOfDatesSixthRow < 7; numberOfDatesSixthRow++) { 
-        dateUsedAsKey = nextYearString + nextMonthString + dateOfNextMonth;
+        dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
         monthRowsObject.sixthRow.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.sixthRow); }}>{dateOfNextMonth}</td>);
         dateOfNextMonth++;
     }
@@ -197,18 +187,23 @@ export function Calendar() {
         const todaysDate = currentDate.getDate();
 
         // If this condition is met, then I know that the date is in the first 3 rows
-        if (monthRowsObject.thirdRow[6].key.slice(6) >= todaysDate) { 
-            if (monthRowsObject.secondRow[6].key.slice(6) < todaysDate) { 
+        if (Number(monthRowsObject.thirdRow[6].key.split("-")[2]) >= todaysDate) { 
+            if (Number(monthRowsObject.secondRow[6].key.split("-")[2]) < todaysDate) { 
                 return monthRowsObject.thirdRow;
-            } else if (monthRowsObject.firstRow[0].key.slice(6) < monthRowsObject.firstRow[6].key.slice(6) || monthRowsObject.secondRow[0].key.slice(6) <= todaysDate) {
+
+            } else if (Number(monthRowsObject.firstRow[0].key.split("-")[2]) < Number(monthRowsObject.firstRow[6].key.split("-")[2]) ||
+                Number(monthRowsObject.secondRow[0].key.split("-")[2]) <= todaysDate) {
+
                 return monthRowsObject.secondRow;
             } else {
                 return monthRowsObject.firstRow;
             }
         } else {
-            if (monthRowsObject.fifthRow[0].key.slice(6) > todaysDate) { 
+            if (Number(monthRowsObject.fifthRow[0].key.split("-")[2]) > todaysDate) { 
                 return monthRowsObject.fourthRow;
-            } else if (monthRowsObject.sixthRow[0].key.slice(6) < monthRowsObject.sixthRow[6].key.slice(6) || monthRowsObject.fifthRow[6].key.slice(6) >= todaysDate) {
+
+            } else if (Number(monthRowsObject.sixthRow[0].key.split("-")[2]) < Number(monthRowsObject.sixthRow[6].key.split("-")[2]) ||
+                Number(monthRowsObject.fifthRow[6].key.split("-")[2]) >= todaysDate) {
 
                 // Here is the logic: if the first element in the row is LOWER than the last one, it means the month has ended on the previous one 
                 // If it wouldnt have ended, the first element will belong to the current month and therefore will be bigger 
@@ -222,7 +217,7 @@ export function Calendar() {
     // Using the second State to preserve the initialWeek even if it gets updated, so that the user can back to it
     const [initialWeek, setDifferentWeek] = useState(getInitialWeek);
     const [preserveInitial, setDontUse] = useState(initialWeek);
-
+    console.log(initialWeek)
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
@@ -279,7 +274,7 @@ export function Calendar() {
 
     // this just changes the background from white to black 
     const changeBackground = () => {
-        if (document.body.style.backgroundColor === "" || document.body.style.backgroundColor === "rgb(253, 253, 253)") {
+        if (document.body.style.backgroundColor === "rgb(253, 253, 253)") {
             document.body.style.backgroundColor = "#181818";
             document.body.style.color = "#FDFDFD";
             localStorage.setItem("Background", "background=#181818");
@@ -289,7 +284,7 @@ export function Calendar() {
             localStorage.setItem("Background", "background=#FDFDFD");
         }
     };
-
+    // DEV NOTE - HERE REFRACTURING ENDED
     // states for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
     const [initialAddTask, setNewTask] = useState(false);
     const adjustMonth = currentDate.getMonth() + 1;
@@ -533,9 +528,9 @@ export function Calendar() {
 
     return (
         <>
-            {initialSearch == true && <SearchUserInput setsearch={setSearch} searchResult={searchResult.current} />}
-            {initialAddTask == true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
-            {userNotLogged == true && <Login dontDisplayUI={setUserIsLogged} /> }
+            {initialSearch === true && <SearchUserInput setsearch={setSearch} searchResult={searchResult.current} />}
+            {initialAddTask === true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
+            {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
             <div className="pagetop">
             
                 <span className="cal">Calendar</span>

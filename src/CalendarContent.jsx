@@ -1,75 +1,46 @@
-import React, { useDebugValue } from 'react';
 import { useState, useRef, useEffect } from 'react'; 
 import Addtask from './Addtask';
 
 function CalendarContent(props) {
 
-    // This state is used to render/not render a component Addtask which also returns the state update so that it can be destructed when neccessary
-    const [initialaddtask, setNewTask] = useState(false);
-    const [getHourAndDay, setHourandDay] = useState();
+    // This state is used to render/not render a component Addtask which also returns the state update so that it can be deconstructed when neccessary
+    const [initialAddTask, setNewTask] = useState(false);
+    const [getHourAndDay, setHourAndDay] = useState();
 
     // Setting the content of table
-    const days1 = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const weekdays1 = days1.map((day) => { return <td key={day}>{day}</td> });
-    const datesofweekdays = [<td key={0}></td>];
-    let propsLength = props.initialWeek.length;
-    let contentrows = [];
-    let contentkeys;
-    let hours = 0;
+    const daysAndTimeArray = ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const calendarTableHeader = daysAndTimeArray.map((day) => { return <td key={day}>{day}</td> });
 
-    /* Here I want to add the dates in XX.XX format day-month into the head of the table, 
-    I use keys of the delivered array to slice them and revert them to get the individual dates of each day*/
-    for (let zz = 0; zz < propsLength; zz++) {
-        contentkeys = props.initialWeek[zz].key.slice(4);
-        if (contentkeys[0] == "0") {
-            contentkeys = contentkeys.slice(1);
-            if (contentkeys.length == 2) {
-                contentkeys = contentkeys[1] + "." + contentkeys[0];
-            } else {
-                contentkeys = contentkeys[1] + contentkeys[2] + "." + contentkeys[0];
-            };
-        } else {
-            if (contentkeys.length == 3) {
-                contentkeys = contentkeys[2] + "." + contentkeys[0] + contentkeys[1];
-            } else {
-                contentkeys = contentkeys[2] + contentkeys[3] + "." + contentkeys[0] + contentkeys[1];
-            };
-        };
-        datesofweekdays.push(<td key={props.initialWeek[zz].key}>{contentkeys}</td>);
-    };
+    // First element is below Time table header cell and it needs to be empty, hence why the array starts with an empty element
+    const datesOfTheWeek = [<td key={0}></td>];
+
+    /* Here I want to add the dates in XX.XX format day-month into the head of the table, I use keys of the delivered array to get the dates*/
+    for (let i = 0; i < 7; i++) {
+        let contentkeys = props.initialWeek[i].key.split("-");
+        datesOfTheWeek.push(<td key={props.initialWeek[i].key}>{contentkeys[2] + "." + contentkeys[1]}</td>);
+    }
+
+    const contentrows = [];
+    const usedKeys = [props.initialWeek[0].key, props.initialWeek[1].key, props.initialWeek[2].key,
+    props.initialWeek[3].key, props.initialWeek[4].key, props.initialWeek[5].key, props.initialWeek[6].key];
 
     // Here I am creating rows and cells for each day and each hour with special keys
-    for (let p = 10; p < 34; p++) { // So I want to create keys here in a special way so that I can use them later on
-        let displayhours = hours + ":00";
-        let day0 = "";
-        let day1 = p + props.initialWeek[0].key;
-        let day2 = p + props.initialWeek[1].key;
-        let day3 = p + props.initialWeek[2].key;
-        let day4 = p + props.initialWeek[3].key;
-        let day5 = p + props.initialWeek[4].key;
-        let day6 = p + props.initialWeek[5].key;
-        let day7 = p + props.initialWeek[6].key;
+    for (let i = 0; i < 24; i++) { 
         contentrows.push(
-            <tr key={p}>
-                <td key={day0}>{displayhours}</td>
-                <td className="tablecontentdetail" key={day1} onClick={() => { setNewTask(true); setHourandDay(day1) }}></td>
-                <td className="tablecontentdetail" key={day2} onClick={() => { setNewTask(true); setHourandDay(day2) }}></td>
-                <td className="tablecontentdetail" key={day3} onClick={() => { setNewTask(true); setHourandDay(day3) }}></td>
-                <td className="tablecontentdetail" key={day4} onClick={() => { setNewTask(true); setHourandDay(day4) }}></td>
-                <td className="tablecontentdetail" key={day5} onClick={() => { setNewTask(true); setHourandDay(day5) }}></td>
-                <td className="tablecontentdetail" key={day6} onClick={() => { setNewTask(true); setHourandDay(day6) }}></td>
-                <td className="tablecontentdetail" key={day7} onClick={() => { setNewTask(true); setHourandDay(day7) }}></td>
+            <tr key={i}>
+                <td key={""}>{i + ":00"}</td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[0]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[0]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[1]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[1]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[2]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[2]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[3]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[3]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[4]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[4]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[5]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[5]) }}></td>
+                <td className="tablecontentdetail" key={i + "-" + usedKeys[6]} onClick={() => { setNewTask(true); setHourAndDay(i + "-" + usedKeys[6]) }}></td>
             </tr>
         );
-        hours++;
-    };
+    }
 
-    // Getting all the currently used keys in the week
-    const usedKeys = [];
-    for (let i = 0; i < 7; i++) {
-        usedKeys.push(props.initialWeek[i].key);
-    };
-
+    // DEV NOTE FINISHED WITH CODE UNTIL THIS POINT
     // state for controlling TaskDetails component
     const [initialTask, setTask] = useState(false);
     const [initialTitle, setTitle] = useState();
@@ -79,16 +50,17 @@ function CalendarContent(props) {
 
     return (
         <>
-            {initialTask == true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription} displaycookie={initialCookie} cookiedate={initialCookieDate} />}
-            {initialaddtask == true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
+            {initialTask === true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription}
+                displaycookie={initialCookie} cookiedate={initialCookieDate} />}
+            {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
             <div className="tcontent">
                 <table className="tablecontent">
                     <thead>
                         <tr>
-                            {datesofweekdays}
+                            {datesOfTheWeek}
                         </tr>
                         <tr>
-                            {weekdays1}
+                            {calendarTableHeader}
                         </tr>
                     </thead>
                 </table>
@@ -98,7 +70,7 @@ function CalendarContent(props) {
                             {contentrows}
                         </tbody>
                     </table>
-                    {localStorage.getItem("Cookies").includes("Task") == true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
+                    {localStorage.getItem("Cookies").includes("Task") === true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
                         displaytitle={setTitle} displaydescription={setDescription} initialcookie={setCookie} cookiedate={setCookieDate} />}
                 </div>
             </div>
@@ -147,7 +119,10 @@ function DisplayAllTasks(props) {
                 left: 0 + (indexofDay * 9.89) - 9.89 + "vw",
             };
             allTasksArray.push(
-                <div key={i} id="taskindex" style={taskStyle} onClick={() => { props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]); props.initialcookie(splitArray[0]); props.cookiedate(splitArray[2]); } }>
+                <div key={i} id="taskindex" style={taskStyle} onClick={() => {
+                    props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]);
+                    props.initialcookie(splitArray[0]); props.cookiedate(splitArray[2]);
+                }}>
                     <p>{splitArray[1]}</p>
                 </div>)
         };
