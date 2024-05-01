@@ -83,8 +83,8 @@ function MonthContent(props) {
                 </table>
             </div>
         </>
-    );
-};
+    )
+}
 
 function CountTasks(props) {
 
@@ -92,8 +92,8 @@ function CountTasks(props) {
         <>
             {props.monthtasks}
         </>
-    );
-};
+    )
+}
 function YearContent(props) {
 
     // I am setting useRef to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,

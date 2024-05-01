@@ -10,7 +10,7 @@ export function Calendar() {
     // if storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
     localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") == null ? "" : localStorage.getItem("TaskDetails"));
     localStorage.setItem("Date", localStorage.getItem("Date") == null ? "" : localStorage.getItem("Date"));
-    localStorage.setItem("Cookies", localStorage.getItem("Cookies") == null ? "" : localStorage.getItem("Cookies"));
+    localStorage.setItem("Tasks", localStorage.getItem("Tasks") == null ? "" : localStorage.getItem("Tasks"));
 
     const daysOfTheWeekArray = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const monthsOfTheYearArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -217,7 +217,7 @@ export function Calendar() {
     // Using the second State to preserve the initialWeek even if it gets updated, so that the user can back to it
     const [initialWeek, setDifferentWeek] = useState(getInitialWeek);
     const [preserveInitial, setDontUse] = useState(initialWeek);
-    console.log(initialWeek)
+
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
     const [displayinitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayinitial);
@@ -287,8 +287,8 @@ export function Calendar() {
     // DEV NOTE - HERE REFRACTURING ENDED
     // states for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
     const [initialAddTask, setNewTask] = useState(false);
-    const adjustMonth = currentDate.getMonth() + 1;
-    const getHourAndDay = currentDate.getHours() + 10 + "" + currentDate.getFullYear() + ((adjustMonth.toString().length === 1) ? "0" + adjustMonth : adjustMonth) + currentDate.getDate();
+
+    const getHourAndDay = currentDate.getHours() + "-" + currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
 
     // states for the apperance and disappearance of SearchUserInput component
     const [initialSearch, setSearch] = useState(false);
@@ -320,9 +320,9 @@ export function Calendar() {
         if (localStorage.getItem("TaskDetails").includes(inputByUser)) {
 
             // dateArray stores the dates = keys that are used in the YYYYMMDD format
-            let dateArray = localStorage.getItem("Date").split("___");
+            let dateArray = localStorage.getItem("Date").split("_");
             // arrayDetails stores the title and description 
-            let arrayDetails = localStorage.getItem("TaskDetails").split("___"); 
+            let arrayDetails = localStorage.getItem("TaskDetails").split("_"); 
             let detailIndex;
             let slicedDate, slicedMonth, slicedYear, slicedDay;
             let createkey;
@@ -529,14 +529,14 @@ export function Calendar() {
     return (
         <>
             {initialSearch === true && <SearchUserInput setsearch={setSearch} searchResult={searchResult.current} />}
-            {initialAddTask === true && <Addtask componentchanger={setNewTask} getHourAndDay={getHourAndDay} addtaskbackground={setNewTask} />}
+            {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
             {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
             <div className="pagetop">
             
                 <span className="cal">Calendar</span>
 
                 <div className="prkotina">
-                <button id="todaybutton" className="todaybutton" type="button" onClick={() => { // here I am resetting all states to initial ones so that I can get back to beginning
+                <button id="todaybutton" className="todaybutton" type="button" onClick={() => {
                     setMonthName( monthsOfTheYearArray[currentDate.getMonth()]);
                     setMonthNumber(currentDate.getMonth());
                     setYearNumber(currentDate.getFullYear());
@@ -624,12 +624,12 @@ function Login(props) {
 
         // This works in 2 ways, first to catch if user gave invalid input, and also if user was feeling funky and removed "required" from his client side
         if (inputCleansed == "") {
-            alert("Aha ! You thought so? A valid input is required!");
+            alert("Please enter a name");
             return
-        };
+        }
 
         // Here I am setting the cookie and destroying the component 
-        setCookie("name", inputCleansed, 1);
+        setCookie("name", inputCleansed);
         props.dontDisplayUI(false);
     }
 
@@ -655,12 +655,12 @@ function Login(props) {
     )
 }
 
-function setCookie(cname, cvalue, exdays) {
+function setCookie(cname, cvalue) {
 
-    //props are name, value for the name, and days which will always be 1 - I want a year long expiration
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000 ));
-    let expire = "expires=" + d.toDateString();
+    // Expiration time is set to one year
+    const dateToChange = new Date();
+    dateToChange.setTime(d.getTime() + (24 * 60 * 60 * 1000 ));
+    let expire = "expires=" + dateToChange.toDateString();
     document.cookie = cname + "=" + cvalue + "_;_" + expire + ";path=/";
 }
 

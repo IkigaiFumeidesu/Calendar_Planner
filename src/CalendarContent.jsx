@@ -14,15 +14,15 @@ function CalendarContent(props) {
     // First element is below Time table header cell and it needs to be empty, hence why the array starts with an empty element
     const datesOfTheWeek = [<td key={0}></td>];
 
-    /* Here I want to add the dates in XX.XX format day-month into the head of the table, I use keys of the delivered array to get the dates*/
+    // Here I want to add the dates in XX.XX format day-month into the head of the table, I use keys of the delivered array to get the dates
     for (let i = 0; i < 7; i++) {
         let contentkeys = props.initialWeek[i].key.split("-");
         datesOfTheWeek.push(<td key={props.initialWeek[i].key}>{contentkeys[2] + "." + contentkeys[1]}</td>);
     }
 
-    const contentrows = [];
     const usedKeys = [props.initialWeek[0].key, props.initialWeek[1].key, props.initialWeek[2].key,
     props.initialWeek[3].key, props.initialWeek[4].key, props.initialWeek[5].key, props.initialWeek[6].key];
+    const contentrows = [];
 
     // Here I am creating rows and cells for each day and each hour with special keys
     for (let i = 0; i < 24; i++) { 
@@ -40,18 +40,13 @@ function CalendarContent(props) {
         );
     }
 
-    // DEV NOTE FINISHED WITH CODE UNTIL THIS POINT
     // state for controlling TaskDetails component
-    const [initialTask, setTask] = useState(false);
-    const [initialTitle, setTitle] = useState();
-    const [initialDescription, setDescription] = useState();
-    const [initialCookie, setCookie] = useState();
-    const [initialCookieDate, setCookieDate] = useState();
+    const [initialTaskDetails, setTaskDetails] = useState(false);
+    const [makeAnotherPlan, setAnotherPlan] = useState();
 
     return (
         <>
-            {initialTask === true && <TaskDetails displaytask={setTask} displaytitle={initialTitle} displaydescription={initialDescription}
-                displaycookie={initialCookie} cookiedate={initialCookieDate} />}
+            {initialTaskDetails === true && <TaskDetails setTaskDetails={setTaskDetails} makeAnotherPlan={makeAnotherPlan}/>}
             {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
             <div className="tcontent">
                 <table className="tablecontent">
@@ -70,99 +65,98 @@ function CalendarContent(props) {
                             {contentrows}
                         </tbody>
                     </table>
-                    {localStorage.getItem("Cookies").includes("Task") === true && <DisplayAllTasks usedKeys={usedKeys} displaytask={setTask}
-                        displaytitle={setTitle} displaydescription={setDescription} initialcookie={setCookie} cookiedate={setCookieDate} />}
+                    {localStorage.getItem("Date").includes("_") === true && <DisplayAllTasks usedKeys={usedKeys} setTaskDetails={setTaskDetails} setAnotherPlan={setAnotherPlan}/>}
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
 export default CalendarContent;
 
 
 function DisplayAllTasks(props) {
 
-    // every cookie ends with _; in order to iterate I have to split them
-    const cookieArray = localStorage.getItem("Cookies").split("_;");
-    const allTasksArray = [];
-    for (let i = 0; i < cookieArray.length; i++) {
+    // Retrieving data from storage to be loop through
+    const existingTasksArray = JSON.parse(localStorage.getItem("Tasks"));
+    const existingDatesArray = localStorage.getItem("Date").split("_");
 
-        // each cookie gets then again split into another array so that I can compare its date value with a passing array of keys (props)
-        const splitArray = cookieArray[i].toString().split("___");
+    const displayedTasksArray = [];
+    const existingArrayLength = existingDatesArray.length;
+
+    for (let i = 0; i < existingArrayLength; i++) { 
 
         // if this props array has the date value, it will create the task
-        if (props.usedKeys.includes(splitArray[2])) {
-
-            // elements of an array to be converted from string to number
-            const firstHourInput = Number(splitArray[3]);
-            const secondHourInput = Number(splitArray[4]);
+        if (props.usedKeys.includes(existingDatesArray[i])) {
 
             // find the index of the date in the keys array and display it
-            const indexofDay = props.usedKeys.indexOf(splitArray[2]) + 1;
+            const indexOfDay = props.usedKeys.indexOf(existingDatesArray[i]) + 1;
 
             // style based on values received from reading the cookie
             const taskStyle = {
-                backgroundColor: splitArray[5],
+                backgroundColor: existingTasksArray[i].colour,
                 position: "absolute",
                 overflow: "hidden",
                 width: 153,
                 outline: "1px solid grey",
 
                 // Abs because user can input eg. 9 and 19 (positive result) or 19 and 9 (negative result), +1 is for the result to not be a 0 != 40*0 
-                height: 40.7 * Math.abs(firstHourInput - secondHourInput) + 40.7, 
+                height: 40.7 * Math.abs(existingTasksArray[i].fromHour - existingTasksArray[i].toHour) + 40.7, 
 
                 // Searching for the lower value between these 2 submitted
-                top: 126.5 / 23 * firstHourInput + "vh",
+                top: 126.5 / 23 * existingTasksArray[i].fromHour + "vh",
 
                 // find the index of the date in the keys array and display it
-                left: 0 + (indexofDay * 9.89) - 9.89 + "vw",
-            };
-            allTasksArray.push(
+                left: 0 + (indexOfDay * 9.89) - 9.89 + "vw",
+            }
+            displayedTasksArray.push(
                 <div key={i} id="taskindex" style={taskStyle} onClick={() => {
-                    props.displaytask(true); props.displaytitle(splitArray[1]); props.displaydescription(splitArray[6]);
-                    props.initialcookie(splitArray[0]); props.cookiedate(splitArray[2]);
+                    props.setTaskDetails(true); props.setAnotherPlan([existingTasksArray[i], i]);
                 }}>
-                    <p>{splitArray[1]}</p>
-                </div>)
-        };
-    };
-
-    return (
-        <>
-            <div className="Taskdiv">
-                {allTasksArray}
-            </div>
-        </>
-    );
-};
-
-function TaskDetails(props) {
-
-    const deleteCookie = () => {
-
-        // Cleaning the String =Task?= from "=", because I will use "=" to split the array
-        const cleanCookie = props.displaycookie.replace(/["="]/g, "");
-        const cookieArray = localStorage.getItem("Cookies").split("=");
-
-        // Getting the index of clicked Cookie to get the corresponding elements positions in all localStorages
-        const cookieIndex = cookieArray.indexOf(cleanCookie);
-        const replaceCookie = "=" + cookieArray[cookieIndex] + "=" + cookieArray[cookieIndex + 1];
-        localStorage.setItem("Cookies", localStorage.getItem("Cookies").replace(replaceCookie, ""));
-        localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails").replace(props.displaytitle + "___" + props.displaydescription + "___", ""));
-        localStorage.setItem("Date", localStorage.getItem("Date").replace(props.cookiedate + "___", ""));
+                    <p>{existingTasksArray[i].title}</p>
+                </div>);
+        }
     }
 
     return (
         <>
-            <div className="taskdetailsbackground" onClick={() => { props.displaytask(false) }}></div>
-            <div className="taskdetails">
-                <h2>{props.displaytitle}</h2>
-                <hr />
-                <p>{props.displaydescription}</p>
-                <button onClick={() => { deleteCookie(); props.displaytask(false) }}>Delete this task!</button>
-                <button onClick={() => { props.displaytask(false) }}>Hide the details!</button>
+            <div className="Taskdiv">
+                {displayedTasksArray}
             </div>
         </>
-    );
-};
+    )
+}
+
+function TaskDetails(props) {
+
+    const deleteTask = () => {
+        
+        // Removing clicked task by using the index passed in props
+        const existingTasksArray = JSON.parse(localStorage.getItem("Tasks"));
+        existingTasksArray.splice(props.makeAnotherPlan[1], 1);
+        localStorage.setItem("Tasks", JSON.stringify(existingTasksArray));
+
+        // Same as above, but no convertion to JSON needed
+        const existingDatesArray = localStorage.getItem("Date").split("_");
+        existingDatesArray.splice(props.makeAnotherPlan[1], 1);
+        localStorage.setItem("Date", existingDatesArray.join("_"));
+
+        // For every 1 element in existingTasksArray there are 2 in existingTaskDetailsArray - hence (say props is 0), 0 * 2 = 0, and 0 * 2 + 1 = 1, so splice(0,1)
+        const existingTaskDetailsArray = JSON.parse(localStorage.getItem("TaskDetails"));
+        existingDatesArray.splice(props.makeAnotherPlan[1] * 2, props.makeAnotherPlan[1] * 2 + 1);
+        localStorage.setItem("TaskDetails", JSON.stringify(existingDatesArray));
+    }
+ 
+    return (
+        <>
+            <div className="taskdetailsbackground" onClick={() => { props.setTaskDetails(false) }}></div>
+            <div className="taskdetails">
+                <h2>{props.makeAnotherPlan[0].title}</h2>
+                <hr />
+                <p>{props.makeAnotherPlan[0].description}</p>
+                <button onClick={() => { deleteTask(); props.setTaskDetails(false) }}>Delete this task!</button>
+                <button onClick={() => { props.setTaskDetails(false) }}>Hide the details!</button>
+            </div>
+        </>
+    )
+}
