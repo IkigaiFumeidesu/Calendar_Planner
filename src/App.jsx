@@ -25,9 +25,7 @@ export function Calendar() {
 
     // Decide whether its leap year or not = 28/29th February
     const numberOfDaysInMonthArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    if (initialYearNumber % 4 === 0) {
-        numberOfDaysInMonthArray[1] = 29;
-    }
+    initialYearNumber % 4 === 0 && (numberOfDaysInMonthArray[1] = 29);
 
     // Set a date to 1.XX.XXXX format to get the number of the day (0-6) 
     const numberOfDaysInMonth = numberOfDaysInMonthArray[initialMonthNumber];
@@ -56,9 +54,8 @@ export function Calendar() {
 
     // Preparing to set each key of every date to XXXX-??-?? year-month-date format
     let previousMonth = initialMonthNumber;
-    if (previousMonth === 0) {
-        previousMonth = 12;
-    }
+    previousMonth === 0 && (previousMonth = 12);
+
     let currentMonth = initialMonthNumber + 1;
 
     // iterator variables
@@ -153,9 +150,7 @@ export function Calendar() {
 
     // Ex. April - initialMonthNumber would return 3, so to get the next month - May I need to add 2
     let nextMonth = initialMonthNumber + 2;
-    if (nextMonth === 13) {
-        nextMonth = 1;
-    }
+    nextMonth === 13 && (nextMonth = 1);
 
     // Filling 5th and 6th arrays so that both contain 7 elements
     let dateOfNextMonth = 1;
@@ -164,9 +159,7 @@ export function Calendar() {
 
     // When I update month to January I also need to up the year parameter
     let nextYearString = initialYearNumber;
-    if (nextMonth === 1) {
-        nextYearString = initialYearNumber + 1;
-    }
+    nextMonth === 1 && (nextYearString = initialYearNumber + 1);
 
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
     for (; numberOfDatesFifthRow < 7; numberOfDatesFifthRow++) {
@@ -219,8 +212,8 @@ export function Calendar() {
     const [preserveInitial, setDontUse] = useState(initialWeek);
 
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
-    const [displayinitial, setDisplayDifferent] = useState("displayweek");
-    const [preservedisplay, setDisplayback] = useState(displayinitial);
+    const [displayInitial, setDisplayDifferent] = useState("displayweek");
+    const [preservedisplay, setDisplayback] = useState(displayInitial);
 
     // *Below are 2 functions for arrows - 2 onClicks*
 
@@ -599,8 +592,13 @@ export function Calendar() {
                         <button className="createbutton">Other Overlays</button>
                     </div>
                 </div>
-                <DisplayUI displayinitial={displayinitial} setdisplay={setDisplayDifferent} setrow={setDifferentWeek} initialWeek={initialWeek} monthRowsObject={monthRowsObject}
-                    namesOfTheDays={namesOfTheDays} daysOfTheWeekArray={daysOfTheWeekArray}  monthsOfTheYearArray={ monthsOfTheYearArray} numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
+                <DisplayUI displayInitial={displayInitial}
+                    initialWeek={initialWeek}
+
+                    monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays} setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} 
+                    
+                    daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
+                    numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
             </div>
         </>
     )

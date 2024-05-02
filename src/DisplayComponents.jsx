@@ -2,22 +2,24 @@ import { useRef } from "react"
 import CalendarContent from "./CalendarContent"
 
 function DisplayUI(props) {
-    if (props.displayinitial === "displayweek") {
+    if (props.displayInitial === "displayweek") {
         return (
             <>
                 <CalendarContent initialWeek={props.initialWeek} />
             </>
         )
-    } else if (props.displayinitial === "displaymonth") {
+    } else if (props.displayInitial === "displaymonth") {
         return (
             <>
-                <MonthContent monthRowsObject={props.monthRowsObject} namesOfTheDays={props.namesOfTheDays} setdisplay={props.setdisplay} setrow={props.setrow} />
+                <MonthContent monthRowsObject={props.monthRowsObject} namesOfTheDays={props.namesOfTheDays}
+                    setDisplayDifferent={props.setDisplayDifferent} setDifferentWeek={props.setDifferentWeek} />
             </>
         )
     } else { 
         return (
             <>
-                <YearContent daysOfTheWeekArray={props.daysOfTheWeekArray} monthsOfTheYearArray={props.monthsOfTheYearArray} numberOfDaysInMonthArray={props.numberOfDaysInMonthArray} initialYearNumber={props.initialYearNumber} />
+                <YearContent daysOfTheWeekArray={props.daysOfTheWeekArray} monthsOfTheYearArray={props.monthsOfTheYearArray}
+                    numberOfDaysInMonthArray={props.numberOfDaysInMonthArray} initialYearNumber={props.initialYearNumber} />
             </>
         )
     }
@@ -28,10 +30,10 @@ function MonthContent(props) {
     const monthTasksCounter = [];
     let counterForKeys = 0;
     
-    // function to count Tasks at a given day
+    // Counting all plans with a given date 
     const countTasks = (key, row, index) => {
 
-        const count = [...localStorage.getItem("Cookies").matchAll(key + "_", "i")];
+        const count = [...localDateStored.matchAll(key + "_", "i")];
         const customStyle = {
             position: "absolute",
             zIndex: 2,
@@ -42,50 +44,39 @@ function MonthContent(props) {
         counterForKeys++;
     };
 
-    // check if any day of the month corresponds with cookies
+    const localDateStored = localStorage.getItem("Date");
+
+    // Checking if any used date in a given month corresponds with one stored in localStorage
     for (let i = 0; i < 7; i++) {
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.firstRow[i].key)) {
-            countTasks(props.monthRowsObject.firstRow[i].key, 0, i)
-        }
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.secondRow[i].key)) {
-            countTasks(props.monthRowsObject.secondRow[i].key, 1, i)
-        }
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.thirdRow[i].key)) {
-            countTasks(props.monthRowsObject.thirdRow[i].key, 2, i)
-        }
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.fourthRow[i].key)) {
-            countTasks(props.monthRowsObject.fourthRow[i].key, 3, i)
-        }
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.fifthRow[i].key)) {
-            countTasks(props.monthRowsObject.fifthRow[i].key, 4, i)
-        }
-        if (localStorage.getItem("Cookies").includes(props.monthRowsObject.sixthRow[i].key)) {
-            countTasks(props.monthRowsObject.sixthRow[i].key, 5, i)
-        }
+        localDateStored.includes(props.monthRowsObject.firstRow[i].key) && (countTasks(props.monthRowsObject.firstRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.secondRow[i].key) && (countTasks(props.monthRowsObject.secondRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.thirdRow[i].key) && (countTasks(props.monthRowsObject.thirdRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.fourthRow[i].key) && (countTasks(props.monthRowsObject.fourthRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.fifthRow[i].key) && (countTasks(props.monthRowsObject.fifthRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.sixthRow[i].key) && (countTasks(props.monthRowsObject.sixthRow[i].key, 0, i));
     }
 
     return (
         <>
-            <div className="tcontent">
-                {monthTasksCounter !== 0 && <CountTasks monthtasks={monthTasksCounter} />}
-                <table className="tablemonthcontent">
-                    <thead>
-                        <tr>{props.namesOfTheDays}</tr>
-                    </thead>
-                    <tbody>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.firstRow) }}>{props.monthRowsObject.firstRow}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.secondRow) }}>{props.monthRowsObject.secondRow}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.thirdRow) }}>{props.monthRowsObject.thirdRow}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.fourthRow) }}>{props.monthRowsObject.fourthRow}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.fifthRow) }}>{props.monthRowsObject.fifthRow}</tr>
-                        <tr onClick={() => { props.setdisplay("displayweek"); props.setrow(props.monthRowsObject.sixthRow) }}>{props.monthRowsObject.sixthRow}</tr>
-                    </tbody>
-                </table>
-            </div>
+        <div className="tcontent">
+            {monthTasksCounter !== 0 && <CountTasks monthtasks={monthTasksCounter} />}
+            <table className="tablemonthcontent">
+                <thead>
+                    <tr>{props.namesOfTheDays}</tr>
+                </thead>
+                <tbody>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.firstRow) }}>{props.monthRowsObject.firstRow}</tr>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.secondRow) }}>{props.monthRowsObject.secondRow}</tr>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.thirdRow) }}>{props.monthRowsObject.thirdRow}</tr>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.fourthRow) }}>{props.monthRowsObject.fourthRow}</tr>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.fifthRow) }}>{props.monthRowsObject.fifthRow}</tr>
+                    <tr onClick={() => { props.setDisplayDifferent("displayweek"); props.setDifferentWeek(props.monthRowsObject.sixthRow) }}>{props.monthRowsObject.sixthRow}</tr>
+                </tbody>
+            </table>
+        </div>
         </>
     )
 }
-
 function CountTasks(props) {
 
     return (
@@ -97,235 +88,206 @@ function CountTasks(props) {
 function YearContent(props) {
 
     // I am setting useRef to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,
-    // Ref would get updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.monthsOfTheYearArray array
-
-    const ref = useRef();
-    ref.current = 0; 
-    const rowref = useRef();
-    rowref.current = "";
+    // refUsedForMonths would get updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.monthsOfTheYearArray array
+    const refUsedForMonths = useRef();
+    refUsedForMonths.current = 0; 
 
     // I want to get the initial date of the first year so that I can work with it to display the full year
-
-    const currentyear = props.initialYearNumber.toString(); // passed year so that update to previous or next year is automatic
-    const startoftheyear = new Date();
-    startoftheyear.setFullYear(currentyear, ref.current, 1);
-    const firstday = startoftheyear.getDay();
-    const previousyear = (currentyear - 1).toString();
-    let firstrowprevious;
-    let rowkeys;
-    let date = 1;
+    const startOfTheYear = new Date();
+    startOfTheYear.setFullYear(props.initialYearNumber, refUsedForMonths.current, 1);
+    const firstDayOfYear = startOfTheYear.getDay();
+    let datesPreviousYear;
+    let creationOfKey;
+    let dateOfThisYear = 1;
     let whichrow;
+    // Constructor for objects, which will contain array of dates
+    class MonthDates {
+        constructor(firstRowYear, secondRowYear, thirdRowYear, fourthRowYear, fifthRowYear, sixthRowYear, rowCreation) {
+            this.firstRowYear = firstRowYear;
+            this.secondRowYear = secondRowYear;
+            this.thirdRowYear = thirdRowYear;
+            this.fourthRowYear = fourthRowYear;
+            this.fifthRowYear = fifthRowYear;
+            this.sixthRowYear = sixthRowYear;
+            this.rowCreation = rowCreation;
+        }
+    }
 
-    // Constructor for objects to hold an arrays of dates
-    function MonthDates(row1, row2, row3, row4, row5, row6, rowCreation) {
-        this.row1 = row1;
-        this.row2 = row2;
-        this.row3 = row3;
-        this.row4 = row4;
-        this.row5 = row5;
-        this.row6 = row6;
-        this.rowCreation = rowCreation;
-    };
-
-    // I want my objects to be in one
+    // Creating all objects via constructor
     const Objects = {};
-    for (let x = 0; x < 12; x++) {
-        Objects[x] = { name: new MonthDates([], [], [], [], [], [], []) };
-    };
+    for (let i = 0; i < 12; i++) {
+        Objects[i] = new MonthDates([], [], [], [], [], [], []);
+    }
 
-    // one runtime per render, to get the start of the chain - calendar
-    if (firstday == 0) { // Condition if the month starts on Sunday
+    // One runtime per render, to get the start of the chain - calendar
+    // Condition if the month starts on Sunday
+    if (firstDayOfYear === 0) {
 
-        firstrowprevious = props.numberOfDaysInMonthArray[11] - 5;
-        for (let fr = 0; fr < 6; fr++) {
-            rowkeys = previousyear + 12 + firstrowprevious;
-            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
-            firstrowprevious++
-        };
-        rowkeys = currentyear + 1 + date;
-        Objects[0].name.row1.push(<td key={rowkeys}>{date}</td>);
-        date++;
+        // Ex. 31 dates are in previous month 31 - 5 is 26 but starting from 26 to 31, there are 6 numbers, thats why i < 6, it starts at 0
+        datesPreviousYear = props.numberOfDaysInMonthArray[11] - 5;
+        createDatesPreviousYear(6);
 
-    } else if (firstday == 1) { // Condition if the month starts on Monday
+        // To the 6 dates from previous month, I need to add 1 from the month to be displayed
+        createDatesThisYear(1);
 
-        firstrowprevious = props.numberOfDaysInMonthArray[11] - 6;
-        for (let fr = 0; fr < 7; fr++) {
-            rowkeys = previousyear + 12 + firstrowprevious;
-            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
-            firstrowprevious++;
-        };
+    // Condition if the month starts on Monday
+    } else if (firstDayOfYear === 1) {
 
-    } else { // Solution for the rest of the week
+        // Ex. 31 dates are in previous month 31 - 6 is 25 but starting from 25 to 31, there are 7 numbers, therefore the whole first row 
+        datesPreviousYear = props.numberOfDaysInMonthArray[11] - 6;
+        createDatesPreviousYear(7);
 
-        firstrowprevious = props.numberOfDaysInMonthArray[11] - firstday + 2;
-        for (let fr = 0; fr < firstday - 1; fr++) {
-            rowkeys = previousyear + 12 + firstrowprevious;
-            Objects[0].name.row1.push(<td className="previousmonth" key={rowkeys}>{firstrowprevious}</td>);
-            firstrowprevious++;
-        };
-        for (let fr = 0; fr < 8 - firstday; fr++) {
-            rowkeys = currentyear + 1 + date;
-            Objects[0].name.row1.push(<td key={rowkeys}>{date}</td>);
-            date++;
-        };
-    };
+    // Solution for the rest of the week
+    } else {
 
-    // Here I will create all 12 monthsOfTheYearArray with the same function, inputting different variables as the useRef gets updated
-    
+        // Ex. 31 dateOfThisYears are in previous month 31 - 4 + 2 = 29, therefore 3 numbers, +2 because I omitted 2 cases, Mo and Su
+        datesPreviousYear = props.numberOfDaysInMonthArray[11] - firstDayOfYear + 2;
+        createDatesPreviousYear(firstDayOfYear - 1);
+
+        // i starts at 0, therefore range from 0 to 8 is 9 numbers, because I added 2 before
+        createDatesThisYear(8 - firstDayOfYear);
+    }
+
+    function createDatesPreviousYear(number) {
+
+        for (let i = 0; i < number; i++) {
+            creationOfKey = props.initialYearNumber - 1 + "-" + 12 + "-" + datesPreviousYear;
+            Objects[0].firstRowYear.push(<td className="previousmonth" key={creationOfKey}>{datesPreviousYear}</td>);
+            datesPreviousYear++;
+        }
+    }
+    function createDatesThisYear(number) {
+        for (let i = 0; i < number; i++) {
+            creationOfKey = props.initialYearNumber + "-" + 1 + "-" + dateOfThisYear;
+            Objects[0].firstRowYear.push(<td key={creationOfKey}>{dateOfThisYear}</td>);
+            dateOfThisYear++;
+        }
+    }
+
+    // Here I will create all 12 Objects with the same function, inputting different variables as the useRef gets updated
     const createYearTable = (Month) => {
 
-        const displaymonth = props.monthsOfTheYearArray[ref.current];
-        const displayweek = props.daysOfTheWeekArray.map((day) => { return <td key={day}>{day}</td> });
-        let nextdate;
+        const displayMonthName = props.monthsOfTheYearArray[refUsedForMonths.current];
+        const displayWholeWeek = props.daysOfTheWeekArray.map((day) => { return <td key={day}>{day}</td> });
 
-        // passing rows between objects (aka months), condition is to exclude January AND I also wanted to change the style per say
-
-        if (Month != Objects[0].name) { // So in the case the 5th row is when the month ends I want to get the number at the start of the array
-            if (whichrow == true) {
-
-                let p = 1;
-                let z = (Objects[ref.current - 1].name.row5[0].key).slice(-2); // Im getting the date at the first position of the array
-                for (let i = 0; i < 7; i++) {
-                    if (Objects[ref.current - 1].name.row5[i].key == (currentyear + (ref.current + 1) + p)) {
-                        Month.row1.push(<td key={Objects[ref.current - 1].name.row5[i].key}>{p}</td>);
-                        p++;   // when the key is equal to the first day of the month I want to push that date and others into the array
-                    } else {
-                        Month.row1.push(<td key={Objects[ref.current - 1].name.row5[i].key} className="previousmonth">{z}</td>);
-                        z++;   // with the gotten date I want to push that date and increase it until I encounter a key which equals to the first day of the month
-                    };
-                };
-                date = date - 7; // -7 because of what nextdate number is, if the month doesnt extend beyond 5th row
+        // Passing arrays between objects (aka months), condition is to exclude January AND also I want to change the style
+        if (Month !== Objects[0]) { 
+            // this condition determines if the passed array is the 5th or 6th row
+            if (whichrow === true) {
+                passTheRow(Objects[refUsedForMonths.current - 1].fifthRowYear)
             } else {
+                passTheRow(Objects[refUsedForMonths.current - 1].sixthRowYear)
+            }
+        }
+        function passTheRow(givenRow) {
 
-                let p = 1;
-                let z = (Objects[ref.current - 1].name.row6[0].key).slice(-2); // here I am doing the same thing, but for the 6th row instead of 5th
-                for (let i = 0; i < 7; i++) {
-                    if (Objects[ref.current - 1].name.row6[i].key == (currentyear + (ref.current + 1) + p)) {
-                        Month.row1.push(<td key={Objects[ref.current - 1].name.row6[i].key}>{p}</td>);
-                        p++; // same logic is applied here but with the 6th row
-                    } else {
-                        Month.row1.push(<td key={Objects[ref.current - 1].name.row6[i].key} className="previousmonth">{z}</td>);
-                        z++;
-                    };
-                };
-            };
-        };
+            let counter = 1;
+            let datesOfPreviousMonth = (givenRow[0].key).split("-")[2];
+            for (let i = 0; i < 7; i++) {
+                // Condition: get me the passed Object's fifthRowYear key and read its month value, then compare it, if its true it belongs to the current month
+                if (Number(givenRow[i].key.split("-")[1]) === refUsedForMonths.current + 1) {
+                    Month.firstRowYear.push(<td key={givenRow[i].key}>{counter++}</td>);
+                } else {
+                    Month.firstRowYear.push(<td key={givenRow[i].key} className="previousmonth">{datesOfPreviousMonth++}</td>);
+                }
+            }
+            whichrow === true && (dateOfThisYear = dateOfThisYear - 7);
+        }
 
-        // Just filling array with all the dates of the month
+        // Filling objects's array with the dates of the month
+        for (let i = props.numberOfDaysInMonthArray[refUsedForMonths.current]; dateOfThisYear <= i; dateOfThisYear++) {
+            creationOfKey = props.initialYearNumber + "-" + (refUsedForMonths.current + 1) + "-" + dateOfThisYear;
+            Month.rowCreation.push(<td key={creationOfKey}>{dateOfThisYear}</td>);
+        }
 
-        for (; date <= props.numberOfDaysInMonthArray[ref.current]; date++) {
-            rowkeys = currentyear + (ref.current + 1) + date;
-            Month.rowCreation.push(<td key={rowkeys}>{date}</td>);
-        };
-
-        Month.row2 = Month.rowCreation.slice(0, 7);
-        Month.row3 = Month.rowCreation.slice(7, 14);
-        Month.row4 = Month.rowCreation.slice(14, 21);
-        Month.row5 = Month.rowCreation.slice(21, 28);
-        Month.row6 = Month.rowCreation.slice(28, 31);
+        Month.secondRowYear = Month.rowCreation.slice(0, 7);
+        Month.thirdRowYear = Month.rowCreation.slice(7, 14);
+        Month.fourthRowYear = Month.rowCreation.slice(14, 21);
+        Month.fifthRowYear = Month.rowCreation.slice(21, 28);
+        Month.sixthRowYear = Month.rowCreation.slice(28, 31);
 
         // For the dates of the next month to fill up row 5 and 6
+        let dateOfNextMonth = 1;
+        let numberOfDatesFifthRow = Month.fifthRowYear.length;
+        let numberOfDatesSixthRow = Month.sixthRowYear.length;
 
-        nextdate = 1;
-        let lastrow = Month.row5.length;
-        let lastlastrow = Month.row6.length;
+        // Check whether to import row 5 or row 6 into the next Month's first array
+        whichrow = numberOfDatesSixthRow === 0 ? true : false;
 
-        // This right here is to check whether I want to import row 5 or row 6 into the next month's row 1
+        // Filling the following arrays with datesOfNextMonth
+        fillTheRows(numberOfDatesFifthRow, Month.fifthRowYear);
+        fillTheRows(numberOfDatesSixthRow, Month.sixthRowYear);
+        function fillTheRows(numberOfDates, passedArray) {
 
-        if (lastlastrow > 0) {
-            whichrow = false;
-        } else {
-            whichrow = true;
-        };
-        for (; lastrow < 7; lastrow++) {
-            rowkeys = currentyear + (ref.current + 2) + nextdate;
-            Month.row5.push(<td className="nextmonth" key={rowkeys} >{nextdate}</td>);
-            nextdate++
-        };
-        for (; lastlastrow < 7; lastlastrow++) {
-            rowkeys = currentyear + (ref.current + 2) + nextdate;
-            Month.row6.push(<td className="nextmonth" key={rowkeys}>{nextdate}</td>);
-            nextdate++
-        };
+            for (; numberOfDates < 7; numberOfDates++) {
+                creationOfKey = props.initialYearNumber + "-" + (refUsedForMonths.current + 2) + "-" + dateOfNextMonth;
+                passedArray.push(<td className="nextmonth" key={creationOfKey}>{dateOfNextMonth}</td>);
+                dateOfNextMonth++;
+            }
+        }
 
-        // date gets to the point where its mroe than the number of days in the current month, so I want to make it so that it
-        // gets the number which is equal to the total number of days which I took from the other month to fill rows 5 and 6
-        // then I set the nextdate back to 1 and increase ref.current
+        // dateOfThisYear gets to the point where its value is more than the number of days in the current month, so before next loop I need to change it 
+        // the number I assign it, is the dateOfNextMonth, because dateOfNextMonth is the first number of the second row in the next month to be rendered
+        // then I set the dateOfNextMonth back to 1 and increase refUsedForMonths.current
+        dateOfThisYear = dateOfNextMonth;
+        dateOfNextMonth = 1;
+        refUsedForMonths.current++;
 
-        date = nextdate;
-        nextdate = 1;
-        ref.current++;
         return (
             <>
                 <table className="yearlytable">
                     <thead>
                         <tr>
-                            <td colSpan="7"><strong>{displaymonth}</strong></td>
+                            <td colSpan="7"><strong>{displayMonthName}</strong></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>{displayweek}</tr>
-                        <tr>{Month.row1}</tr>
-                        <tr>{Month.row2}</tr>
-                        <tr>{Month.row3}</tr>
-                        <tr>{Month.row4}</tr>
-                        <tr>{Month.row5}</tr>
-                        <tr>{Month.row6}</tr>
+                        <tr>{displayWholeWeek}</tr>
+                        <tr>{Month.firstRowYear}</tr>
+                        <tr>{Month.secondRowYear}</tr>
+                        <tr>{Month.thirdRowYear}</tr>
+                        <tr>{Month.fourthRowYear}</tr>
+                        <tr>{Month.fifthRowYear}</tr>
+                        <tr>{Month.sixthRowYear}</tr>
                     </tbody>
                 </table>
             </>
-        );
-    };
+        )
+    }
+    const arrayOfMonths = [];
 
-
-    return ( // I humbly present, the ugliest code ever known to man
-        <>
-            <div className="yearcontent">
-                <div className="monthflexbox">
-                    <div className="monthdiv">
-                        {createYearTable(Objects[0].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[1].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[2].name)} 
-                    </div>
-                </div>
-                <div className="monthflexbox">
-                    <div className="monthdiv">
-                        {createYearTable(Objects[3].name)}     
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[4].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[5].name)}
-                    </div>
-                </div>
-                <div className="monthflexbox">
-                    <div className="monthdiv">
-                        {createYearTable(Objects[6].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[7].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[8].name)}
-                    </div>
-                </div>
-                <div className="monthflexbox">
-                    <div className="monthdiv">
-                        {createYearTable(Objects[9].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[10].name)}
-                    </div>
-                    <div className="monthdiv">
-                        {createYearTable(Objects[11].name)}
-                    </div>
-                </div>
+    // creating all Months into an Array
+    for (let i = 0; i < 12; i++) {
+        arrayOfMonths.push(
+            <div className="monthdiv">
+                {createYearTable(Objects[i])}
             </div>
+        )
+    }
+    return (
+        <>
+        <div className="yearcontent">
+            <div className="monthflexbox">
+                {arrayOfMonths[0]}
+                {arrayOfMonths[1]}
+                {arrayOfMonths[2]}
+            </div>
+            <div className="monthflexbox">
+                {arrayOfMonths[3]}
+                {arrayOfMonths[4]}
+                {arrayOfMonths[5]}
+            </div>
+            <div className="monthflexbox">
+                {arrayOfMonths[6]}
+                {arrayOfMonths[7]}
+                {arrayOfMonths[8]}
+            </div>
+            <div className="monthflexbox">
+                {arrayOfMonths[9]}
+                {arrayOfMonths[10]}
+                {arrayOfMonths[11]}
+            </div>
+        </div>
         </>
     )
 }

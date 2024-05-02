@@ -7,12 +7,8 @@ function Addtask(props) {
     const shiftedHour = selectedCellArray.shift() + ":00";
 
     // To set the default value for input type date it needs to be in set format, I cannot enter one digit values without zeroes
-    if (selectedCellArray[1].length === 1) {
-        selectedCellArray[1] = "0" + selectedCellArray[1];
-    }
-    if (selectedCellArray[2].length === 1) {
-        selectedCellArray[2] = "0" + selectedCellArray[2];
-    }
+    selectedCellArray[1].length === 1 && (selectedCellArray[1] = "0" + selectedCellArray[1]);
+    selectedCellArray[2].length === 1 && (selectedCellArray[2] = "0" + selectedCellArray[2]);
 
     // Default value for date input and for manipulation of onChange action by user
     const [initialDayValue, setDayValue] = useState(selectedCellArray.join("-"));
@@ -26,7 +22,6 @@ function Addtask(props) {
         arrayForHoursInTheDay.push(<option key={"A" + i}>{i + ":00"}</option>);
         arraySecondForHoursInTheDay.push(<option key={"B" + i}>{i + ":00"}</option>);
     }
-    // DEV NOTE ADJUST OPTIONS IN THE RETURN SECTION
 
     function addEntryIntoStorage(e) {
 
@@ -45,12 +40,8 @@ function Addtask(props) {
         }
 
         // Getting the date into the same format as used in Calendar.jsx
-        if (objectForm.date[8] === "0") {
-            objectForm.date = objectForm.date.slice(0, 8) + objectForm.date.slice(9);
-        }
-        if (objectForm.date[5] === "0") {
-            objectForm.date = objectForm.date.slice(0, 5) + objectForm.date.slice(6);
-        }
+        objectForm.date[8] === "0" && (objectForm.date = objectForm.date.slice(0, 8) + objectForm.date.slice(9));
+        objectForm.date[5] === "0" && (objectForm.date = objectForm.date.slice(0, 5) + objectForm.date.slice(6));
 
         const fromHourReplaced = Number(objectForm.fromHour.replace(":00", ""));
         const toHourReplaced = Number(objectForm.toHour.replace(":00", ""));
