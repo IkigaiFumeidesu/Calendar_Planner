@@ -143,8 +143,8 @@ function TaskDetails(props) {
 
         // For every 1 element in existingTasksArray there are 2 in existingTaskDetailsArray - hence (say props is 0), 0 * 2 = 0, and 0 * 2 + 1 = 1, so splice(0,1)
         const existingTaskDetailsArray = JSON.parse(localStorage.getItem("TaskDetails"));
-        existingDatesArray.splice(props.makeAnotherPlan[1] * 2, props.makeAnotherPlan[1] * 2 + 1);
-        localStorage.setItem("TaskDetails", JSON.stringify(existingDatesArray));
+        existingTaskDetailsArray.splice(props.makeAnotherPlan[1] * 2, 2);
+        localStorage.setItem("TaskDetails", JSON.stringify(existingTaskDetailsArray));
     }
  
     return (

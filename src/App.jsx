@@ -65,89 +65,40 @@ export function Calendar() {
     // Date counter of the first day of month to be rendered
     let dateCounter = 1; 
 
-    // Here is the solution to the first row of the calendar, where JS gives Sunday 0 as its according to JS the start of the week
-    // Since the workweek is Mo-Su, I need to check which day is the starting day of the month and get the dates of the previous month to fill out the rest of the row
-
-    // Condition if the month starts on Sunday
-    if (firstDayNumber === 0) { 
-
+    // JS gives Sunday 0 as its according to JS the start of the week, my week starts with monday so I need to check it 
+    if (firstDayNumber === 0) {    // Condition if the month starts on Sunday
         // Ex. 31 dates are in previous month 31 - 5 is 26 but starting from 26 to 31, there are 6 numbers, thats why i < 6, it starts at 0
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 5;
-        for (let i = 0; i < 6; i++) {
-            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
-            monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
-            previousMonthDates++;
-        }
+        createDatesPreviousMonth(6);
+
         // To the 6 dates from previous month, I need to add 1 from the month to be displayed
-        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-        monthRowsObject.firstRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{dateCounter}</td>);
-        dateCounter++;
+        createDatesThisMonth(0, 1, monthRowsObject.firstRow)
 
-    // Condition if the month starts on Monday
-    } else if (firstDayNumber === 1) { 
-
+    } else if (firstDayNumber === 1) {    // Condition if the month starts on Monday
         // Ex. 31 dates are in previous month 31 - 6 is 25 but starting from 25 to 31, there are 7 numbers, therefore the whole first row 
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 6;
-        for (let i = 0; i < 7; i++) {
-            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
-            monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
-            previousMonthDates++;
-        }
+        createDatesPreviousMonth(7);
 
-    // Solution for the rest of the week
-    } else { 
-
+    } else {    // Solution for the rest of the week
         // Ex. 31 dates are in previous month 31 - 4 + 2 = 29, therefore 3 numbers, +2 because I omitted 2 cases, Mo and Su
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - firstDayNumber + 2;
-        for (let i = 0; i < firstDayNumber - 1; i++) {
-            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
-            monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
-            previousMonthDates++;
-        }
+        createDatesPreviousMonth(firstDayNumber - 1);
 
-        //  i starts at 0, therefore range from 0 to 8 is 9 numbers, because I added 2 before
-        for (let i = 0; i < 8 - firstDayNumber; i++) {
-            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-            monthRowsObject.firstRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{dateCounter}</td>);
-            dateCounter++;
-        }
+        // i starts at 0, therefore range from 0 to 8 is 9 numbers, because I added 2 before
+        createDatesThisMonth(0, 8 - firstDayNumber, monthRowsObject.firstRow)
     }
-    
     // I need to add onClick event to all other dates so that the user can switch weeks simply by just clicking on a date 
-    for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-        monthRowsObject.secondRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.secondRow) }}>{dateCounter}</td>);
-        dateCounter++;
-    }
-    for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-        monthRowsObject.thirdRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.thirdRow) }}>{dateCounter}</td>);
-        dateCounter++;
-    }
-    for (let i = 0; i < 7; i++) {
-        dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-        monthRowsObject.fourthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fourthRow) }}>{dateCounter}</td>);
-        dateCounter++;
-    }
+    createDatesThisMonth(0, 7, monthRowsObject.secondRow);
+    createDatesThisMonth(0, 7, monthRowsObject.thirdRow);
+    createDatesThisMonth(0, 7, monthRowsObject.fourthRow);
 
     // First 4 rows are guaranteed to be filled, now I need to check if the month ends in 5th or 6th row and fill it with dates respectively
     if (numberOfDaysInMonth - dateCounter >= 7) { 
-        for (let i = 0; i < 7; i++) {
-            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-            monthRowsObject.fifthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow) }}>{dateCounter}</td>);
-            dateCounter++;
-        }
-        for (; dateCounter <= numberOfDaysInMonth; dateCounter++) {
-            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-            monthRowsObject.sixthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.sixthRow) }}>{dateCounter}</td>);
-        }
+        createDatesThisMonth(0, 7, monthRowsObject.fifthRow);
+        createDatesThisMonth(dateCounter, numberOfDaysInMonth + 1, monthRowsObject.sixthRow);
     } else {
-        for (; dateCounter <= numberOfDaysInMonth; dateCounter++) {
-            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-            monthRowsObject.fifthRow.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow) }}>{dateCounter}</td>);
-        }
+        createDatesThisMonth(dateCounter, numberOfDaysInMonth + 1, monthRowsObject.fifthRow);
     }
-
     // Ex. April - initialMonthNumber would return 3, so to get the next month - May I need to add 2
     let nextMonth = initialMonthNumber + 2;
     nextMonth === 13 && (nextMonth = 1);
@@ -162,17 +113,32 @@ export function Calendar() {
     nextMonth === 1 && (nextYearString = initialYearNumber + 1);
 
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
-    for (; numberOfDatesFifthRow < 7; numberOfDatesFifthRow++) {
-        dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
-        monthRowsObject.fifthRow.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.fifthRow); }}>{dateOfNextMonth}</td>);
-        dateOfNextMonth++;
-    }
+    createDatesNextMonth(numberOfDatesFifthRow, 7, monthRowsObject.fifthRow);
 
     // And then fill out whole 6th array with the dates of the next month
-    for (; numberOfDatesSixthRow < 7; numberOfDatesSixthRow++) { 
-        dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
-        monthRowsObject.sixthRow.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.sixthRow); }}>{dateOfNextMonth}</td>);
-        dateOfNextMonth++;
+    createDatesNextMonth(numberOfDatesSixthRow, 7, monthRowsObject.sixthRow);
+
+    // Functions to create all dates
+    function createDatesPreviousMonth(number) {
+        for (let i = 0; i < number; i++) {
+            dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
+            monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
+            previousMonthDates++;
+        }
+    }
+    function createDatesThisMonth(from, number, row) {
+        for (let i = from; i < number; i++) {
+            dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
+            row.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(row) }}>{dateCounter}</td>);
+            dateCounter++;
+        }
+    }
+    function createDatesNextMonth(from, number, row) {
+        for (let i = from; i < number; i++) {
+            dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
+            row.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(row); }}>{dateOfNextMonth}</td>);
+            dateOfNextMonth++;
+        }
     }
 
     // Here I am getting the today's date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
@@ -205,7 +171,7 @@ export function Calendar() {
                 return monthRowsObject.sixthRow;
             }
         }
-    };
+    }
 
     // Using the second State to preserve the initialWeek even if it gets updated, so that the user can back to it
     const [initialWeek, setDifferentWeek] = useState(getInitialWeek);
@@ -227,7 +193,7 @@ export function Calendar() {
             setMonthName(monthsOfTheYearArray[initialMonthNumber - 1]);
             setMonthNumber(initialMonthNumber - 1);
         }
-    };
+    }
 
     // Change to the next month and update the element
     const changeToNextMonth = () => {
@@ -239,7 +205,7 @@ export function Calendar() {
             setMonthName(monthsOfTheYearArray[initialMonthNumber + 1]);
             setMonthNumber(initialMonthNumber + 1);
         }
-    };
+    }
 
     // State to decide if Login component should render or not
     const [userNotLogged, setUserIsLogged] = useState(false);
@@ -252,7 +218,7 @@ export function Calendar() {
         } else {
             setUserIsLogged(true);
         }
-    };
+    }
 
     // This is the default setting for the user I want to hold this setting so that it doesnt go back to normal when the site refreshes
     if (localStorage.getItem("Background") === null || localStorage.getItem("Background") === "background=#FDFDFD") {
@@ -263,7 +229,7 @@ export function Calendar() {
         document.body.style.backgroundColor = "#181818";
         document.body.style.color = "#FDFDFD";
         localStorage.setItem("Background", "background=#181818");
-    };
+    }
 
     // this just changes the background from white to black 
     const changeBackground = () => {
@@ -276,63 +242,55 @@ export function Calendar() {
             document.body.style.color = "#181818";
             localStorage.setItem("Background", "background=#FDFDFD");
         }
-    };
-    // DEV NOTE - HERE REFRACTURING ENDED
-    // states for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
-    const [initialAddTask, setNewTask] = useState(false);
+    }
 
+    // States for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
+    const [initialAddTask, setNewTask] = useState(false);
     const getHourAndDay = currentDate.getHours() + "-" + currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
 
-    // states for the apperance and disappearance of SearchUserInput component
+    // States for the apperance and disappearance of SearchUserInput component
     const [initialSearch, setSearch] = useState(false);
 
     // useRef to hold the corresponding values for each task
     const searchResult = useRef();
-    const [renderId, setRenderId] = useState("");
+
     function searchAlgorithm(e) {   
 
         // Preventing the form to refresh on submit
         e.preventDefault();
 
         // Gathering data from entries and pushing it into an object
-        const form = e.target;
-        const formData = new FormData(form);
-        const formJson = Object.fromEntries(formData.entries());
+        const formInput = e.target;
+        const formData = new FormData(formInput);
+        const searchObject = Object.fromEntries(formData.entries());
 
-        // cleansing the input of a character I use and of blank spaces
-        const inputByUser = formJson.input.trim().replace(/[_]/g, "");
+        // Cleansing the input off of blank spaces
+        searchObject.input = searchObject.input.trim();
 
-        // in case the user would manually remove minLength, there is still the condition
-        if (inputByUser.length <= 2) {
-            alert("Please enter at least 3 accepted letters");
+        // Condition to catch if the user would try to remove minLength from the client side, or would input less characters
+        if (searchObject.input.length <= 2) {
+            alert("Please enter at least 3 symbols");
             const searchInput = document.getElementById("searchinput").value = "";
             return
         }
+        const localTaskDetailsArray = JSON.parse(localStorage.getItem("TaskDetails"));
 
-        // check if the storage has a plan with the given input
-        if (localStorage.getItem("TaskDetails").includes(inputByUser)) {
+        // Check if the storage has a plan with the given input
+        if (localTaskDetailsArray.join(" ").includes(searchObject.input)) {
 
-            // dateArray stores the dates = keys that are used in the YYYYMMDD format
-            let dateArray = localStorage.getItem("Date").split("_");
-            // arrayDetails stores the title and description 
-            let arrayDetails = localStorage.getItem("TaskDetails").split("_"); 
+            const localDateArray = localStorage.getItem("Date").split("_");
             let detailIndex;
-            let slicedDate, slicedMonth, slicedYear, slicedDay;
-            let createkey;
+            let extractedDate, extractedMonth, extractedYear, extractedDay;
+            let createKey;
             let endOfMonth;
             let p = 0;
-            let displayDetails = [];
-            let replaceDaterow = [];
-            const slicedDateArray = [];
-            const slicedMonthArray = [];
-            const slicedYearArray = [];
-            const slicedDayArray = [];
+            const displayDetails = [];
+            const extractedDateArray = [];
 
             for (let i = 0; i !== -1; i++) {
-
-                // Loop through each element in an array and scan it for hits, have to go back to string to not be dependent on words starting with input
+                // Recursion loop for scanning elements for hits - if includes returns true
                 for (let s = 0; s !== -1;) {
-                    if (arrayDetails[s].toString().includes(inputByUser)) {
+                    if (localTaskDetailsArray[s].includes(searchObject.input)) {
                         detailIndex = s;
                         s= -1;
                     } else {
@@ -340,180 +298,151 @@ export function Calendar() {
                     }
                 }
 
-                // This function sets up hits with dates and titles and buttons
-                function searchInputDisplay(thedate, index) {
+                // I always want to display the title of the plan and its corresponding date, but hits can come from description as well
+                // Logic: if hit came from title aka, indexes 0,2,4.. the date can be found using the condition below, since there are 2 elements in TaskDetails and 1 in Date
+                if (detailIndex % 2 === 0) {
 
-                    slicedDate = thedate;
-                    // slice out the Month and check if it starts with 0 or not, if yes slice only the number behind it and remove -1 so that I can get a number of days from the same named array
-                    slicedMonth = slicedDate[4] == 0 ? Number(slicedDate[5]) - 1 : Number(slicedDate.slice(4, 6)) - 1;
-                    slicedYear = Number(slicedDate.slice(0, 4));
-                    slicedDay = slicedDate.slice(6);
+                    // Hit is in the title, to get the date I just need to divide the index 
+                    extractedDate = localDateArray[detailIndex / 2];
+                    searchInputDisplay(extractedDate, detailIndex);
 
-                    // I need to store the values for each individual hit, because otherwise when the button is clicked it will apply all values from the latest hit
-                    // I also created a button with an ID corresponding to the loop i variable so that it matches the passed values in the arrays below
-                    slicedDateArray.push(slicedDate);
-                    slicedMonthArray.push(slicedMonth);
-                    slicedYearArray.push(slicedYear);
-                    slicedDayArray.push(slicedDay);
+                    // Shortening the Array for the next loop, +2 because I am splicing out the title AND the description of that one particular plan
+                    localTaskDetailsArray.splice(0, detailIndex + 2);
+                    // For every 2 elements in TaskDetails, there is one in Date, therefore I need to divide the index and add 1 to include that element as well
+                    localDateArray.splice(0, detailIndex / 2 + 1);
+
+                } else {
+
+                    // Hit is in the description, I need to jump to title element and divide by 2 to get the equivalent Date
+                    extractedDate = localDateArray[(detailIndex - 1) / 2];
+                    searchInputDisplay(extractedDate, detailIndex - 1);
+
+                    // Shortening the Array for the next loop, +1 because splice(0,1) slices out 1 element, so to include it, I need to add 1 to the index
+                    localTaskDetailsArray.splice(0, detailIndex + 1);
+                    // For every 2 elements in TaskDetails, there is one in Date, I am jumping to title, dividing it and adding one to include the description element
+                    localDateArray.splice(0, (detailIndex - 1) / 2 + 1); 
+                }
+                function searchInputDisplay(extractedDate, index) {
+
+                    const dateArray = extractedDate.split("-");
+                    // I need to store the values for each individual hit, because otherwise when the button is clicked it would apply all the values from the latest loop
+                    // I also created a button with an ID corresponding to the loop i variable so that it matches the passed values in the array
+                    extractedDateArray.push(...dateArray);
                     displayDetails.push(<div className="searchResult" key={p++}>
-                        <h3 className="searchH2">{slicedDay + "." + (slicedDate[4] == 0 ? slicedDate[5] : slicedDate.slice(4, 6))}</h3>
-                        <p>{arrayDetails[index]}</p>
+                        <h3 className="searchH2">{dateArray[2] + "." + dateArray[1]}</h3>
+                        <p>{localTaskDetailsArray[index]}</p>
                         <button id={i} onClick={(e) => { showTheWeek(e.target.id) }}>Display</button></div>)
-                };
-
+                }
                 function showTheWeek(id) {
 
                     // here I am rewriting the values from the last hit to the one I have stored for the button by his ID
-                    slicedDate = slicedDateArray[id];
-                    slicedMonth = slicedMonthArray[id];
-                    slicedYear = slicedYearArray[id];
-                    slicedDay = slicedDayArray[id];
+                    extractedDay = Number(extractedDateArray[id * 3 + 2]);
+                    extractedMonth = Number(extractedDateArray[id * 3 + 1]);
+                    extractedYear = Number(extractedDateArray[id * 3]);
+                    const replaceDaterow = [];
 
                     // Just checking if its leap year, otherwise its not essential to change February
-                    endOfMonth = numberOfDaysInMonthArray[slicedMonth];
-                    if (endOfMonth == 28 && Number(slicedDate[0, 4]) % 4 == 0) {
+                    endOfMonth = numberOfDaysInMonthArray[extractedMonth - 1];
+                    if (endOfMonth == 28 && extractedYear % 4 == 0) {
                         endOfMonth = 29;
                     }
-                    // setting states to re-render the calendar and "jump" from one month or even year if necessary
-                    setYearNumber(slicedYear);
-                    setMonthNumber(slicedMonth);
-                    setMonthName( monthsOfTheYearArray[slicedMonth]);
+                    // Setting states to re-render the calendar and "jump" from one month or even year if necessary
+                    setYearNumber(extractedYear);
+                    setMonthNumber(extractedMonth - 1);
+                    setMonthName(monthsOfTheYearArray[extractedMonth - 1]);
 
-                    // I need to splice the Daterow, otherwise it will keep on growing every single time someone clicks the button
-                    replaceDaterow.splice(0, 7);
-                    const d = new Date();
-                    d.setFullYear(slicedYear, slicedMonth, 1);
                     // Here I am looking at the day the month starts, since JS week starts with Sunday, I need to adjust it accordingly to mine
-                    const day = d.getDay() == 0 ? 6 : d.getDay() - 1;
+                    const adjustDate = new Date();
+                    adjustDate.setFullYear(extractedYear, extractedMonth - 1, 1);
+                    const day = adjustDate.getDay() === 0 ? 6 : adjustDate.getDay() - 1;
 
                     // The idea here is that, no matter on which day the month starts, carrying whatever number I can filter the date into a corresponding row
                     // Depending on which row it is, I can also see if that row is going to be fully packed with dates of the month or, if perhaps dates from different months will mix
-                    if (1 <= slicedDay && slicedDay <= (7 - day)) {
+                    if (1 <= extractedDay && extractedDay <= (7 - day)) {
                         createRow(1, 7 - day)
 
-                    } else if ((7 - day + 1) <= slicedDay && slicedDay <= (14 - day)) {
+                    } else if ((7 - day + 1) <= extractedDay && extractedDay <= (14 - day)) {
                         createRow(7 - day + 1, 14 - day);
 
-                    } else if ((14 - day + 1) <= slicedDay && slicedDay <= (21 - day)) {
+                    } else if ((14 - day + 1) <= extractedDay && extractedDay <= (21 - day)) {
                         createRow(14 - day + 1, 21 - day);
 
-                    } else if ((21 - day + 1) <= slicedDay && slicedDay <= (28 - day)) {
+                    } else if ((21 - day + 1) <= extractedDay && extractedDay <= (28 - day)) {
                         createRow(21 - day + 1, 28 - day);
 
                     // Here I need to extra check whether the length of the array isnt more than 7, this could happen for cases when day = 5,6 creating array of 8 or 9th elements
-                    } else if ((28 - day + 1) <= slicedDay && slicedDay <= endOfMonth && endOfMonth - (28 - day + 1) <= 7) {
+                    } else if ((28 - day + 1) <= extractedDay && extractedDay <= endOfMonth && endOfMonth - (28 - day + 1) <= 7) {
                         createRow(28 - day + 1, endOfMonth);
 
                     // This one takes care of that special case mentioned above
-                    } else if ((35 - day + 1) <= slicedDay && slicedDay <= endOfMonth) {
+                    } else if ((35 - day + 1) <= extractedDay && extractedDay <= endOfMonth) {
                         createRow(35 - day + 1, endOfMonth);
                     }
                     function createRow(start, end) {
 
-                        // if the plan's week is within the month's dates - from start to end, I will just fill it with dates of the month
-                        if (start + 6 - end == 0) {
+                        // If the plan's week is within the month's dates - from start to end, I will just fill it with dates of the month
+                        if (start + 6 - end === 0) {
                             for (let i = start; start <= end; start++) {
-                                createkey = slicedDate.slice(0, 6) + start;
-                                replaceDaterow.push(<td key={createkey}>{start}</td>);
+                                createKey = extractedYear + "-" + extractedMonth + "-" + start;
+                                replaceDaterow.push(<td key={createKey}>{start}</td>);
                             }
                             // if the plan's week is NOT within the month's dates only, then I have to fill only a specific amount of dates of the month
                         } else {
                             for (let i = start; start <= end; start++) {
-                                createkey = slicedDate.slice(0, 6) + start;
-                                replaceDaterow.push(<td key={createkey}>{start}</td>);
+                                createKey = extractedYear + "-" + extractedMonth + "-" + start;
+                                replaceDaterow.push(<td key={createKey}>{start}</td>);
                             }
                         }
 
-                        // if the plan's week is in the first row - dates of that month mixes with the previous month
+                        // If the plan's week is in the first row - dates of that month mixes with the previous month
                         let replaceDaterowNumber = replaceDaterow.length;
-                        if (replaceDaterow[replaceDaterowNumber - 1].key.slice(6) < 8) {
+                        if (replaceDaterow[replaceDaterowNumber - 1].key.split("-")[2] < 8) {
 
                             // -1 because I subtracted -1 already to get the elements position in the numberOfDaysInMonthArray array, now I need the previous one
-                            endOfMonth = slicedMonth - 1 == -1 ? numberOfDaysInMonthArray[slicedMonth + 11] : numberOfDaysInMonthArray[slicedMonth - 1];
+                            endOfMonth = extractedMonth - 1 === 0 ? numberOfDaysInMonthArray[extractedMonth + 11] : numberOfDaysInMonthArray[extractedMonth - 1];
 
-                            // if slicedMonth is equal to 0 it means that we're in January, and the next month is Dec, therefore the key will bear 12 as month, and year will decrease
-                            if (slicedMonth == 0) {
-                                slicedMonth = 12;
-                                slicedYear--;
+                            // If we're in January, we're at the end of the array, to get Dec, I need to update the number to 12 and subtract 1 from year
+                            if (extractedMonth === 1) {
+                                extractedMonth = 12;
+                                extractedYear--;
                             }
-                            // checking if the length is 1 if not I need to add 0 because the general way the keys are desined are with 2 digits for months
-                            if (slicedMonth.toString().length == 1) {
-                                slicedMonth = "0" + slicedMonth;
-                            }
-                            // Check how many dates are needed to be filled, then fill them using unshift until the length is equal to 7
+                            // Filling the array of dates from previous month
                             for (let i = replaceDaterowNumber; i < 7; i++) {
-                                createkey = "" + slicedYear + slicedMonth + endOfMonth;
-                                replaceDaterow.unshift(<td key={createkey}>{endOfMonth}</td>);
+                                createKey = extractedYear + "-" + extractedMonth + "-" + endOfMonth;
+                                replaceDaterow.unshift(<td key={createKey}>{endOfMonth}</td>);
                                 endOfMonth--;
                             }
-                            // if the plan's week is in the later rows (5th, 6th) - dates mixes with the next month
+                         // if the plan's week is in the later rows (5th, 6th) - dates mixes with the next month
                         } else {
                             // +2 because I already subtracted -1 when I reached the numberOfDaysInMonthArray array
-                            slicedMonth = slicedMonth + 2 == 13 ? 1 : slicedMonth + 2;
-                            slicedYear = slicedMonth == 1 ? slicedYear + 1 : slicedYear;
-                            slicedMonth = slicedMonth.toString().length == 1 ? "0" + slicedMonth : slicedMonth;
+                            extractedMonth = extractedMonth + 1 === 13 ? 1 : extractedMonth + 1;
+                            extractedYear = extractedMonth === 1 ? extractedYear + 1 : extractedYear;
                             let date = 1;
 
                             for (let i = replaceDaterowNumber; i < 7; i++) {
-                                createkey = "" + slicedYear + slicedMonth + date;
-                                replaceDaterow.push(<td key={createkey}>{date}</td>);
+                                createKey = extractedYear + "-" + extractedMonth + "-" + date;
+                                replaceDaterow.push(<td key={createKey}>{date}</td>);
                                 date++;
                             }
                         }
-                        // updating the state of passed array - calendarContext and updating state to cause rerender
+                        // Updating the state of passed array - calendarContext
                         setDifferentWeek(replaceDaterow);
-                        setRenderId(id);
                     }
                 }
-                
-                // I always want to display the title of the plan, since description is not required - therefore when I get an index of an element 
-                // And with that index I want to jump from description to plan index, or not move if the index points at the title one
-                if (detailIndex % 2 !== 0) {
-
-                    // hit is in the description, I need to jump to title element and divide by 2 to get the equivalent Date in dateArray
-                    slicedDate = dateArray[(detailIndex - 1) / 2];
-
-                    searchInputDisplay(slicedDate, detailIndex - 1);
-
-                    // after the function calculated all variables I need it to, I have to slice out used elements to run the loop again
-                    // the +1 is necessary because detailIndex starts counting from 0, so if I were to slice out the first element I need slice(1)
-                    arrayDetails = arrayDetails.slice(detailIndex + 1);
-                    // for every 2 elements of arrayDetails there is 1 element in dateArray, so to slice out the element I need to divide the number
-                    dateArray = dateArray.slice((detailIndex - 1) / 2 + 1); 
-                } else {
-
-                    // hit is in the title, no need to jump, but still need to divide 
-                    slicedDate = dateArray[detailIndex / 2];
-
-                    searchInputDisplay(slicedDate, detailIndex);
-
-                    // As explained above, +1 is required, but here is +2 because were currently looking at the title, which is in front of description element
-                    // so to slice it out I need to move twice
-                    arrayDetails = arrayDetails.slice(detailIndex + 2);
-                    // for every 2 elements of arrayDetails there is 1 element in dateArray, so to slice out the element I need to divide the number
-                    dateArray = dateArray.slice(detailIndex / 2 + 1);
-                }
-
                 // Here I will look at the sliced out array and look if there are any more hits, if true the loop will continue
-                if (arrayDetails.toString().includes(inputByUser)) {
+                if (localTaskDetailsArray.join("-").includes(searchObject.input)) {
 
-                // if there are no more hits, the loop will end and the component is displayed to the user
                 } else {
-
-                    // Also I will remove any input submitted from the search bar
+                    // If there are no more hits, loop ends, results are displayed and search input is cleaned
                     const searchInput = document.getElementById("searchinput").value = "";
-                    // Display the results and break from the loop
                     searchResult.current = displayDetails;
                     setSearch(true);
                     return
                 }
             }
-            // if no results are found, empty out the input, return a message and show it
         } else {
-
-            // Also I will remove any input submitted from the search bar
+            // If no results are found, empty out the input, return a message
             const searchInput = document.getElementById("searchinput").value = "";
-            // Display the below message to the user
             searchResult.current = "There are no results for your search.";
             setSearch(true);
         }
@@ -521,7 +450,7 @@ export function Calendar() {
 
     return (
         <>
-            {initialSearch === true && <SearchUserInput setsearch={setSearch} searchResult={searchResult.current} />}
+            {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
             {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
             {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
             <div className="pagetop">
@@ -618,16 +547,16 @@ function Login(props) {
 
         // I wanted to allow special characters like èìøšáøíé etc. but \W would take them out, so this is the way around it "^\\pL+$" is from the XRegExp lib
         const regex = /["^\\pL+$"\s\d\(^\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?\.\,\°\´)]/g;
-        const inputCleansed = formJson.name.replace(regex, "");
+        formJson.name = formJson.name.replace(regex, "");
 
         // This works in 2 ways, first to catch if user gave invalid input, and also if user was feeling funky and removed "required" from his client side
-        if (inputCleansed == "") {
+        if (formJson.name == "") {
             alert("Please enter a name");
             return
         }
 
         // Here I am setting the cookie and destroying the component 
-        setCookie("name", inputCleansed);
+        setCookie("name", formJson.name);
         props.dontDisplayUI(false);
     }
 
@@ -657,7 +586,7 @@ function setCookie(cname, cvalue) {
 
     // Expiration time is set to one year
     const dateToChange = new Date();
-    dateToChange.setTime(d.getTime() + (24 * 60 * 60 * 1000 ));
+    dateToChange.setTime(dateToChange.getTime() + (24 * 60 * 60 * 1000 ));
     let expire = "expires=" + dateToChange.toDateString();
     document.cookie = cname + "=" + cvalue + "_;_" + expire + ";path=/";
 }
@@ -670,7 +599,7 @@ function SearchUserInput(props) {
             <div className="searchdiv">
                 <h2>Search results:</h2>
                 <div className="searchResultsDiv">{props.searchResult}</div>
-                <button onClick={() => {props.setsearch(false) } }>Hide the search results!</button>
+                <button onClick={() => {props.setSearch(false) } }>Hide the search results!</button>
             </div>
         </>
     )
