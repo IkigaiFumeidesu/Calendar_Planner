@@ -43,17 +43,16 @@ function MonthContent(props) {
         monthTasksCounter.push(<h3 style={customStyle} key={counterForKeys}>{count.length !== 0 && count.length + " Task(s)"}</h3>)
         counterForKeys++;
     };
-
     const localDateStored = localStorage.getItem("Date");
 
     // Checking if any used date in a given month corresponds with one stored in localStorage
     for (let i = 0; i < 7; i++) {
-        localDateStored.includes(props.monthRowsObject.firstRow[i].key) && (countTasks(props.monthRowsObject.firstRow[i].key, 0, i));
-        localDateStored.includes(props.monthRowsObject.secondRow[i].key) && (countTasks(props.monthRowsObject.secondRow[i].key, 0, i));
-        localDateStored.includes(props.monthRowsObject.thirdRow[i].key) && (countTasks(props.monthRowsObject.thirdRow[i].key, 0, i));
-        localDateStored.includes(props.monthRowsObject.fourthRow[i].key) && (countTasks(props.monthRowsObject.fourthRow[i].key, 0, i));
-        localDateStored.includes(props.monthRowsObject.fifthRow[i].key) && (countTasks(props.monthRowsObject.fifthRow[i].key, 0, i));
-        localDateStored.includes(props.monthRowsObject.sixthRow[i].key) && (countTasks(props.monthRowsObject.sixthRow[i].key, 0, i));
+        localDateStored.includes(props.monthRowsObject.firstRow[i].key) && countTasks(props.monthRowsObject.firstRow[i].key, 0, i);
+        localDateStored.includes(props.monthRowsObject.secondRow[i].key) && countTasks(props.monthRowsObject.secondRow[i].key, 1, i);
+        localDateStored.includes(props.monthRowsObject.thirdRow[i].key) && countTasks(props.monthRowsObject.thirdRow[i].key, 2, i);
+        localDateStored.includes(props.monthRowsObject.fourthRow[i].key) && countTasks(props.monthRowsObject.fourthRow[i].key, 3, i);
+        localDateStored.includes(props.monthRowsObject.fifthRow[i].key) && countTasks(props.monthRowsObject.fifthRow[i].key, 4, i);
+        localDateStored.includes(props.monthRowsObject.sixthRow[i].key) && countTasks(props.monthRowsObject.sixthRow[i].key, 5, i);
     }
 
     return (

@@ -7,14 +7,13 @@ import Addtask from './Addtask';
 // Top of the page
 export function Calendar() {
 
-    // if storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
-    localStorage.setItem("TaskDetails", localStorage.getItem("TaskDetails") == null ? "" : localStorage.getItem("TaskDetails"));
-    localStorage.setItem("Date", localStorage.getItem("Date") == null ? "" : localStorage.getItem("Date"));
-    localStorage.setItem("Tasks", localStorage.getItem("Tasks") == null ? "" : localStorage.getItem("Tasks"));
+    // If storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
+    localStorage.getItem("TaskDetails") === null && localStorage.setItem("TaskDetails", "");
+    localStorage.getItem("Date") === null && localStorage.setItem("Date", "");
+    localStorage.getItem("Tasks") === null && localStorage.setItem("Tasks", "");
 
     const daysOfTheWeekArray = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const monthsOfTheYearArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
     const currentDate = new Date();
     const namesOfTheDays = daysOfTheWeekArray.map((day) => { return <td key={day}><strong>{day}</strong></td> });
 
@@ -270,6 +269,11 @@ export function Calendar() {
         // Condition to catch if the user would try to remove minLength from the client side, or would input less characters
         if (searchObject.input.length <= 2) {
             alert("Please enter at least 3 symbols");
+            const searchInput = document.getElementById("searchinput").value = "";
+            return
+        }
+        if (localStorage.getItem("TaskDetails") === "") {
+            alert("There are no plans");
             const searchInput = document.getElementById("searchinput").value = "";
             return
         }

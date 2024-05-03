@@ -72,7 +72,7 @@ function Addtask(props) {
         }
 
         // Check if cookie with the date exists 
-        if (localStorage.getItem("Date").includes(objectForm.date)) {
+        if (localStorage.getItem("Date").includes(objectForm.date + "_")) {
 
             // get the index and create and array from date to cover the hours
             const existingTaskArray = JSON.parse(localStorage.getItem("Tasks"));
