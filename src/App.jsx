@@ -1,5 +1,5 @@
-import React, { useRef, useState, useMemo } from 'react';
-import './App.css';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
+import './App.scss';
 import DisplayUI from './DisplayComponents';
 import ProfilePicture from './assets/profile-picture.svg';
 import Addtask from './Addtask';
@@ -121,7 +121,7 @@ export function Calendar() {
     function createDatesPreviousMonth(number) {
         for (let i = 0; i < number; i++) {
             dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
-            monthRowsObject.firstRow.push(<td className="previousmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
+            monthRowsObject.firstRow.push(<td className="calendar-table_previousM" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
             previousMonthDates++;
         }
     }
@@ -135,7 +135,7 @@ export function Calendar() {
     function createDatesNextMonth(from, number, row) {
         for (let i = from; i < number; i++) {
             dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
-            row.push(<td className="nextmonth" key={dateUsedAsKey} onClick={() => { setDifferentWeek(row); }}>{dateOfNextMonth}</td>);
+            row.push(<td className="calendar-table_nextM" key={dateUsedAsKey} onClick={() => { setDifferentWeek(row); }}>{dateOfNextMonth}</td>);
             dateOfNextMonth++;
         }
     }
@@ -236,19 +236,28 @@ export function Calendar() {
             document.body.style.backgroundColor = "#181818";
             document.body.style.color = "#FDFDFD";
             localStorage.setItem("Background", "background=#181818");
+            setBackground("B");
+
         } else {
             document.body.style.backgroundColor = "#FDFDFD";
             document.body.style.color = "#181818";
             localStorage.setItem("Background", "background=#FDFDFD");
+            setBackground("W");
+
         }
     }
+    const [initialBackground, setBackground] = useState("");
+    const whiteBackground = [<circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>,
+        <circle cx="0" cy="20" r="10" stroke="black" strokeWidth="3" fill="white">Can't Load SVG</circle>];
 
+    const blackBackground = [<circle cx="40" cy="20" r="10" stroke="white" strokeWidth="3" fill="white">Can't Load SVG</circle>,
+        <circle cx="0" cy="20" r="10" stroke="white" strokeWidth="3" fill="black">Can't Load SVG</circle>];
     // States for the appearance and disappearance of Addtask component and passing todays date + current hour to it as a default value
     const [initialAddTask, setNewTask] = useState(false);
     const getHourAndDay = currentDate.getHours() + "-" + currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
 
     // States for the apperance and disappearance of SearchUserInput component
-    const [initialSearch, setSearch] = useState(false);
+    const [initialSearch, setSearch] = useState(false); 
 
     // useRef to hold the corresponding values for each task
     const searchResult = useRef();
@@ -269,12 +278,12 @@ export function Calendar() {
         // Condition to catch if the user would try to remove minLength from the client side, or would input less characters
         if (searchObject.input.length <= 2) {
             alert("Please enter at least 3 symbols");
-            const searchInput = document.getElementById("searchinput").value = "";
+            const searchInput = document.getElementById("page-top_input").value = "";
             return
         }
         if (localStorage.getItem("TaskDetails") === "") {
             alert("There are no plans");
-            const searchInput = document.getElementById("searchinput").value = "";
+            const searchInput = document.getElementById("page-top_input").value = "";
             return
         }
         const localTaskDetailsArray = JSON.parse(localStorage.getItem("TaskDetails"));
@@ -332,10 +341,11 @@ export function Calendar() {
                     // I need to store the values for each individual hit, because otherwise when the button is clicked it would apply all the values from the latest loop
                     // I also created a button with an ID corresponding to the loop i variable so that it matches the passed values in the array
                     extractedDateArray.push(...dateArray);
-                    displayDetails.push(<div className="searchResult" key={p++}>
-                        <h3 className="searchH2">{dateArray[2] + "." + dateArray[1]}</h3>
+                    displayDetails.push(<div className="search-div_plan_creation" key={p++}>
+                        <h3>{dateArray[2] + "." + dateArray[1]}</h3>
                         <p>{localTaskDetailsArray[index]}</p>
-                        <button id={i} onClick={(e) => { showTheWeek(e.target.id) }}>Display</button></div>)
+                        <button id={i} onClick={(e) => { showTheWeek(e.target.id) }}>Show me</button>
+                    </div>)
                 }
                 function showTheWeek(id) {
 
@@ -438,7 +448,7 @@ export function Calendar() {
 
                 } else {
                     // If there are no more hits, loop ends, results are displayed and search input is cleaned
-                    const searchInput = document.getElementById("searchinput").value = "";
+                    const searchInput = document.getElementById("page-top_input").value = "";
                     searchResult.current = displayDetails;
                     setSearch(true);
                     return
@@ -446,7 +456,7 @@ export function Calendar() {
             }
         } else {
             // If no results are found, empty out the input, return a message
-            const searchInput = document.getElementById("searchinput").value = "";
+            const searchInput = document.getElementById("page-top_input").value = "";
             searchResult.current = "There are no results for your search.";
             setSearch(true);
         }
@@ -454,15 +464,16 @@ export function Calendar() {
 
     return (
         <>
-            {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
-            {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
-            {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
-            <div className="pagetop">
-            
-                <span className="cal">Calendar</span>
+        {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
+        {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
+        {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
 
-                <div className="prkotina">
-                <button id="todaybutton" className="todaybutton" type="button" onClick={() => {
+        <div className="page-top">
+            
+            <span>Calendar</span>
+
+            <div className="page-top_divbuttons">
+                <button type="button" onClick={() => {
                     setMonthName( monthsOfTheYearArray[currentDate.getMonth()]);
                     setMonthNumber(currentDate.getMonth());
                     setYearNumber(currentDate.getFullYear());
@@ -470,69 +481,71 @@ export function Calendar() {
                     setDisplayDifferent(preservedisplay);
                 }}>Today</button>
 
-                <ul className="ultoppage">
-                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent(preservedisplay) } }>Week</button></li>
-                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent("displaymonth") } }>Month</button></li>
-                    <li className="litopinline"><button className="topbutton" onClick={() => {setDisplayDifferent("displayyear") } }>Year</button></li>
+                <ul className="page-top_ul">
+                    <li><button onClick={() => {setDisplayDifferent(preservedisplay) } }>Week</button></li>
+                    <li><button onClick={() => {setDisplayDifferent("displaymonth") } }>Month</button></li>
+                    <li><button onClick={() => {setDisplayDifferent("displayyear") } }>Year</button></li>
                 </ul>
-                </div>
-                <form onSubmit={searchAlgorithm} method="post">
-                    <input className="inputsearch" id="searchinput" type="search" placeholder="Search for.." name="input" minLength="3" maxLength="15"></input>
-                    <button className="searchbutton" type="submit">Search</button>
-                </form>
+            </div>
 
-                {/*Icon for a change between white / black background*/}
-                <div className="svg">
-                    <div onClick={changeBackground}>
-                        <svg className="changeofbg">
-                            <circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>
-                        </svg>
-                        <svg className="changeofbg">
-                            <circle cx="0" cy="20" r="10" stroke="black" strokeWidth="3" fill="white">Can't Load SVG</circle>
-                        </svg>
-                    </div>
-                    <div className="profilediv" onClick={checkIfUserIsLogged}>
-                        <img src={ProfilePicture} alt="Profile" className="profile" />
-                    </div>
+            <form onSubmit={searchAlgorithm} method="post">
+                <input id="page-top_input" type="search" placeholder="Search for.." name="input" minLength="3" maxLength="15"></input>
+                <button className="page-top_search_button" type="submit">Search</button>
+            </form>
+
+            {/*Icon for a change between white / black background line 249*/}
+            <div className="page-top_svg_div">
+                <div onClick={changeBackground}>
+                    <svg>
+                        {document.body.style.backgroundColor === "rgb(253, 253, 253)" ? whiteBackground[0] : blackBackground[0]}
+                    </svg>
+                    <svg>
+                        {document.body.style.backgroundColor === "rgb(253, 253, 253)" ? whiteBackground[1] : blackBackground[1]}
+                    </svg>
+                </div>
+                <div className="page-top_user_div" onClick={checkIfUserIsLogged}>
+                    <img src={ProfilePicture} alt="Profile"/>
                 </div>
             </div>
-            <hr className="hrmargin"></hr>
-            <div className="bla">
-                <div className="calendarbody">
-                    <table id="calendartable">
-                        <thead>
-                            <tr>
-                                <th id="monthsetting" colSpan="4">{initialMonthName}</th>
-                                <th colSpan="1">{initialYearNumber}</th>
-                                <th id="previous" onClick={changeToPreviousMonth}>&larr;</th>
-                                <th id="next" onClick={changeToNextMonth}>&rarr;</th>
-                            </tr>
-                            <tr>
-                                {namesOfTheDays}
-                            </tr>
-                        </thead>
-                        <tbody className="tbody">
-                            <tr>{monthRowsObject.firstRow}</tr>
-                            <tr>{monthRowsObject.secondRow}</tr>
-                            <tr>{monthRowsObject.thirdRow}</tr>
-                            <tr>{monthRowsObject.fourthRow}</tr>
-                            <tr>{monthRowsObject.fifthRow}</tr>
-                            <tr>{monthRowsObject.sixthRow}</tr>
-                        </tbody>
-                    </table>
-                    <div>
-                        <button className="createbutton" onClick={() => { setNewTask(true) }}>Create a new Plan</button>
-                        <button className="createbutton">Other Overlays</button>
-                    </div>
-                </div>
-                <DisplayUI displayInitial={displayInitial}
-                    initialWeek={initialWeek}
+        </div>
 
-                    monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays} setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} 
+        <hr className="page-divide_hr"></hr>
+        <div className="page-content">
+            <div className="page-left_side">
+                <table className="calendar-table">
+                    <thead>
+                        <tr>
+                            <th className="calendar-table_month" colSpan="4">{initialMonthName}</th>
+                            <th colSpan="1">{initialYearNumber}</th>
+                            <th className="calendar-table_arrow" onClick={changeToPreviousMonth}>&larr;</th>
+                            <th className="calendar-table_arrow" onClick={changeToNextMonth}>&rarr;</th>
+                        </tr>
+                        <tr>
+                            {namesOfTheDays}
+                        </tr>
+                    </thead>
+                    <tbody className="calendar-table_body">
+                        <tr>{monthRowsObject.firstRow}</tr>
+                        <tr>{monthRowsObject.secondRow}</tr>
+                        <tr>{monthRowsObject.thirdRow}</tr>
+                        <tr>{monthRowsObject.fourthRow}</tr>
+                        <tr>{monthRowsObject.fifthRow}</tr>
+                        <tr>{monthRowsObject.sixthRow}</tr>
+                    </tbody>
+                </table>
+                <div>
+                    <button className="create-switch_button" onClick={() => { setNewTask(true) }}>Create a new Plan</button>
+                    <button className="create-switch_button">Other Overlays</button>
+                </div>
+            </div>
+            <DisplayUI displayInitial={displayInitial}
+                initialWeek={initialWeek}
+
+                monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays} setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} 
                     
-                    daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
-                    numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
-            </div>
+                daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
+                numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
+        </div>
         </>
     )
 }
@@ -549,36 +562,37 @@ function Login(props) {
         const formData = new FormData(form); 
         const formJson = Object.fromEntries(formData.entries()); 
 
-        // I wanted to allow special characters like èìøšáøíé etc. but \W would take them out, so this is the way around it "^\\pL+$" is from the XRegExp lib
+        // I wanted to allow special characters like èìøšáøíé etc. "^\\pL+$" is from the XRegExp lib
         const regex = /["^\\pL+$"\s\d\(^\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?\.\,\°\´)]/g;
         formJson.name = formJson.name.replace(regex, "");
 
-        // This works in 2 ways, first to catch if user gave invalid input, and also if user was feeling funky and removed "required" from his client side
+        // This works in 2 ways, first to catch if user gave invalid input, and also if user removed "required" from ´their client side
         if (formJson.name == "") {
             alert("Please enter a name");
             return
         }
 
         // Here I am setting the cookie and destroying the component 
-        setCookie("name", formJson.name);
+        setCookie(formJson.name);
         props.dontDisplayUI(false);
     }
 
     return (
         <>
-            <div className="logindiv" onClick={() => { props.dontDisplayUI(false) }}>
-            </div>
-            <div id="loginUI">
+            <div className="login-div_background" onClick={() => { props.dontDisplayUI(false) }}></div>
+            <div className="login-div">
                 <div>
-                    <img src={ProfilePicture} className="profilepicturelogin"></img>
+                    <button className="login-div_cancel" onClick={() => { props.dontDisplayUI(false) }}>X</button>
+                    <img src={ProfilePicture} className="login-div_profile_pic"></img>
                 </div>
                 <h2>Sign up:</h2>
                 <form method="post" onSubmit={checkUserInput}>
-                    <label htmlFor="username">Name: </label>
-                    <input id="username" name="name" type="text" required maxLength="20"></input>
-                    <br />
+                    <label htmlFor="login-div_username">Name: </label>
+                    <input id="login-div_username" name="name" type="text" required maxLength="20" placeholder="..."></input>
+                    <label htmlFor="login-div_password">Password: </label>
+                    <input id="login-div_password" name="password" type="password" required maxLength="40" placeholder="..."></input>
                     <br/>
-                 <button type="submit">Complete your registration!</button>
+                    <button className="login-div-register" type="submit">Submit my registration!</button>
                 </form>
                 <br/>
             </div>
@@ -586,13 +600,13 @@ function Login(props) {
     )
 }
 
-function setCookie(cname, cvalue) {
+function setCookie(cvalue) {
 
     // Expiration time is set to one year
     const dateToChange = new Date();
     dateToChange.setTime(dateToChange.getTime() + (24 * 60 * 60 * 1000 ));
     let expire = "expires=" + dateToChange.toDateString();
-    document.cookie = cname + "=" + cvalue + "_;_" + expire + ";path=/";
+    document.cookie = "Name=" + cvalue + "_;_" + expire + ";path=/";
 }
 
 
@@ -600,10 +614,11 @@ function SearchUserInput(props) {
 
     return (
         <>
-            <div className="searchdiv">
+            <div className="search-div">
+                <button className="search-div_cancel" onClick={() => { props.setSearch(false) }}>X</button>
                 <h2>Search results:</h2>
-                <div className="searchResultsDiv">{props.searchResult}</div>
-                <button onClick={() => {props.setSearch(false) } }>Hide the search results!</button>
+                <div className="search-div_results">{props.searchResult}</div>
+                <button className="search-div_hide_button" onClick={() => { props.setSearch(false) }}>Hide the search results!</button>
             </div>
         </>
     )

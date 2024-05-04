@@ -1,0 +1,449 @@
+@mixin displayF($display, $content) {
+    display: $display;
+    justify-content: $content;
+}
+@mixin borderD() {
+    border: $borderThickness solid $borderColour;
+}
+@mixin displayTab() {
+    display: table;
+    table-layout: fixed;
+}
+@mixin paddingT($Fvalue, $Svalue) {
+    padding: $Fvalue $Svalue;
+}
+@mixin cancelButton() {
+    float: right;
+    background-color: white;
+    border: none;
+    border-left: 0.14vh solid $borderColour;
+    border-bottom: 0.14vh solid $borderColour;
+    cursor: $cursorP;
+}
+$borderThickness: 0.4vh;
+$borderColour: grey;
+$hoverColour: lightskyblue;
+$borderRadius: 0.7vh;
+$cursorP: pointer;
+
+* {
+    box-sizing: content-box;
+}
+html, body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+
+// App.jsx component SASS
+.page-top {
+    @include displayF(flex, space-between);
+    align-items: center;
+    overflow: hidden;
+
+    span {
+        font-weight: bold;
+        font-size: 1.4rem;
+        padding: 2vh 0 2vh 1.35vw;
+        margin-right: 8.5vw;
+    }
+}
+//Today button and div holding all buttons
+.page-top_divbuttons {
+    @include displayF(flex, space-between);
+    width: 30vw;
+
+    button {
+        @include borderD();
+        @include paddingT(1vh, 2vw);
+        border-radius: $borderRadius;
+        cursor: $cursorP;
+    }
+
+    button:hover {
+        background-color: $hoverColour;
+    }
+}
+// Ul + li represents Week,Month,Year buttons
+.page-top_ul {
+    @include borderD();
+    border-radius: $borderRadius;
+    margin: 0;
+    padding: 0;
+
+    li {
+        display: inline-block;
+    }
+
+    button {
+        @include paddingT(1vh, 2vw);
+        cursor: $cursorP;
+        border: 0;
+        border-radius: 0;
+    }
+
+    button:hover {
+        background-color: $hoverColour;
+    }
+}
+// Search input and button
+#page-top_input {
+    @include paddingT(1vh, 0vw);
+    @include borderD();
+    border-top-left-radius: $borderRadius;
+    border-bottom-left-radius: $borderRadius;
+    border-right: 0;
+}
+.page-top_search_button {
+    @include paddingT(1vh, 2vw);
+    @include borderD();
+    border-top-right-radius: $borderRadius;
+    border-bottom-right-radius: $borderRadius;
+    cursor: $cursorP;
+}
+.page-top_search_button:hover {
+    background-color: $hoverColour;
+}
+// Svg change of background 
+.page-top_svg_div {
+    display: flex;
+    align-items: center;
+
+    svg {
+        height: 5.7vh;
+        width: 2.6vw;
+        cursor: pointer;
+    }
+}
+// User picture
+.page-top_user_div {
+    @include paddingT(1.4vh, 0.65vw);
+    border-left: 0.1vh solid $borderColour;
+    user-select: none;
+    cursor: $cursorP;
+    background-color: rgb(253, 253, 253);
+
+    img {
+        height: 5.7vh;
+        width: 2.7vw;
+    }
+}
+// Division between the top of the page and its content
+.page-divide_hr {
+    margin: 0;
+    border-collapse: collapse;
+    border: 0.1vh solid $borderColour;
+}
+// Div holding the whole content of the page
+.page-content {
+    @include displayF(flex, space-between);
+}
+// Div holding the content of the left side of the page
+.page-left_side {
+    width: 20vw;
+}
+// Table representing the calendar 
+.calendar-table {
+    @include displayTab();
+    width: 100%;
+    text-align: center;
+    margin: 1.4vh 0.65vw;
+}
+// The name of the month
+.calendar-table_month {
+    text-align: left;
+    padding-left: 0.6vw;
+    font-size: 1.3rem;
+}
+// Arrows which user uses to navigate
+.calendar-table_arrow {
+    user-select: none;
+    cursor: $cursorP;
+}
+// Style for the elements of the table
+.calendar-table_body {
+    user-select: none;
+    cursor: $cursorP;
+    border-collapse: collapse;
+}
+.calendar-table_body tr td {
+    @include paddingT(0.85vh, 0.32vw);
+}
+.calendar-table_body tr td:hover {
+    background-color: $hoverColour;
+}
+.calendar-table_previousM, .calendar-table_nextM {
+    color: $borderColour;
+}
+.calendar-table_arrow:hover, .calendar-table_previousM:hover, .calendar-table_nextM:hover {
+    background-color: $hoverColour;
+}
+// Buttons under the table calendar
+.create-switch_button {
+    @include paddingT(1.42vh, 0.97vw);
+    @include borderD();
+    margin-left: 1vw;
+    border-radius: $borderRadius;
+}
+.create-switch_button:hover {
+    background-color: $hoverColour;
+}
+// Login component SASS (inside App.jsx)
+.login-div_background {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    opacity: 50%;
+    z-index: 3;
+}
+// Div holding the component
+.login-div {
+    @include borderD();
+    border-radius: $borderRadius;
+    background-color: white;
+    position: absolute;
+    left: 37.5vw;
+    top: 15vh;
+    z-index: 3;
+    width: 25vw;
+    height: 60vh;
+    text-align: center;
+    color: black;
+    label {
+        display: block;
+        text-align: left;
+        margin-left: 7vw
+    }
+    h2 {
+        margin: 0;
+        margin-bottom: 1vh;
+    }
+}
+// Cancel button
+.login-div_cancel {
+    @include cancelButton();
+}
+.login-div_cancel:hover {
+    background-color: $hoverColour;
+}
+// Picture of the user
+.login-div_profile_pic {
+    width: 12vw;
+    height: 25vh;
+    margin: 3vh auto;
+    margin-left: 1.5vw;
+    display: inline-block;
+}
+// 2 inputs, Name and Password
+#login-div_username, #login-div_password {
+    @include borderD();
+    display: block;
+    margin-left: 7vw;
+    border-radius: $borderRadius;
+}
+// Register button
+.login-div-register {
+    @include borderD();
+    @include paddingT(1vh, 1vw);
+    border-radius: $borderRadius;
+    cursor: $cursorP;
+}
+.login-div-register:hover {
+    background-color: $hoverColour;
+}
+// Search component SASS (inside App.jsx)
+.search-div {
+    @include borderD();
+    border-radius: $borderRadius;
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 42vh;
+    background-color: white;
+    width: 22vw;
+    text-align: center;
+    z-index: 2;
+    color: black;
+}
+// Cancel button in search component
+.search-div_cancel {
+    @include cancelButton();
+}
+.search-div_cancel:hover {
+    background-color: $hoverColour;
+}
+// Div which holds all the results from search algorithm
+.search-div_results {
+    overflow-y: scroll;
+    height: 28vh;
+    border-top: $borderThickness solid $borderColour;
+    border-bottom: $borderThickness solid $borderColour;
+}
+// Div which holds a single result from search algorithm
+.search-div_plan_creation {
+    @include displayF(flex, space-between);
+    vertical-align: central;
+    border: 1px solid black;
+}
+// Button to hide the r
+.search-div_hide_button {
+    @include borderD();
+    @include paddingT(1.05vh, 1vw);
+    display: block;
+    border-radius: $borderColour;
+    position: absolute;
+    left: 5vw;
+    bottom: 0;
+    border-bottom: 0;
+}
+.search-div_hide_button:hover {
+    background-color: $hoverColour;
+    cursor: $cursorP;
+}
+
+td {
+    padding: 7px 5px;
+}
+
+.tcontent {
+    width: 75%;
+}
+.kok {
+    height: 81.8vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    position: relative;
+}
+.tablecontent {
+    width: 98.3%;
+    border-left: 0.5px solid black;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    text-align: center;
+    display: table;
+    table-layout: fixed;
+}
+.tablecontent thead tr td:first-child {
+    width: 5%;
+}
+.tablecontent thead tr tr td:first-child {
+    width: 5%;
+}
+#tablebordercontent {
+    text-align: center;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+#tablebordercontent tr td {
+    border-spacing: 0px;
+    content: "";
+    height: 25px;
+    outline: 0.5px solid grey;
+}
+.tablecontentdetail:hover {
+    background-color: lightskyblue;
+}
+#tablebordercontent tr td:first-child {
+    width: 5%;
+}
+
+/*Month component css*/
+.tablemonthcontent {
+    text-align: center;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    cursor: pointer;
+}
+.tablemonthcontent tbody tr td {
+    outline: 0.5px solid grey;
+    vertical-align: top;
+    padding: 0;
+    opacity: 100%;
+    height: 14.2vh;  
+}
+.tablemonthcontent thead tr:first-child {
+    outline: 1px solid grey;
+}
+.tablemonthcontent tbody tr td:hover {
+    background-color: lightskyblue;
+}
+/*Task creation css*/
+.newtask {
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    border: 1px solid black;
+    text-align: center;
+    z-index: 2;
+}
+.newTaskBackground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+.newTaskInput {
+    width: 75%;
+}
+/*Year component css*/
+.yearcontent {
+    width: 75%;
+    overflow-y: scroll;
+    height: 91.2vh;
+}
+.monthflexbox {
+    @include displayF(flex, space-evenly);
+}
+.yearlytable {
+    display: table;
+    table-layout: fixed;
+    width: 90%;
+}
+/* Task display css*/
+.Taskdiv {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    display: inline-block;
+    margin-left: 6%;
+    z-index: 1;
+    user-select: none;
+    cursor: pointer;
+}
+.taskdetails {
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    border: 1px solid black;
+    text-align: center;
+    z-index: 2;
+    color: black;
+}
+.taskdetailsbackground {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+.monthcounter {
+    height: 91.2%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
+#taskindex {
+    z-index: 1;
+}
+.h3newTask {
+    color: black;
+}
