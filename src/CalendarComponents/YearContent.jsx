@@ -64,10 +64,9 @@ function YearContent(props) {
     }
 
     function createDatesPreviousYear(number) {
-
         for (let i = 0; i < number; i++) {
             creationOfKey = props.initialYearNumber - 1 + "-" + 12 + "-" + datesPreviousYear;
-            Objects[0].firstRowYear.push(<td className="previousmonth" key={creationOfKey}>{datesPreviousYear}</td>);
+            Objects[0].firstRowYear.push(<td className="calendar-table_previousM" key={creationOfKey}>{datesPreviousYear}</td>);
             datesPreviousYear++;
         }
     }
@@ -103,7 +102,7 @@ function YearContent(props) {
                 if (Number(givenRow[i].key.split("-")[1]) === refUsedForMonths.current + 1) {
                     Month.firstRowYear.push(<td key={givenRow[i].key}>{counter++}</td>);
                 } else {
-                    Month.firstRowYear.push(<td key={givenRow[i].key} className="previousmonth">{datesOfPreviousMonth++}</td>);
+                    Month.firstRowYear.push(<td key={givenRow[i].key} className="calendar-table_previousM">{datesOfPreviousMonth++}</td>);
                 }
             }
             whichrow === true && (dateOfThisYear = dateOfThisYear - 7);
@@ -136,7 +135,7 @@ function YearContent(props) {
 
             for (; numberOfDates < 7; numberOfDates++) {
                 creationOfKey = props.initialYearNumber + "-" + (refUsedForMonths.current + 2) + "-" + dateOfNextMonth;
-                passedArray.push(<td className="nextmonth" key={creationOfKey}>{dateOfNextMonth}</td>);
+                passedArray.push(<td className="calendar-table_nextM" key={creationOfKey}>{dateOfNextMonth}</td>);
                 dateOfNextMonth++;
             }
         }
@@ -150,22 +149,22 @@ function YearContent(props) {
 
         return (
             <>
-                <table className="yearlytable">
-                    <thead>
-                        <tr>
-                            <td colSpan="7"><strong>{displayMonthName}</strong></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>{displayWholeWeek}</tr>
-                        <tr>{Month.firstRowYear}</tr>
-                        <tr>{Month.secondRowYear}</tr>
-                        <tr>{Month.thirdRowYear}</tr>
-                        <tr>{Month.fourthRowYear}</tr>
-                        <tr>{Month.fifthRowYear}</tr>
-                        <tr>{Month.sixthRowYear}</tr>
-                    </tbody>
-                </table>
+            <table className="year-content_table">
+                <thead>
+                    <tr>
+                        <td colSpan="7"><strong>{displayMonthName}</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>{displayWholeWeek}</tr>
+                    <tr>{Month.firstRowYear}</tr>
+                    <tr>{Month.secondRowYear}</tr>
+                    <tr>{Month.thirdRowYear}</tr>
+                    <tr>{Month.fourthRowYear}</tr>
+                    <tr>{Month.fifthRowYear}</tr>
+                    <tr>{Month.sixthRowYear}</tr>
+                </tbody>
+            </table>
             </>
         )
     }
@@ -174,30 +173,30 @@ function YearContent(props) {
     // creating all Months into an Array
     for (let i = 0; i < 12; i++) {
         arrayOfMonths.push(
-            <div className="monthdiv">
+            <div>
                 {createYearTable(Objects[i])}
             </div>
         )
     }
     return (
         <>
-        <div className="yearcontent">
-            <div className="monthflexbox">
+        <div className="year-content_div">
+            <div className="year-content-months">
                 {arrayOfMonths[0]}
                 {arrayOfMonths[1]}
                 {arrayOfMonths[2]}
             </div>
-            <div className="monthflexbox">
+            <div className="year-content-months">
                 {arrayOfMonths[3]}
                 {arrayOfMonths[4]}
                 {arrayOfMonths[5]}
             </div>
-            <div className="monthflexbox">
+            <div className="year-content-months">
                 {arrayOfMonths[6]}
                 {arrayOfMonths[7]}
                 {arrayOfMonths[8]}
             </div>
-            <div className="monthflexbox">
+            <div className="year-content-months">
                 {arrayOfMonths[9]}
                 {arrayOfMonths[10]}
                 {arrayOfMonths[11]}

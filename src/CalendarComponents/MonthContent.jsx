@@ -15,7 +15,7 @@ function MonthContent(props) {
             top: (18 + 14 * row) + "vh",
             left: (28 + 10.65 * index) + "vw",
         };
-        monthTasksCounter.push(<h3 style={customStyle} key={counterForKeys}>{count.length !== 0 && count.length + " Task(s)"}</h3>)
+        monthTasksCounter.push(<h3 style={customStyle} key={counterForKeys}>{count.length !== 0 && count.length + " Task(s)"}</h3>);
         counterForKeys++;
     };
     const localDateStored = localStorage.getItem("Date");
@@ -32,9 +32,9 @@ function MonthContent(props) {
 
     return (
         <>
-            <div className="tcontent">
+            <div className="month-content_div">
                 {monthTasksCounter !== 0 && <CountTasks monthtasks={monthTasksCounter} />}
-                <table className="tablemonthcontent">
+                <table className="month-content_table">
                     <thead>
                         <tr>{props.namesOfTheDays}</tr>
                     </thead>

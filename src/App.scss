@@ -577,49 +577,49 @@ html, body {
 }
 // ENDED HERE
 /////////////////////////////////////////////////////////////// MonthComponent.jsx component
-.tablemonthcontent {
+.month-content_div {
+    width: 74.9vw;
+}
+.month-content_table {
+    @include displayTab();
     text-align: center;
-    width: 100%;
-    display: table;
-    table-layout: fixed;
-    cursor: pointer;
-}
+    width: 99.7%;
+    border-left: 0.32vh solid $borderColour;
+    border-bottom: 0.32vh solid $borderColour;
+    border-right: 0.32vh solid $borderColour;
+    border-spacing: 0;
 
-.tablemonthcontent tbody tr td {
-    outline: 0.5px solid grey;
-    vertical-align: top;
-    padding: 0;
-    opacity: 100%;
-    height: 14.2vh;
-}
+    thead tr td {
+        @include paddingT(1vh, 0);
+    }
 
-.tablemonthcontent thead tr:first-child {
-    outline: 1px solid grey;
+    tbody tr td {
+        outline: 0.5px solid grey;
+        vertical-align: top;
+        padding: 0;
+        opacity: 100%;
+        height: 14.3vh;
+        cursor: $cursorP;
+    }
 }
-
-.tablemonthcontent tbody tr td:hover {
-    background-color: lightskyblue;
+.month-content_table tbody tr td:hover {
+    background-color: $hoverColour;
 }
 /////////////////////////////////////////////////////////////// YearComponent.jsx
-.yearcontent {
+.year-content_table {
+    @include displayTab();
+    width: 90%;
+    
+    tbody tr td {
+        @include paddingT(1vh, 0.32vw);
+    }
+}
+.year-content_div {
     width: 75%;
     overflow-y: scroll;
     height: 91.2vh;
 }
-
-.monthflexbox {
+// Div containing 3 months to be spaced out
+.year-content-months {
     @include displayF(flex, space-evenly);
-}
-
-.yearlytable {
-    display: table;
-    table-layout: fixed;
-    width: 90%;
-}
-
-.monthcounter {
-    height: 91.2%;
-    width: 100%;
-    position: absolute;
-    z-index: -1;
 }

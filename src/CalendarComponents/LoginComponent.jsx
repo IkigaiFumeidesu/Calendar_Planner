@@ -1,6 +1,6 @@
 import React from 'react';
-
-function Login(props) {
+import ProfilePicture from '../assets/profile-picture.svg'
+function LoginComponent(props) {
     function checkUserInput(e) {
 
         // Preventing the form to refresh on submit

@@ -491,7 +491,7 @@ export function Calendar() {
         <>
         {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
         {initialAddTask === true && <AddTask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
-        {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
+        {userNotLogged === true && <LoginComponent dontDisplayUI={setUserIsLogged} /> }
 
         <div className="page-top">
             
