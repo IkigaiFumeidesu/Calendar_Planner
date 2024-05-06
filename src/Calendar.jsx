@@ -1,8 +1,11 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.scss';
-import DisplayUI from './DisplayComponents';
 import ProfilePicture from './assets/profile-picture.svg';
-import Addtask from './Addtask';
+import AddTask from './CalendarComponents/AddTask';
+import WeekContent from './CalendarComponents/WeekContent';
+import MonthContent from './CalendarComponents/MonthContent';
+import YearContent from './CalendarComponents/YearContent';
+import LoginComponent from './CalendarComponents/LoginComponent';
 
 // Top of the page
 export function Calendar() {
@@ -211,7 +214,7 @@ export function Calendar() {
 
     // If user has already logged in, cookie with the name "name" is present therefore I dont need to log the user again
     const checkIfUserIsLogged = () => {
-        if (document.cookie.includes("name")) {
+        if (document.cookie.includes("Name")) {
             alert("You are logged in.");
             return
         } else {
@@ -461,11 +464,33 @@ export function Calendar() {
             setSearch(true);
         }
     }
-
+    function displayUI() {
+        if (displayInitial === "displayweek") {
+            return (
+                <>
+                    <WeekContent initialWeek={initialWeek} />
+                </>
+            )
+        } else if (displayInitial === "displaymonth") {
+            return (
+                <>
+                    <MonthContent monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays}
+                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} />
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <YearContent daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
+                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
+                </>
+            )
+        }
+    }
     return (
         <>
         {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
-        {initialAddTask === true && <Addtask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
+        {initialAddTask === true && <AddTask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
         {userNotLogged === true && <Login dontDisplayUI={setUserIsLogged} /> }
 
         <div className="page-top">
@@ -482,9 +507,9 @@ export function Calendar() {
                 }}>Today</button>
 
                 <ul className="page-top_ul">
-                    <li><button onClick={() => {setDisplayDifferent(preservedisplay) } }>Week</button></li>
-                    <li><button onClick={() => {setDisplayDifferent("displaymonth") } }>Month</button></li>
-                    <li><button onClick={() => {setDisplayDifferent("displayyear") } }>Year</button></li>
+                    <li> <button id="page-top_ul_liF" onClick={() => {setDisplayDifferent(preservedisplay) } }>Week</button> </li>
+                    <li> <button onClick={() => {setDisplayDifferent("displaymonth") } }>Month</button> </li>
+                    <li> <button id="page-top_ul_liL" onClick={() => {setDisplayDifferent("displayyear") } }>Year</button> </li>
                 </ul>
             </div>
 
@@ -538,67 +563,12 @@ export function Calendar() {
                     <button className="create-switch_button">Other Overlays</button>
                 </div>
             </div>
-            <DisplayUI displayInitial={displayInitial}
-                initialWeek={initialWeek}
-
-                monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays} setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} 
-                    
-                daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
-                numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
+                {displayUI()}
         </div>
         </>
     )
 }
 export default Calendar
-
-function Login(props) {
-    function checkUserInput(e) {
-
-        // Preventing the form to refresh on submit
-        e.preventDefault(); 
-
-        // Gathering data from entries and pushing it into an object
-        const form = e.target; 
-        const formData = new FormData(form); 
-        const formJson = Object.fromEntries(formData.entries()); 
-
-        // I wanted to allow special characters like èìøšáøíé etc. "^\\pL+$" is from the XRegExp lib
-        const regex = /["^\\pL+$"\s\d\(^\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?\.\,\°\´)]/g;
-        formJson.name = formJson.name.replace(regex, "");
-
-        // This works in 2 ways, first to catch if user gave invalid input, and also if user removed "required" from ´their client side
-        if (formJson.name == "") {
-            alert("Please enter a name");
-            return
-        }
-
-        // Here I am setting the cookie and destroying the component 
-        setCookie(formJson.name);
-        props.dontDisplayUI(false);
-    }
-
-    return (
-        <>
-            <div className="login-div_background" onClick={() => { props.dontDisplayUI(false) }}></div>
-            <div className="login-div">
-                <div>
-                    <button className="login-div_cancel" onClick={() => { props.dontDisplayUI(false) }}>X</button>
-                    <img src={ProfilePicture} className="login-div_profile_pic"></img>
-                </div>
-                <h2>Sign up:</h2>
-                <form method="post" onSubmit={checkUserInput}>
-                    <label htmlFor="login-div_username">Name: </label>
-                    <input id="login-div_username" name="name" type="text" required maxLength="20" placeholder="..."></input>
-                    <label htmlFor="login-div_password">Password: </label>
-                    <input id="login-div_password" name="password" type="password" required maxLength="40" placeholder="..."></input>
-                    <br/>
-                    <button className="login-div-register" type="submit">Submit my registration!</button>
-                </form>
-                <br/>
-            </div>
-        </>
-    )
-}
 
 function setCookie(cvalue) {
 

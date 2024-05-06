@@ -19,6 +19,7 @@
     border-left: 0.14vh solid $borderColour;
     border-bottom: 0.14vh solid $borderColour;
     cursor: $cursorP;
+    border-top-right-radius: $borderRadius / 2;
 }
 $borderThickness: 0.4vh;
 $borderColour: grey;
@@ -35,7 +36,7 @@ html, body {
     overflow: hidden;
 }
 
-// App.jsx component SASS
+/////////////////////////////////////////////////////////////// App.jsx component SASS
 .page-top {
     @include displayF(flex, space-between);
     align-items: center;
@@ -85,6 +86,14 @@ html, body {
     button:hover {
         background-color: $hoverColour;
     }
+}
+#page-top_ul_liF {
+    border-top-left-radius: $borderRadius / 2;
+    border-bottom-left-radius: $borderRadius / 2;
+}
+#page-top_ul_liL {
+    border-top-right-radius: $borderRadius / 2;
+    border-bottom-right-radius: $borderRadius / 2;
 }
 // Search input and button
 #page-top_input {
@@ -167,7 +176,7 @@ html, body {
     border-collapse: collapse;
 }
 .calendar-table_body tr td {
-    @include paddingT(0.85vh, 0.32vw);
+    @include paddingT(1vh, 0.32vw);
 }
 .calendar-table_body tr td:hover {
     background-color: $hoverColour;
@@ -184,11 +193,13 @@ html, body {
     @include borderD();
     margin-left: 1vw;
     border-radius: $borderRadius;
+    cursor: $cursorP;
 }
 .create-switch_button:hover {
     background-color: $hoverColour;
 }
-// Login component SASS (inside App.jsx)
+
+/////////////////////////////////////////////////////////////// Login component SASS (inside App.jsx)
 .login-div_background {
     position: absolute;
     height: 100vh;
@@ -210,11 +221,13 @@ html, body {
     height: 60vh;
     text-align: center;
     color: black;
+
     label {
         display: block;
         text-align: left;
         margin-left: 7vw
     }
+
     h2 {
         margin: 0;
         margin-bottom: 1vh;
@@ -252,7 +265,7 @@ html, body {
 .login-div-register:hover {
     background-color: $hoverColour;
 }
-// Search component SASS (inside App.jsx)
+/////////////////////////////////////////////////////////////// Search component SASS (inside App.jsx)
 .search-div {
     @include borderD();
     border-radius: $borderRadius;
@@ -285,6 +298,14 @@ html, body {
     @include displayF(flex, space-between);
     vertical-align: central;
     border: 1px solid black;
+
+    button {
+        cursor: $cursorP;
+    }
+    
+    button:hover {
+        background-color: $hoverColour;
+    }
 }
 // Button to hide the r
 .search-div_hide_button {
@@ -302,55 +323,260 @@ html, body {
     cursor: $cursorP;
 }
 
-td {
-    padding: 7px 5px;
+/////////////////////////////////////////////////////////////// WeekComponent.jsx SASS
+.week-content {
+    width: 74.9vw;
 }
+// Table function as a header for names of weekdays
+.week-content_header_table {
+    @include displayTab();
+    width: 98.25%;
+    border-left: $borderThickness * 0.8 solid $borderColour;
+    border-right: $borderThickness * 0.8 solid $borderColour;
+    border-bottom: $borderThickness * 0.8 solid $borderColour;
+    text-align: center;
+    border-spacing: 0;
 
-.tcontent {
-    width: 75%;
+    thead tr td {
+        @include paddingT(1vh, 0.32vw);
+    }
+    thead tr td:first-child {
+        width: 4%;
+    }
+
+    thead tr tr td:first-child {
+        width: 4%;
+    }
 }
-.kok {
-    height: 81.8vh;
+#week-content_header_holiday {
+    content: "";
+}
+// Div holding the table with plans and cells
+.week-content_cells_div {
+    height: 81.4vh;
     overflow-x: hidden;
     overflow-y: scroll;
     width: 100%;
     position: relative;
 }
-.tablecontent {
-    width: 98.3%;
-    border-left: 0.5px solid black;
-    border-right: 0.5px solid black;
-    border-bottom: 0.5px solid black;
-    text-align: center;
-    display: table;
-    table-layout: fixed;
-}
-.tablecontent thead tr td:first-child {
-    width: 5%;
-}
-.tablecontent thead tr tr td:first-child {
-    width: 5%;
-}
-#tablebordercontent {
+// Table with plans and cells
+#week-content_cells_table {
     text-align: center;
     width: 100%;
     display: table;
     table-layout: fixed;
-}
-#tablebordercontent tr td {
-    border-spacing: 0px;
-    content: "";
-    height: 25px;
-    outline: 0.5px solid grey;
-}
-.tablecontentdetail:hover {
-    background-color: lightskyblue;
-}
-#tablebordercontent tr td:first-child {
-    width: 5%;
-}
+    border-spacing: 0;
 
-/*Month component css*/
+    tbody tr td {
+        @include paddingT(1vh, 0.32vw);
+        border-left: $borderThickness / 5 solid $borderColour;
+        border-bottom: $borderThickness / 5 solid $borderColour;
+        content: "";
+        height: 3.55vh;
+        border-collapse: collapse;
+    }
+
+    tbody tr td:first-child {
+        width: 4%;
+    }
+
+    tbody tr td:last-child {
+        border-right: $borderThickness / 5 solid $borderColour;
+    }
+
+    tbody tr td:hover {
+        background-color: $hoverColour;
+    }
+}
+/////////////////////////////////////////////////////////////// DisplayAllTasks.jsx component
+.display_all_task_div {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    display: inline-block;
+    z-index: 1;
+    user-select: none;
+    cursor: $cursorP;
+}
+/////////////////////////////////////////////////////////////// TaskDetails.jsx component 
+.task-details_background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+.task-details_div {
+    @include borderD();
+    border-radius: $borderRadius;
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    text-align: center;
+    z-index: 2;
+    color: black;
+}
+// cancel button in the top right
+.task-details_cancel {
+    @include cancelButton();
+}
+.task-details_cancel:hover {
+    background-color: $hoverColour;
+}
+// Div holding date, title and time 
+.task-details_header {
+    @include displayF(flex, flex-start);
+
+    h1 {
+        margin-right: 1vw;
+        margin-left: 1vw;
+        margin-bottom: 0;
+    }
+    h3 {
+        margin-top: 2vw;
+        margin-bottom: 0;
+    }
+    h4 {
+        margin-top: 0.5vw;
+        margin-left: 1vw;
+        margin-bottom: 0.5vw;
+    }
+}
+// Div with description of the plan
+.task-details_description_div {
+    height: 23vh;
+    overflow-y: scroll;
+
+    p:first-child {
+        margin: 0;
+    }
+
+    p:last-child {
+        word-wrap: break-word;
+        text-align: justify;
+        margin: 0;
+    }
+}
+// The bottom of the task, 2 buttons
+.task-details_bottom {
+    @include displayF(flex, space-evenly);
+}
+.task-details_buttons {
+    @include borderD();
+    @include paddingT(1vh, 2vw);
+    border-radius: $borderRadius;
+}
+.task-details_buttons:hover {
+    cursor: $cursorP;
+    background-color: $hoverColour;
+}
+/////////////////////////////////////////////////////////////// Addtask.jsx component
+.add-task_background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+.add-task_div {
+    @include borderD();
+    border-radius: $borderRadius;
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    text-align: center;
+    z-index: 2;
+    color: black;
+
+    h3 {
+        margin-top: 2vh;
+        margin-bottom: 0;
+       margin-left: 1.5vw;
+    }
+}
+// Cancel button
+.add-task_cancel {
+    @include cancelButton;
+}
+.add-task_cancel:hover {
+    background-color: $hoverColour;
+}
+// Title, date, colour, time
+.add-task_context {
+    height: 10vh;
+
+    div {
+        display: flex;
+        margin-top: 0.3vh;
+        margin-bottom: 0.5vh;
+    }
+
+    div div {
+        width: 30%;
+        display: inline-block;
+    }
+}
+#add-task_title {
+    width: 40%;
+    border: 0;
+    border-bottom: $borderThickness solid $borderColour;
+}
+#add-task_date {
+    width: 40%;
+    cursor: $cursorP;
+}
+// Bottom area, textarea and button
+.add-task_textarea {
+    margin-top: 8vh;
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        @include borderD();
+        @include paddingT(1vh, 2vw);
+        border-radius: $borderRadius;
+        cursor: $cursorP;
+    }
+
+    button:hover {
+        background-color: $hoverColour;
+    }
+}
+// Hour selectors
+#add-task_selects, #add-task_selectss {
+    border: 0;
+    border-bottom: 1px solid black;
+    cursor: $cursorP;
+}
+// The "-" in between the hours
+.add-task_between_selects {
+    display: inline-block;
+    margin: 0 0.66vw;
+}
+// Palette of colours
+.add-task_colours {
+
+    span svg circle {
+        border-radius: 100%;
+        outline: 2px solid transparent;
+    }
+
+    span svg circle:hover {
+        outline: 2px solid black !important;
+        cursor: $cursorP;
+    }
+}
+#add-task_circle_blue {
+    outline: 2px solid black;
+}
+// ENDED HERE
+/////////////////////////////////////////////////////////////// MonthComponent.jsx component
 .tablemonthcontent {
     text-align: center;
     width: 100%;
@@ -358,92 +584,42 @@ td {
     table-layout: fixed;
     cursor: pointer;
 }
+
 .tablemonthcontent tbody tr td {
     outline: 0.5px solid grey;
     vertical-align: top;
     padding: 0;
     opacity: 100%;
-    height: 14.2vh;  
+    height: 14.2vh;
 }
+
 .tablemonthcontent thead tr:first-child {
     outline: 1px solid grey;
 }
+
 .tablemonthcontent tbody tr td:hover {
     background-color: lightskyblue;
 }
-/*Task creation css*/
-.newtask {
-    position: absolute;
-    top: 55vh;
-    left: 1vw;
-    height: 43vh;
-    background-color: white;
-    width: 22vw;
-    border: 1px solid black;
-    text-align: center;
-    z-index: 2;
-}
-.newTaskBackground {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 2;
-}
-.newTaskInput {
-    width: 75%;
-}
-/*Year component css*/
+/////////////////////////////////////////////////////////////// YearComponent.jsx
 .yearcontent {
     width: 75%;
     overflow-y: scroll;
     height: 91.2vh;
 }
+
 .monthflexbox {
     @include displayF(flex, space-evenly);
 }
+
 .yearlytable {
     display: table;
     table-layout: fixed;
     width: 90%;
 }
-/* Task display css*/
-.Taskdiv {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    display: inline-block;
-    margin-left: 6%;
-    z-index: 1;
-    user-select: none;
-    cursor: pointer;
-}
-.taskdetails {
-    position: absolute;
-    top: 55vh;
-    left: 1vw;
-    height: 43vh;
-    background-color: white;
-    width: 22vw;
-    border: 1px solid black;
-    text-align: center;
-    z-index: 2;
-    color: black;
-}
-.taskdetailsbackground {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-}
+
 .monthcounter {
     height: 91.2%;
     width: 100%;
     position: absolute;
     z-index: -1;
-}
-#taskindex {
-    z-index: 1;
-}
-.h3newTask {
-    color: black;
 }
