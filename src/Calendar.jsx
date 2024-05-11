@@ -570,16 +570,6 @@ export function Calendar() {
 }
 export default Calendar
 
-function setCookie(cvalue) {
-
-    // Expiration time is set to one year
-    const dateToChange = new Date();
-    dateToChange.setTime(dateToChange.getTime() + (24 * 60 * 60 * 1000 ));
-    let expire = "expires=" + dateToChange.toDateString();
-    document.cookie = "Name=" + cvalue + "_;_" + expire + ";path=/";
-}
-
-
 function SearchUserInput(props) {
 
     return (

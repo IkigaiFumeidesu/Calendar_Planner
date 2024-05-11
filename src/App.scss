@@ -19,7 +19,7 @@
     border-left: 0.14vh solid $borderColour;
     border-bottom: 0.14vh solid $borderColour;
     cursor: $cursorP;
-    border-top-right-radius: $borderRadius / 2;
+    border-top-right-radius: calc($borderRadius / 2);
 }
 $borderThickness: 0.4vh;
 $borderColour: grey;
@@ -88,12 +88,12 @@ html, body {
     }
 }
 #page-top_ul_liF {
-    border-top-left-radius: $borderRadius / 2;
-    border-bottom-left-radius: $borderRadius / 2;
+    border-top-left-radius: calc($borderRadius / 2);
+    border-bottom-left-radius: calc($borderRadius / 2);
 }
 #page-top_ul_liL {
-    border-top-right-radius: $borderRadius / 2;
-    border-bottom-right-radius: $borderRadius / 2;
+    border-top-right-radius: calc($borderRadius / 2);
+    border-bottom-right-radius: calc($borderRadius / 2);
 }
 // Search input and button
 #page-top_input {
@@ -369,8 +369,8 @@ html, body {
 
     tbody tr td {
         @include paddingT(1vh, 0.32vw);
-        border-left: $borderThickness / 5 solid $borderColour;
-        border-bottom: $borderThickness / 5 solid $borderColour;
+        border-left: calc($borderThickness / 5) solid $borderColour;
+        border-bottom: calc($borderThickness / 5) solid $borderColour;
         content: "";
         height: 3.55vh;
         border-collapse: collapse;
@@ -381,7 +381,7 @@ html, body {
     }
 
     tbody tr td:last-child {
-        border-right: $borderThickness / 5 solid $borderColour;
+        border-right: calc($borderThickness / 5) solid $borderColour;
     }
 
     tbody tr td:hover {
