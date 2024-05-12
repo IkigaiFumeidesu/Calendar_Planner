@@ -24,10 +24,15 @@ If the user tries to create a plan which would overlap with an existing one, the
 
 ## 2. Search algorithm
 If the user types in first 3 letters of any word present either in the title or description of any plan, the algorithm will find it.
+
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/2216c804-dff4-4542-8b60-74e336371440)
+
 These are the results: 
+
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/8b60aa6e-9afb-405e-a2a6-fb2d2545a852)
+
 By clicking on the "display" button, the Calendar will instantly jump to the plan's location and show it to the user:
+
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/c28d6a1d-09eb-45bd-b7e2-02b90fbb7564)
 
 ## 3. Different displays of the Calendar
@@ -42,7 +47,9 @@ So far, year only shows the whole year to the user.
 ## 4. Login
 If the user chooses to, they can login, though since all data is stored locally usin JSON, it is not necessary.
 By clicking on the login symbol pops up this form:
+
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/62707778-bff6-4aa2-8416-4878808316e9)
+
 Upon successfully logging in, the user's name is stored as a cookie and it is used to validate that user is logged in, password is not stored.
 
 ## 5. APIs
