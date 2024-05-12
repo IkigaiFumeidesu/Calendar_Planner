@@ -1,5 +1,5 @@
 # Calendar_Planner
-This is my personal project I've been working on for the past 2 months. Throughout its development I've experienced many new methods and technologies via encountering problems and solving them.
+This is my personal project, which I've been working on for the past 2 months. Throughout its development I've get to know many new methods and technologies via encountering problems and solving them.
 Preview:
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/29e5b2e9-d2ae-46e6-8226-3d14bd4c34e0)
 > To see the image clearly, click on it to display it in fullscreen
@@ -47,7 +47,9 @@ Upon successfully logging in, the user's name is stored as a cookie and it is us
 
 ## 5. APIs
 Currently, Calendar runs 2 APIs. 
+
 First API is used to get the CountryCode of the user. For this it is using this API: (https://ipinfo.io/)
+
 Second API is used to get the public holidays of a country based on the submitted year and CountryCode. This API runs AFTER the first one finished retrieving CountryCode. API: (https://date.nager.at/)
 
 
