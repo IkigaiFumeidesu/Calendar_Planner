@@ -4,6 +4,7 @@ import TaskDetails from './WeekComponents/TaskDetails';
 import AddTask from './AddTask';
 function WeekContent(props) {
 
+    console.log(props.initialPublicHoliday)
     // This state is used to render/not render a component Addtask which also returns the state update so that it can be deconstructed when neccessary
     const [initialAddTask, setNewTask] = useState(false);
     const [getHourAndDay, setHourAndDay] = useState();
@@ -11,18 +12,38 @@ function WeekContent(props) {
     // Setting the content of table
     const daysAndTimeArray = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const calendarTableHeader = daysAndTimeArray.map((day) => { return <td key={day}>{day}</td> });
+    const usedKeys = [props.initialWeek[0].key, props.initialWeek[1].key, props.initialWeek[2].key,
+        props.initialWeek[3].key, props.initialWeek[4].key, props.initialWeek[5].key, props.initialWeek[6].key];
+    console.log(usedKeys)
+    const publicHolidayHeader = [<td key="T">Time</td>];
+    for (let i = 0; i < 7; i++) {
+        publicHolidayHeader.push(<td key={props.initialWeek[i].key + "H" }></td>)
+    }
+    const publicHolidayLength = props.initialPublicHoliday.length;
 
+    if (props.initialPublicHoliday !== "") {
+        for (let i = 0; i < publicHolidayLength; i++) {
+            if (usedKeys.indexOf(props.initialPublicHoliday[i][0]) !== -1) {
+                if (i > 7) {
+                    i -= 7;
+                    publicHolidayHeader[i - 1] = <td key={usedKeys[i - 2] + "H"}>{props.initialPublicHoliday[i][1]}</td>;
+                    i += 7;
+                }
+                console.log(i)
+                console.log(usedKeys.indexOf(props.initialPublicHoliday[i][0]))
+                publicHolidayHeader[i - 1] = <td key={usedKeys[usedKeys.indexOf(props.initialPublicHoliday[i][0])] + "H"}>{props.initialPublicHoliday[i][1]}</td>;
+            }
+        }
+    }
+    console.log(publicHolidayHeader);
     // First element is below Time table header cell and it needs to be empty, hence why the array starts with an empty element
-    const datesOfTheWeek = [<td key={-1}>Time</td>];
+    const datesOfTheWeek = [<td key={-1}></td>];
 
     // Here I want to add the dates in XX.XX format day-month into the head of the table, I use keys of the delivered array to get the dates
     for (let i = 0; i < 7; i++) {
         let contentkeys = props.initialWeek[i].key.split("-");
         datesOfTheWeek.push(<td key={props.initialWeek[i].key}>{contentkeys[2] + "." + contentkeys[1]}</td>);
     }
-
-    const usedKeys = [props.initialWeek[0].key, props.initialWeek[1].key, props.initialWeek[2].key,
-    props.initialWeek[3].key, props.initialWeek[4].key, props.initialWeek[5].key, props.initialWeek[6].key];
     const contentrows = [];
 
     // Here I am creating rows and cells for each day and each hour with special keys
@@ -66,6 +87,7 @@ function WeekContent(props) {
                             {datesOfTheWeek}
                         </tr>
                         <tr id="week-content_header_holiday">
+                            {publicHolidayHeader}
                         </tr>
                     </thead>
                 </table>

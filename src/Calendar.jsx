@@ -1,19 +1,22 @@
-import React, { useRef, useState } from 'react';
-import './App.scss';
+import React, { useRef, useState, useEffect } from 'react';
+import './Calendar.scss';
 import ProfilePicture from './assets/profile-picture.svg';
 import AddTask from './CalendarComponents/AddTask';
 import WeekContent from './CalendarComponents/WeekContent';
 import MonthContent from './CalendarComponents/MonthContent';
 import YearContent from './CalendarComponents/YearContent';
 import LoginComponent from './CalendarComponents/LoginComponent';
+import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
 
 // Top of the page
-export function Calendar() {
+export function Calendar(props) {
 
     // If storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
     localStorage.getItem("TaskDetails") === null && localStorage.setItem("TaskDetails", "");
     localStorage.getItem("Date") === null && localStorage.setItem("Date", "");
     localStorage.getItem("Tasks") === null && localStorage.setItem("Tasks", "");
+
+    const [initialPublicHoliday, setPublicHoliday] = useState("");
 
     const daysOfTheWeekArray = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const monthsOfTheYearArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -468,30 +471,32 @@ export function Calendar() {
         if (displayInitial === "displayweek") {
             return (
                 <>
-                    <WeekContent initialWeek={initialWeek} />
+                    <WeekContent initialWeek={initialWeek} initialPublicHoliday={initialPublicHoliday} />
                 </>
             )
         } else if (displayInitial === "displaymonth") {
             return (
                 <>
                     <MonthContent monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays}
-                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} />
+                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} initialPublicHoliday={initialPublicHoliday}/>
                 </>
             )
         } else {
             return (
                 <>
                     <YearContent daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
-                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />
+                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} initialPublicHoliday={initialPublicHoliday}/>
                 </>
             )
         }
     }
+
     return (
         <>
         {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
         {initialAddTask === true && <AddTask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
-        {userNotLogged === true && <LoginComponent dontDisplayUI={setUserIsLogged} /> }
+        {userNotLogged === true && <LoginComponent dontDisplayUI={setUserIsLogged} />}
+            {props.initialCountry !== "" && <PublicHolidayAPI initialCountry={props.initialCountry} initialYearNumber={initialYearNumber} setPublicHoliday={setPublicHoliday} />}
 
         <div className="page-top">
             
