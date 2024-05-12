@@ -59,6 +59,9 @@ First API is used to get the CountryCode of the user. For this it is using this 
 
 Second API is used to get the public holidays of a country based on the submitted year and CountryCode. This API runs AFTER the first one finished retrieving CountryCode. API: (https://date.nager.at/)
 
+If both API calls are successful, the user can see public holidays displayed in week, example for CountryCode CZ, year 2024: 
+
+![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/4e21919a-b326-4082-8bf6-875ae4d567ad)
 
 
 
