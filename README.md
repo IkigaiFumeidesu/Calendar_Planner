@@ -31,7 +31,7 @@ These are the results:
 
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/8b60aa6e-9afb-405e-a2a6-fb2d2545a852)
 
-By clicking on the "display" button, the Calendar will instantly jump to the plan's location and show it to the user:
+By clicking on the "show me" button, the Calendar will instantly jump to the plan's location and show it to the user:
 
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/c28d6a1d-09eb-45bd-b7e2-02b90fbb7564)
 
