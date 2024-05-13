@@ -2,3 +2,4 @@ node_modules/
 .vs/
 Calendar_Planner.sln
 Calendar_Planner.esproj
+file.js
