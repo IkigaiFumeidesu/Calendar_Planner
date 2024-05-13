@@ -1,5 +1,9 @@
 # Calendar_Planner
 This is my personal project, which I've been working on for the past 2 months. Throughout its development I've get to know many new methods and technologies via encountering problems and solving them.
+
+YT link: 
+(https://youtu.be/nG91dX7rXjE)
+
 Preview:
 ![image](https://github.com/IkigaiFumeidesu/Calendar_Planner/assets/150911217/29e5b2e9-d2ae-46e6-8226-3d14bd4c34e0)
 > To see the image clearly, click on it to display it in fullscreen
