@@ -4,7 +4,6 @@ import TaskDetails from './WeekComponents/TaskDetails';
 import AddTask from './AddTask';
 function WeekContent(props) {
 
-    console.log(props.initialPublicHoliday)
     // This state is used to render/not render a component Addtask which also returns the state update so that it can be deconstructed when neccessary
     const [initialAddTask, setNewTask] = useState(false);
     const [getHourAndDay, setHourAndDay] = useState();
@@ -14,28 +13,22 @@ function WeekContent(props) {
     const calendarTableHeader = daysAndTimeArray.map((day) => { return <td key={day}>{day}</td> });
     const usedKeys = [props.initialWeek[0].key, props.initialWeek[1].key, props.initialWeek[2].key,
         props.initialWeek[3].key, props.initialWeek[4].key, props.initialWeek[5].key, props.initialWeek[6].key];
-    console.log(usedKeys)
+
+    // Header for public holidays
     const publicHolidayHeader = [<td key="T">Time</td>];
     for (let i = 0; i < 7; i++) {
         publicHolidayHeader.push(<td key={props.initialWeek[i].key + "H" }></td>)
     }
+    // Check if public holidays are present in current week, if so, display them
     const publicHolidayLength = props.initialPublicHoliday.length;
-
     if (props.initialPublicHoliday !== "") {
         for (let i = 0; i < publicHolidayLength; i++) {
-            if (usedKeys.indexOf(props.initialPublicHoliday[i][0]) !== -1) {
-                if (i > 7) {
-                    i -= 7;
-                    publicHolidayHeader[i - 1] = <td key={usedKeys[i - 2] + "H"}>{props.initialPublicHoliday[i][1]}</td>;
-                    i += 7;
-                }
-                console.log(i)
-                console.log(usedKeys.indexOf(props.initialPublicHoliday[i][0]))
-                publicHolidayHeader[i - 1] = <td key={usedKeys[usedKeys.indexOf(props.initialPublicHoliday[i][0])] + "H"}>{props.initialPublicHoliday[i][1]}</td>;
+            const indexHoliday = usedKeys.indexOf(props.initialPublicHoliday[i][0]);
+            if (indexHoliday !== -1) {
+                publicHolidayHeader[indexHoliday + 1] = <td key={usedKeys[indexHoliday] + "H"}>{props.initialPublicHoliday[i][1]}</td>;
             }
         }
     }
-    console.log(publicHolidayHeader);
     // First element is below Time table header cell and it needs to be empty, hence why the array starts with an empty element
     const datesOfTheWeek = [<td key={-1}></td>];
 
