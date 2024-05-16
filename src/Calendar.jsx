@@ -547,8 +547,12 @@ export function Calendar(props) {
                         <tr>
                             <th className="calendar-table_month" colSpan="4">{initialMonthName}</th>
                             <th colSpan="1">{initialYearNumber}</th>
-                            <th className="calendar-table_arrow" onClick={changeToPreviousMonth}>&larr;</th>
-                            <th className="calendar-table_arrow" onClick={changeToNextMonth}>&rarr;</th>
+                                <th className="calendar-table_arrow" onClick={() => {
+                                    displayInitial !== "displayyear" ? changeToPreviousMonth() : setYearNumber(initialYearNumber - 1);
+                                }}>&larr;</th>
+                                <th className="calendar-table_arrow" onClick={() => {
+                                    displayInitial !== "displayyear" ? changeToNextMonth() : setYearNumber(initialYearNumber + 1);
+                                }}>&rarr;</th>
                         </tr>
                         <tr>
                             {namesOfTheDays}
