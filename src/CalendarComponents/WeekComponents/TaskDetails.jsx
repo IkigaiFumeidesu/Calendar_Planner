@@ -30,7 +30,7 @@ function TaskDetails(props) {
                     <h3>{props.makeAnotherPlan[0].title}</h3>
                 </div>
                 <div className="task-details_header">
-                    <h4>Time: {props.makeAnotherPlan[0].fromHour + ":00" + " - " + props.makeAnotherPlan[0].toHour + ":00"}</h4>
+                    <h4>Time: {props.makeAnotherPlan[0].fromHour + ":00" + " - " + (props.makeAnotherPlan[0].toHour + 1) + ":00"}</h4>
                 </div>
                 <div className="task-details_description_div">
                     <p>Description:</p>
