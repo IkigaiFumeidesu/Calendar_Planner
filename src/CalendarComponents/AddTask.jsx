@@ -60,8 +60,6 @@ function AddTask(props) {
             // get the index and create and array from date to cover the hours
             const existingTaskArray = JSON.parse(localStorage.getItem("Tasks"));
             const newDateArray = localStorage.getItem("Date").split("_");
-            console.log(existingTaskArray)
-            console.log(newDateArray)
             let taskFromHour;
             let taskToHour;
             let indexFoundDate;
@@ -75,10 +73,6 @@ function AddTask(props) {
                 taskToHour = existingTaskArray[indexFoundDate].toHour;
                 newDateArray.splice(0, indexFoundDate + 1);
                 existingTaskArray.splice(0, indexFoundDate + 1);
-                console.log(indexFoundDate)
-                console.log(taskFromHour)
-                console.log(taskToHour)
-                console.log(newDateArray)
                 /* 
                 Check algorithm for edge cases in case a user tries to create a task with hours set in a contrary to an existing task: 
                 1. Checks if a new task starts out of an existing task BUT ends within it
