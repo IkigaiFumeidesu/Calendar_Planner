@@ -127,21 +127,23 @@ export function Calendar(props) {
     function createDatesPreviousMonth(number) {
         for (let i = 0; i < number; i++) {
             dateUsedAsKey = previousYear + "-" + previousMonth + "-" + previousMonthDates;
-            monthRowsObject.firstRow.push(<td className="calendar-table_previousM" key={dateUsedAsKey} onClick={() => { setDifferentWeek(monthRowsObject.firstRow) }}>{previousMonthDates}</td>);
+            monthRowsObject.firstRow.push(<td className="calendar-table_previousM" key={dateUsedAsKey} onClick={() => {
+                setDifferentWeek(monthRowsObject.firstRow); setDisplayDifferent("displayweek");
+            }}>{previousMonthDates}</td>);
             previousMonthDates++;
         }
     }
     function createDatesThisMonth(from, number, row) {
         for (let i = from; i < number; i++) {
             dateUsedAsKey = initialYearNumber + "-" + currentMonth + "-" + dateCounter;
-            row.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(row) }}>{dateCounter}</td>);
+            row.push(<td key={dateUsedAsKey} onClick={() => { setDifferentWeek(row); setDisplayDifferent("displayweek"); }}>{dateCounter}</td>);
             dateCounter++;
         }
     }
     function createDatesNextMonth(from, number, row) {
         for (let i = from; i < number; i++) {
             dateUsedAsKey = nextYearString + "-" + nextMonth + "-" + dateOfNextMonth;
-            row.push(<td className="calendar-table_nextM" key={dateUsedAsKey} onClick={() => { setDifferentWeek(row); }}>{dateOfNextMonth}</td>);
+            row.push(<td className="calendar-table_nextM" key={dateUsedAsKey} onClick={() => { setDifferentWeek(row);; setDisplayDifferent("displayweek"); }}>{dateOfNextMonth}</td>);
             dateOfNextMonth++;
         }
     }

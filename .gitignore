@@ -3,3 +3,6 @@ node_modules/
 Calendar_Planner.sln
 Calendar_Planner.esproj
 file.js
+obj/
+.vscode/
+calendar_planner.esproj.user
