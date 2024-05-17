@@ -295,7 +295,7 @@ export function Calendar(props) {
         const localTaskDetailsArray = JSON.parse(localStorage.getItem("TaskDetails"));
 
         // Check if the storage has a plan with the given input
-        if (localTaskDetailsArray.join(" ").includes(searchObject.input)) {
+        if (localTaskDetailsArray.join(" ").toLowerCase().includes(searchObject.input.toLowerCase())) {
 
             const localDateArray = localStorage.getItem("Date").split("_");
             let detailIndex;
@@ -309,7 +309,7 @@ export function Calendar(props) {
             for (let i = 0; i !== -1; i++) {
                 // Recursion loop for scanning elements for hits - if includes returns true
                 for (let s = 0; s !== -1;) {
-                    if (localTaskDetailsArray[s].includes(searchObject.input)) {
+                    if (localTaskDetailsArray[s].toLowerCase().includes(searchObject.input.toLowerCase())) {
                         detailIndex = s;
                         s= -1;
                     } else {
@@ -419,12 +419,14 @@ export function Calendar(props) {
                         if (replaceDaterow[replaceDaterowNumber - 1].key.split("-")[2] < 8) {
 
                             // -1 because I subtracted -1 already to get the elements position in the numberOfDaysInMonthArray array, now I need the previous one
-                            endOfMonth = extractedMonth - 1 === 0 ? numberOfDaysInMonthArray[extractedMonth + 11] : numberOfDaysInMonthArray[extractedMonth - 1];
+                            endOfMonth = extractedMonth - 1 === 0 ? numberOfDaysInMonthArray[extractedMonth + 10] : numberOfDaysInMonthArray[extractedMonth];
 
                             // If we're in January, we're at the end of the array, to get Dec, I need to update the number to 12 and subtract 1 from year
                             if (extractedMonth === 1) {
                                 extractedMonth = 12;
                                 extractedYear--;
+                            } else {
+                                extractedMonth -= 1;
                             }
                             // Filling the array of dates from previous month
                             for (let i = replaceDaterowNumber; i < 7; i++) {
