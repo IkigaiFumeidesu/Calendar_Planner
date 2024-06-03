@@ -2,6 +2,7 @@ import React from 'react';
 import deleteTask from './deleteTask';
 function TaskDetails(props) {
 
+    // Getting the FromHour and ToHour from props to display it in the comp
     const HourToAndFrom = props.makeAnotherPlan[0].date.split("-");
     return (
         <>

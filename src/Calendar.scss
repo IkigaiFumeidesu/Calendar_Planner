@@ -1,5 +1,5 @@
 @use "mixin" as *;
-@use "src/CalendarComponents/WeekComponents/taskDetails" as *;
+@use "src/CalendarComponents/WeekComponents/weekComponents" as *;
 @import "_mixin.scss";
 * {
     box-sizing: content-box;
@@ -361,16 +361,6 @@ html, body {
     tbody tr td:hover {
         background-color: $hoverColour;
     }
-}
-/////////////////////////////////////////////////////////////// DisplayAllTasks.jsx component
-.display_all_task_div {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    display: inline-block;
-    z-index: 1;
-    user-select: none;
-    cursor: $cursorP;
 }
 
 /////////////////////////////////////////////////////////////// Addtask.jsx component

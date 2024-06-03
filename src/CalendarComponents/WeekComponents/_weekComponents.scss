@@ -1,5 +1,15 @@
 @use "../../mixin" as *;
 @import "../../_mixin.scss";
+/////////////////////////////////////////////////////////////// DisplayAllTasks.jsx component
+.display_all_task_div {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    display: inline-block;
+    z-index: 1;
+    user-select: none;
+    cursor: $cursorP;
+}
 /////////////////////////////////////////////////////////////// TaskDetails.jsx component
 .task-details_background {
     width: 100%;
