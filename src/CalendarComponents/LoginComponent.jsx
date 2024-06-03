@@ -1,7 +1,7 @@
 import React from 'react';
 import ProfilePicture from '../assets/profile-picture.svg'
 function LoginComponent(props) {
-    function checkUserInput(e) {
+    function checkLoginInput(e) {
 
         // Preventing the form to refresh on submit
         e.preventDefault();
@@ -20,7 +20,12 @@ function LoginComponent(props) {
             alert("Please enter a name");
             return
         }
-
+        function setCookie(name) {
+            const d = new Date();
+            d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = "Name:" + name + ";" + expires + ";path=/";
+        }
         // Here I am setting the cookie and destroying the component 
         setCookie(formJson.name);
         props.dontDisplayUI(false);
@@ -35,7 +40,7 @@ function LoginComponent(props) {
                     <img src={ProfilePicture} className="login-div_profile_pic"></img>
                 </div>
                 <h2>Sign up:</h2>
-                <form method="post" onSubmit={checkUserInput}>
+                <form method="post" onSubmit={checkLoginInput}>
                     <label htmlFor="login-div_username">Name: </label>
                     <input id="login-div_username" name="name" type="text" required maxLength="20" placeholder="..." autoComplete="off" autoFocus></input>
                     <label htmlFor="login-div_password">Password: </label>
@@ -50,10 +55,3 @@ function LoginComponent(props) {
 }
 
 export default LoginComponent;
-
-function setCookie(name) {
-    const d = new Date();
-    d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = "Name:" + name + ";" + expires + ";path=/";
-}
