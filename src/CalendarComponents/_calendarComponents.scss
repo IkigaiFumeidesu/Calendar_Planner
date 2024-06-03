@@ -1,0 +1,299 @@
+@use "../mixin" as *;
+@import "../_mixin.scss";
+
+/////////////////////////////////////////////////////////////// Addtask.jsx component
+.add-task_background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.add-task_div {
+    @include borderD();
+    border-radius: $borderRadius;
+    position: absolute;
+    top: 55vh;
+    left: 1vw;
+    height: 43vh;
+    background-color: white;
+    width: 22vw;
+    text-align: center;
+    z-index: 2;
+    color: black;
+
+    h3 {
+        margin-top: 2vh;
+        margin-bottom: 0;
+        margin-left: 1.5vw;
+    }
+}
+// Cancel button
+.add-task_cancel {
+    @include cancelButton;
+}
+
+.add-task_cancel:hover {
+    background-color: $hoverColour;
+}
+// Title, date, colour, time
+.add-task_context {
+    height: 10vh;
+
+    div {
+        display: flex;
+        margin-top: 0.3vh;
+        margin-bottom: 0.5vh;
+    }
+
+    div div {
+        width: 30%;
+        display: inline-block;
+    }
+}
+
+#add-task_title {
+    width: 40%;
+    border: 0;
+    border-bottom: $borderThickness solid $borderColour;
+}
+
+#add-task_date {
+    width: 40%;
+    cursor: $cursorP;
+}
+// Bottom area, textarea and button
+.add-task_textarea {
+    margin-top: 8vh;
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        @include borderD();
+        @include paddingT(1vh, 2vw);
+        border-radius: $borderRadius;
+        cursor: $cursorP;
+    }
+
+    button:hover {
+        background-color: $hoverColour;
+    }
+}
+// Hour selectors
+#add-task_selects, #add-task_selectss {
+    border: 0;
+    border-bottom: 1px solid black;
+    cursor: $cursorP;
+}
+// The "-" in between the hours
+.add-task_between_selects {
+    display: inline-block;
+    margin: 0 0.66vw;
+}
+// Palette of colours
+.add-task_colours {
+
+    span svg circle {
+        border-radius: 100%;
+        outline: 2px solid transparent;
+    }
+
+    span svg circle:hover {
+        outline: 2px solid black !important;
+        cursor: $cursorP;
+    }
+}
+
+#add-task_circle_blue {
+    outline: 2px solid black;
+}
+
+/////////////////////////////////////////////////////////////// LoginComponent SASS (inside App.jsx)
+.login-div_background {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    opacity: 50%;
+    z-index: 3;
+}
+// Div holding the component
+.login-div {
+    @include borderD();
+    border-radius: $borderRadius;
+    background-color: white;
+    position: absolute;
+    left: 37.5vw;
+    top: 15vh;
+    z-index: 3;
+    width: 25vw;
+    height: 60vh;
+    text-align: center;
+    color: black;
+
+    label {
+        display: block;
+        text-align: left;
+        margin-left: 7vw
+    }
+
+    h2 {
+        margin: 0;
+        margin-bottom: 1vh;
+    }
+}
+// Cancel button
+.login-div_cancel {
+    @include cancelButton();
+}
+
+.login-div_cancel:hover {
+    background-color: $hoverColour;
+}
+// Picture of the user
+.login-div_profile_pic {
+    width: 12vw;
+    height: 25vh;
+    margin: 3vh auto;
+    margin-left: 1.5vw;
+    display: inline-block;
+}
+// 2 inputs, Name and Password
+#login-div_username, #login-div_password {
+    @include borderD();
+    display: block;
+    margin-left: 7vw;
+    border-radius: $borderRadius;
+}
+// Register button
+.login-div-register {
+    @include borderD();
+    @include paddingT(1vh, 1vw);
+    border-radius: $borderRadius;
+    cursor: $cursorP;
+}
+
+.login-div-register:hover {
+    background-color: $hoverColour;
+}
+
+/////////////////////////////////////////////////////////////// MonthComponent.jsx component
+.month-content_div {
+    width: 74.9vw;
+}
+
+.month-content_table {
+    @include displayTab();
+    text-align: center;
+    width: 99.7%;
+    border-left: 0.32vh solid $borderColour;
+    border-bottom: 0.32vh solid $borderColour;
+    border-right: 0.32vh solid $borderColour;
+    border-spacing: 0;
+
+    thead tr td {
+        @include paddingT(1vh, 0);
+    }
+
+    tbody tr td {
+        outline: 0.5px solid grey;
+        vertical-align: top;
+        padding: 0;
+        opacity: 100%;
+        height: 14.3vh;
+        cursor: $cursorP;
+    }
+}
+
+.month-content_table tbody tr td:hover {
+    background-color: $hoverColour;
+}
+/////////////////////////////////////////////////////////////// WeekComponent.jsx SASS
+.week-content {
+    width: 74.9vw;
+}
+// Table function as a header for names of weekdays
+.week-content_header_table {
+    @include displayTab();
+    width: 98.25%;
+    border-left: $borderThickness * 0.8 solid $borderColour;
+    border-right: $borderThickness * 0.8 solid $borderColour;
+    border-bottom: $borderThickness * 0.8 solid $borderColour;
+    text-align: center;
+    border-spacing: 0;
+
+    thead tr td {
+        @include paddingT(1vh, 0.32vw);
+    }
+
+    thead tr td:first-child {
+        width: 4%;
+    }
+
+    thead tr tr td:first-child {
+        width: 4%;
+    }
+}
+
+#week-content_header_holiday {
+    content: "";
+}
+// Div holding the table with plans and cells
+.week-content_cells_div {
+    height: 76.85vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    position: relative;
+}
+// Table with plans and cells
+#week-content_cells_table {
+    text-align: center;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    border-spacing: 0;
+
+    tbody tr td {
+        @include paddingT(1vh, 0.32vw);
+        border-left: calc($borderThickness / 5) solid $borderColour;
+        border-bottom: calc($borderThickness / 5) solid $borderColour;
+        content: "";
+        height: 3.55vh;
+        border-collapse: collapse;
+    }
+
+    tbody tr td:first-child {
+        width: 4%;
+    }
+
+    tbody tr td:last-child {
+        border-right: calc($borderThickness / 5) solid $borderColour;
+    }
+
+    tbody tr td:hover {
+        background-color: $hoverColour;
+    }
+}
+
+/////////////////////////////////////////////////////////////// YearComponent.jsx
+.year-content_table {
+    @include displayTab();
+    width: 90%;
+
+    tbody tr td {
+        @include paddingT(1vh, 0.32vw);
+    }
+}
+
+.year-content_div {
+    width: 75%;
+    overflow-y: scroll;
+    height: 91.2vh;
+}
+// Div containing 3 months to be spaced out
+.year-content-months {
+    @include displayF(flex, space-evenly);
+}
