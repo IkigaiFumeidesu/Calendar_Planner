@@ -1,0 +1,34 @@
+
+@mixin displayF($display, $content) {
+    display: $display;
+    justify-content: $content;
+}
+
+@mixin borderD() {
+    border: $borderThickness solid $borderColour;
+}
+
+@mixin displayTab() {
+    display: table;
+    table-layout: fixed;
+}
+
+@mixin paddingT($Fvalue, $Svalue) {
+    padding: $Fvalue $Svalue;
+}
+
+@mixin cancelButton() {
+    float: right;
+    background-color: white;
+    border: none;
+    border-left: 0.14vh solid $borderColour;
+    border-bottom: 0.14vh solid $borderColour;
+    cursor: $cursorP;
+    border-top-right-radius: calc($borderRadius / 2);
+}
+
+$borderThickness: 0.4vh;
+$borderColour: grey;
+$hoverColour: lightskyblue;
+$borderRadius: 0.7vh;
+$cursorP: pointer;
