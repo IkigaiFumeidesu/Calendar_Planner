@@ -1,15 +1,13 @@
-import { useRef } from "react"
 
 function YearContent(props) {
 
-    // I am setting useRef to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,
-    // refUsedForMonths would get updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.monthsOfTheYearArray array
-    const refUsedForMonths = useRef();
-    refUsedForMonths.current = 0; 
+    // A variable to help me render each month by slowly ugprading its value to 12, but when any other component would get rendered,
+    // this variable gets updated into infinity, thats why I want it to be set to 0 so that I dont go above the bounds of my props.monthsOfTheYearArray array
+    let countMonths = 0;
 
     // I want to get the initial date of the first year so that I can work with it to display the full year
     const startOfTheYear = new Date();
-    startOfTheYear.setFullYear(props.initialYearNumber, refUsedForMonths.current, 1);
+    startOfTheYear.setFullYear(props.initialYearNumber, countMonths, 1);
     const firstDayOfYear = startOfTheYear.getDay();
     let datesPreviousYear;
     let creationOfKey;
@@ -78,19 +76,19 @@ function YearContent(props) {
         }
     }
 
-    // Here I will create all 12 Objects with the same function, inputting different variables as the useRef gets updated
+    // Here I will create all 12 Objects with the same function, inputting different variables as the countMonths gets updated
     const createYearTable = (Month) => {
 
-        const displayMonthName = props.monthsOfTheYearArray[refUsedForMonths.current];
+        const displayMonthName = props.monthsOfTheYearArray[countMonths];
         const displayWholeWeek = props.daysOfTheWeekArray.map((day) => { return <td key={day}>{day}</td> });
 
         // Passing arrays between objects (aka months), condition is to exclude January AND also I want to change the style
         if (Month !== Objects[0]) { 
             // this condition determines if the passed array is the 5th or 6th row
             if (whichrow === true) {
-                passTheRow(Objects[refUsedForMonths.current - 1].fifthRowYear)
+                passTheRow(Objects[countMonths - 1].fifthRowYear)
             } else {
-                passTheRow(Objects[refUsedForMonths.current - 1].sixthRowYear)
+                passTheRow(Objects[countMonths - 1].sixthRowYear)
             }
         }
         function passTheRow(givenRow) {
@@ -99,7 +97,7 @@ function YearContent(props) {
             let datesOfPreviousMonth = (givenRow[0].key).split("-")[2];
             for (let i = 0; i < 7; i++) {
                 // Condition: get me the passed Object's fifthRowYear key and read its month value, then compare it, if its true it belongs to the current month
-                if (Number(givenRow[i].key.split("-")[1]) === refUsedForMonths.current + 1) {
+                if (Number(givenRow[i].key.split("-")[1]) === countMonths + 1) {
                     Month.firstRowYear.push(<td key={givenRow[i].key}>{counter++}</td>);
                 } else {
                     Month.firstRowYear.push(<td key={givenRow[i].key} className="calendar-table_previousM">{datesOfPreviousMonth++}</td>);
@@ -109,8 +107,8 @@ function YearContent(props) {
         }
 
         // Filling objects's array with the dates of the month
-        for (let i = props.numberOfDaysInMonthArray[refUsedForMonths.current]; dateOfThisYear <= i; dateOfThisYear++) {
-            creationOfKey = props.initialYearNumber + "-" + (refUsedForMonths.current + 1) + "-" + dateOfThisYear;
+        for (let i = props.numberOfDaysInMonthArray[countMonths]; dateOfThisYear <= i; dateOfThisYear++) {
+            creationOfKey = props.initialYearNumber + "-" + (countMonths + 1) + "-" + dateOfThisYear;
             Month.rowCreation.push(<td key={creationOfKey}>{dateOfThisYear}</td>);
         }
 
@@ -134,7 +132,7 @@ function YearContent(props) {
         function fillTheRows(numberOfDates, passedArray) {
 
             for (; numberOfDates < 7; numberOfDates++) {
-                creationOfKey = props.initialYearNumber + "-" + (refUsedForMonths.current + 2) + "-" + dateOfNextMonth;
+                creationOfKey = props.initialYearNumber + "-" + (countMonths + 2) + "-" + dateOfNextMonth;
                 passedArray.push(<td className="calendar-table_nextM" key={creationOfKey}>{dateOfNextMonth}</td>);
                 dateOfNextMonth++;
             }
@@ -142,10 +140,10 @@ function YearContent(props) {
 
         // dateOfThisYear gets to the point where its value is more than the number of days in the current month, so before next loop I need to change it 
         // the number I assign it, is the dateOfNextMonth, because dateOfNextMonth is the first number of the second row in the next month to be rendered
-        // then I set the dateOfNextMonth back to 1 and increase refUsedForMonths.current
+        // then I set the dateOfNextMonth back to 1 and increase countMonths
         dateOfThisYear = dateOfNextMonth;
         dateOfNextMonth = 1;
-        refUsedForMonths.current++;
+        countMonths++;
 
         return (
             <>
