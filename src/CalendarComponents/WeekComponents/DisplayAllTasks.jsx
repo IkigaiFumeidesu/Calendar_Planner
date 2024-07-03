@@ -37,7 +37,7 @@ function DisplayAllTasks(props) {
             }
             displayedTasksArray.push(
                 <div key={i} style={taskStyle} onClick={() => {
-                    props.setTaskDetails(true); props.setAnotherPlan([existingTasksArray[i], i,]);
+                    props.setTaskDetails(true); props.setAnotherPlan([existingTasksArray[i], i]);
                 }}>
                     <p>{existingTasksArray[i].title}</p>
                 </div>);
