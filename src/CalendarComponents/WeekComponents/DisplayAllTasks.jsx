@@ -1,6 +1,11 @@
-import React from 'react';
 
 function DisplayAllTasks(props) {
+
+    /*
+        DEV NOTE
+        It would be better to call for API to get the data from Database and then loop through it 
+        The data in database could be split by either weeks / months to make it faster
+    */ 
 
     // Retrieving data from storage to loop through it
     const existingTasksArray = JSON.parse(localStorage.getItem("Tasks"));
@@ -8,11 +13,12 @@ function DisplayAllTasks(props) {
     const displayedTasksArray = [];
     const existingArrayLength = existingDatesArray.length;
     const contentCellObject = props.contentCellSize;
+    const passedArrayKeys = new Set(props.usedKeys);
 
     for (let i = 0; i < existingArrayLength; i++) {
 
         // If this props array has the date value, it will create the task
-        if (props.usedKeys.includes(existingDatesArray[i])) {
+        if (passedArrayKeys.has(existingDatesArray[i])) {
 
             // Find the index of the date in the keys array and display it
             const indexOfDay = props.usedKeys.indexOf(existingDatesArray[i]) + 1;
@@ -46,4 +52,4 @@ function DisplayAllTasks(props) {
         </>
     )
 }
-export default DisplayAllTasks;
+export default DisplayAllTasks
