@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import './Calendar.scss';
 import ProfilePicture from './assets/profile-picture.svg';
 import AddTask from './CalendarComponents/AddTask';
