@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfilePicture from '../assets/profile-picture.svg'
 function LoginComponent(props) {
     function checkLoginInput(e) {
@@ -54,4 +53,4 @@ function LoginComponent(props) {
     )
 }
 
-export default LoginComponent;
+export default LoginComponent
