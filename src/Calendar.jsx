@@ -11,6 +11,19 @@ import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
 // Top of the page
 export function Calendar(props) {
 
+    /*
+        DEV NOTE
+        Which idiot wrote this code ?
+        Tasks:
+        - Remove unnecessary states
+        - Prevent too many API calls
+        - clear it up
+        - export search function into a separate file
+        - export other functions to a separate files as well
+        - pretty sure SearchUserInput shouldnt be a component 
+    */
+
+
     // If storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
     localStorage.getItem("TaskDetails") === null && localStorage.setItem("TaskDetails", "");
     localStorage.getItem("Date") === null && localStorage.setItem("Date", "");

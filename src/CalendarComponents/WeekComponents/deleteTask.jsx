@@ -1,6 +1,11 @@
 
 function deleteTask() {
 
+    /*
+        DEV NOTE
+        It would be better to manipulate data stored in database and not store it in localStorage
+    */
+
     // Removing clicked task by using the index passed in props
     const existingTasksArray = JSON.parse(localStorage.getItem("Tasks"));
     existingTasksArray.splice(props.makeAnotherPlan[1], 1);
@@ -16,4 +21,4 @@ function deleteTask() {
     existingTaskDetailsArray.splice(props.makeAnotherPlan[1] * 2, 2);
     localStorage.setItem("TaskDetails", JSON.stringify(existingTaskDetailsArray));
 }
-export default deleteTask;
+export default deleteTask

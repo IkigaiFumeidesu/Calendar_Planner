@@ -1,6 +1,11 @@
-import React from 'react';
 import deleteTask from './deleteTask';
 function TaskDetails(props) {
+
+    /*
+        DEV NOTE
+        With proper backend this would get better
+        This could also be just a simple UI change instead of a whole component
+    */
 
     // Getting the FromHour and ToHour from props to display it in the comp
     const HourToAndFrom = props.makeAnotherPlan[0].date.split("-");
@@ -22,7 +27,6 @@ function TaskDetails(props) {
                     <p>{props.makeAnotherPlan[0].description}</p>
                 </div>
                 <hr />
-
                 <div className="task-details_bottom">
                     <button className="task-details_buttons" onClick={() => { deleteTask(props.makeAnotherPlan); props.setTaskDetails(false) }}>Delete this task!</button>
                     <button className="task-details_buttons" onClick={() => { props.setTaskDetails(false) }}>Hide the details!</button>
@@ -31,4 +35,4 @@ function TaskDetails(props) {
         </>
     )
 }
-export default TaskDetails;
+export default TaskDetails
