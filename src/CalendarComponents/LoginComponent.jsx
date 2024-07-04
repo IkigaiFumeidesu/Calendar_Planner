@@ -1,5 +1,11 @@
 import ProfilePicture from '../assets/profile-picture.svg'
 function LoginComponent(props) {
+
+    /*
+        DEV NOTE
+        Would be better to also store the cookie in a database and check for it for automatic login
+    */
+
     function checkLoginInput(e) {
 
         // Preventing the form to refresh on submit
@@ -15,19 +21,16 @@ function LoginComponent(props) {
         formJson.name = formJson.name.replace(regex, "");
 
         // This works in 2 ways, first to catch if user gave invalid input, and also if user removed "required" from ´their client side
-        if (formJson.name == "") {
+        if (formJson.name === "") {
             alert("Please enter a name");
             return
-        }
-        function setCookie(name) {
+        } else {
             const d = new Date();
             d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
             let expires = "expires=" + d.toUTCString();
-            document.cookie = "Name:" + name + ";" + expires + ";path=/";
+            document.cookie = "Name:" + formJson.name + ";" + expires + ";path=/";
+            props.dontDisplayUI(false);
         }
-        // Here I am setting the cookie and destroying the component 
-        setCookie(formJson.name);
-        props.dontDisplayUI(false);
     }
 
     return (
