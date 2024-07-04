@@ -10,6 +10,7 @@ import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
 import getInitialWeek from './CalendarComponents/getInitialWeek';
 import changeToPreviousMonth from './CalendarComponents/changeToPreviousMonth';
 import changeToNextMonth from './CalendarComponents/changeToNextMonth';
+import checkIfUserIsLogged from './CalendarComponents/checkIfUserIsLogged';
 
 // Top of the page
 export function Calendar(props) {
@@ -174,16 +175,6 @@ export function Calendar(props) {
 
     // State to decide if Login component should render or not
     const [userNotLogged, setUserIsLogged] = useState(false);
-
-    // If user has already logged in, cookie with the name "name" is present therefore I dont need to log the user again
-    const checkIfUserIsLogged = () => {
-        if (document.cookie.includes("Name")) {
-            alert("You are logged in.");
-            return
-        } else {
-            setUserIsLogged(true);
-        }
-    }
 
     // This is the default setting for the user I want to hold this setting so that it doesnt go back to normal when the site refreshes
     if (localStorage.getItem("Background") === null || localStorage.getItem("Background") === "background=#FDFDFD") {
@@ -495,7 +486,7 @@ export function Calendar(props) {
                         {document.body.style.backgroundColor === "rgb(253, 253, 253)" ? whiteBackground[1] : blackBackground[1]}
                     </svg>
                 </div>
-                <div className="page-top_user_div" onClick={checkIfUserIsLogged}>
+                <div className="page-top_user_div" onClick={() => checkIfUserIsLogged(setUserIsLogged)}>
                     <img src={ProfilePicture} alt="Profile"/>
                 </div>
             </div>
