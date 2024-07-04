@@ -8,6 +8,7 @@ import YearContent from './CalendarComponents/YearContent';
 import LoginComponent from './CalendarComponents/LoginComponent';
 import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
 import getInitialWeek from './CalendarComponents/getInitialWeek';
+import changeToPreviousMonth from './CalendarComponents/changeToPreviousMonth';
 
 // Top of the page
 export function Calendar(props) {
@@ -169,20 +170,6 @@ export function Calendar(props) {
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
     const [displayInitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayInitial);
-
-    // *Below are 2 functions for arrows - 2 onClicks*
-
-    // Change to the previous month and update the element
-    const changeToPreviousMonth = () => {
-        if (initialMonthNumber === 0) {
-            setMonthName(monthsOfTheYearArray[initialMonthNumber + 11]);
-            setMonthNumber(11);
-            setYearNumber(initialYearNumber - 1);
-        } else {
-            setMonthName(monthsOfTheYearArray[initialMonthNumber - 1]);
-            setMonthNumber(initialMonthNumber - 1);
-        }
-    }
 
     // Change to the next month and update the element
     const changeToNextMonth = () => {
@@ -534,10 +521,14 @@ export function Calendar(props) {
                             <th className="calendar-table_month" colSpan="4">{initialMonthName}</th>
                             <th colSpan="1">{initialYearNumber}</th>
                                 <th className="calendar-table_arrow" onClick={() => {
-                                    displayInitial !== "displayyear" ? changeToPreviousMonth() : setYearNumber(initialYearNumber - 1);
+                                    displayInitial !== "displayyear" ?
+                                        changeToPreviousMonth(setMonthName, setMonthNumber, setYearNumber, initialMonthNumber, monthsOfTheYearArray, initialYearNumber) :
+                                        setYearNumber(initialYearNumber - 1);
                                 }}>&larr;</th>
                                 <th className="calendar-table_arrow" onClick={() => {
-                                    displayInitial !== "displayyear" ? changeToNextMonth() : setYearNumber(initialYearNumber + 1);
+                                    displayInitial !== "displayyear" ?
+                                        changeToNextMonth(setMonthName, setMonthNumber, setYearNumber, initialMonthNumber, monthsOfTheYearArray, initialYearNumber) :
+                                        setYearNumber(initialYearNumber + 1);
                                 }}>&rarr;</th>
                         </tr>
                         <tr>
