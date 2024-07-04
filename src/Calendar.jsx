@@ -7,6 +7,7 @@ import MonthContent from './CalendarComponents/MonthContent';
 import YearContent from './CalendarComponents/YearContent';
 import LoginComponent from './CalendarComponents/LoginComponent';
 import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
+import getInitialWeek from './CalendarComponents/getInitialWeek';
 
 // Top of the page
 export function Calendar(props) {
@@ -29,7 +30,7 @@ export function Calendar(props) {
     localStorage.getItem("Date") === null && localStorage.setItem("Date", "");
     localStorage.getItem("Tasks") === null && localStorage.setItem("Tasks", "");
 
-    const [initialPublicHoliday, setPublicHoliday] = useState("");
+    const [initialPublicHoliday, setPublicHoliday] = useState(""); // QQQ
 
     const daysOfTheWeekArray = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const monthsOfTheYearArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -73,7 +74,6 @@ export function Calendar(props) {
     // Preparing to set each key of every date to XXXX-??-?? year-month-date format
     let previousMonth = initialMonthNumber;
     previousMonth === 0 && (previousMonth = 12);
-
     let currentMonth = initialMonthNumber + 1;
 
     // iterator variables
@@ -84,24 +84,26 @@ export function Calendar(props) {
     let dateCounter = 1; 
 
     // JS gives Sunday 0 as its according to JS the start of the week, my week starts with monday so I need to check it 
+
     if (firstDayNumber === 0) {    // Condition if the month starts on Sunday
+
         // Ex. 31 dates are in previous month 31 - 5 is 26 but starting from 26 to 31, there are 6 numbers, thats why i < 6, it starts at 0
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 5;
         createDatesPreviousMonth(6);
-
         // To the 6 dates from previous month, I need to add 1 from the month to be displayed
         createDatesThisMonth(0, 1, monthRowsObject.firstRow)
 
     } else if (firstDayNumber === 1) {    // Condition if the month starts on Monday
+
         // Ex. 31 dates are in previous month 31 - 6 is 25 but starting from 25 to 31, there are 7 numbers, therefore the whole first row 
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - 6;
         createDatesPreviousMonth(7);
 
     } else {    // Solution for the rest of the week
+
         // Ex. 31 dates are in previous month 31 - 4 + 2 = 29, therefore 3 numbers, +2 because I omitted 2 cases, Mo and Su
         previousMonthDates = numberOfDaysInMonthArray[previousMonthNumber] - firstDayNumber + 2;
         createDatesPreviousMonth(firstDayNumber - 1);
-
         // i starts at 0, therefore range from 0 to 8 is 9 numbers, because I added 2 before
         createDatesThisMonth(0, 8 - firstDayNumber, monthRowsObject.firstRow)
     }
@@ -132,7 +134,6 @@ export function Calendar(props) {
 
     // If there is less elements in the 5th array than 7 fill it out with the dates of the next month
     createDatesNextMonth(numberOfDatesFifthRow, 7, monthRowsObject.fifthRow);
-
     // And then fill out whole 6th array with the dates of the next month
     createDatesNextMonth(numberOfDatesSixthRow, 7, monthRowsObject.sixthRow);
 
@@ -161,40 +162,8 @@ export function Calendar(props) {
         }
     }
 
-    // Here I am getting the today's date and finding it in the array of all arrays (rows) so that I can display the week (array) its in
-    const getInitialWeek = () => {
-        const todaysDate = currentDate.getDate();
-
-        // If this condition is met, then I know that the date is in the first 3 rows
-        if (Number(monthRowsObject.thirdRow[6].key.split("-")[2]) >= todaysDate) { 
-            if (Number(monthRowsObject.secondRow[6].key.split("-")[2]) < todaysDate) { 
-                return monthRowsObject.thirdRow;
-
-            } else if (Number(monthRowsObject.firstRow[0].key.split("-")[2]) < Number(monthRowsObject.firstRow[6].key.split("-")[2]) ||
-                Number(monthRowsObject.secondRow[0].key.split("-")[2]) <= todaysDate) {
-
-                return monthRowsObject.secondRow;
-            } else {
-                return monthRowsObject.firstRow;
-            }
-        } else {
-            if (Number(monthRowsObject.fifthRow[0].key.split("-")[2]) > todaysDate) { 
-                return monthRowsObject.fourthRow;
-
-            } else if (Number(monthRowsObject.sixthRow[0].key.split("-")[2]) < Number(monthRowsObject.sixthRow[6].key.split("-")[2]) ||
-                Number(monthRowsObject.fifthRow[6].key.split("-")[2]) >= todaysDate) {
-
-                // Here is the logic: if the first element in the row is LOWER than the last one, it means the month has ended on the previous one 
-                // If it wouldnt have ended, the first element will belong to the current month and therefore will be bigger 
-                return monthRowsObject.fifthRow;
-            } else {
-                return monthRowsObject.sixthRow;
-            }
-        }
-    }
-
     // Using the second State to preserve the initialWeek even if it gets updated, so that the user can back to it
-    const [initialWeek, setDifferentWeek] = useState(getInitialWeek);
+    const [initialWeek, setDifferentWeek] = useState(getInitialWeek(currentDate,monthRowsObject));
     const [preserveInitial, setDontUse] = useState(initialWeek);
 
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
@@ -495,14 +464,14 @@ export function Calendar(props) {
             return (
                 <>
                     <MonthContent monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays}
-                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} initialPublicHoliday={initialPublicHoliday}/>
+                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek}/>
                 </>
             )
         } else {
             return (
                 <>
                     <YearContent daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
-                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} initialPublicHoliday={initialPublicHoliday}/>
+                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber}/>
                 </>
             )
         }
