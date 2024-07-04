@@ -513,7 +513,7 @@ export function Calendar(props) {
         {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
         {initialAddTask === true && <AddTask setNewTask={setNewTask} getHourAndDay={getHourAndDay} />}
         {userNotLogged === true && <LoginComponent dontDisplayUI={setUserIsLogged} />}
-            {props.initialCountry !== "" && <PublicHolidayAPI initialCountry={props.initialCountry} initialYearNumber={initialYearNumber} setPublicHoliday={setPublicHoliday} />}
+        {props.initialCountry !== "" && <PublicHolidayAPI initialCountry={props.initialCountry} initialYearNumber={initialYearNumber} setPublicHoliday={setPublicHoliday} />}
 
         <div className="page-top">
             
