@@ -11,6 +11,7 @@ import getInitialWeek from './CalendarComponents/getInitialWeek';
 import changeToPreviousMonth from './CalendarComponents/changeToPreviousMonth';
 import changeToNextMonth from './CalendarComponents/changeToNextMonth';
 import checkIfUserIsLogged from './CalendarComponents/checkIfUserIsLogged';
+import changeBackground from './CalendarComponents/changeBackground';
 
 // Top of the page
 export function Calendar(props) {
@@ -187,22 +188,6 @@ export function Calendar(props) {
         localStorage.setItem("Background", "background=#181818");
     }
 
-    // this just changes the background from white to black 
-    const changeBackground = () => {
-        if (document.body.style.backgroundColor === "rgb(253, 253, 253)") {
-            document.body.style.backgroundColor = "#181818";
-            document.body.style.color = "#FDFDFD";
-            localStorage.setItem("Background", "background=#181818");
-            setBackground("B");
-
-        } else {
-            document.body.style.backgroundColor = "#FDFDFD";
-            document.body.style.color = "#181818";
-            localStorage.setItem("Background", "background=#FDFDFD");
-            setBackground("W");
-
-        }
-    }
     const [initialBackground, setBackground] = useState("");
     const whiteBackground = [<circle cx="40" cy="20" r="10" stroke="black" strokeWidth="3" fill="black">Can't Load SVG</circle>,
         <circle cx="0" cy="20" r="10" stroke="black" strokeWidth="3" fill="white">Can't Load SVG</circle>];
@@ -478,7 +463,7 @@ export function Calendar(props) {
 
             {/*Icon for a change between white / black background line 249*/}
             <div className="page-top_svg_div">
-                <div onClick={changeBackground}>
+                <div onClick={() => changeBackground(setBackground)}>
                     <svg>
                         {document.body.style.backgroundColor === "rgb(253, 253, 253)" ? whiteBackground[0] : blackBackground[0]}
                     </svg>
