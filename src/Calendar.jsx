@@ -9,6 +9,7 @@ import LoginComponent from './CalendarComponents/LoginComponent';
 import PublicHolidayAPI from './CalendarComponents/PublicHolidayAPI';
 import getInitialWeek from './CalendarComponents/getInitialWeek';
 import changeToPreviousMonth from './CalendarComponents/changeToPreviousMonth';
+import changeToNextMonth from './CalendarComponents/changeToNextMonth';
 
 // Top of the page
 export function Calendar(props) {
@@ -170,18 +171,6 @@ export function Calendar(props) {
     // These are states which I use to display the week as initial and then to change the body depending on what the user wants to display
     const [displayInitial, setDisplayDifferent] = useState("displayweek");
     const [preservedisplay, setDisplayback] = useState(displayInitial);
-
-    // Change to the next month and update the element
-    const changeToNextMonth = () => {
-        if (initialMonthNumber === 11) {
-            setMonthName(monthsOfTheYearArray[initialMonthNumber - 11]);
-            setMonthNumber(0);
-            setYearNumber(initialYearNumber + 1);
-        } else {
-            setMonthName(monthsOfTheYearArray[initialMonthNumber + 1]);
-            setMonthNumber(initialMonthNumber + 1);
-        }
-    }
 
     // State to decide if Login component should render or not
     const [userNotLogged, setUserIsLogged] = useState(false);
