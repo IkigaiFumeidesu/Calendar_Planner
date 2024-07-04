@@ -15,7 +15,6 @@ import changeBackground from './CalendarComponents/changeBackground';
 import searchAlgorithm from './CalendarComponents/searchAlgorithm';
 import SearchUserInput from './CalendarComponents/SearchUserInput';
 
-// Top of the page
 export function Calendar(props) {
 
     // If storage exists, leave it be, if not change null to empty string, otherwise searchAlgorithm function will produce an error running .include() on null 
@@ -23,7 +22,7 @@ export function Calendar(props) {
     localStorage.getItem("Date") === null && localStorage.setItem("Date", "");
     localStorage.getItem("Tasks") === null && localStorage.setItem("Tasks", "");
 
-    const [initialPublicHoliday, setPublicHoliday] = useState(""); // QQQ
+    const [initialPublicHoliday, setPublicHoliday] = useState("");
 
     const daysOfTheWeekArray = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
     const monthsOfTheYearArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -193,30 +192,6 @@ export function Calendar(props) {
     // useRef to hold the corresponding values for each task
     const searchResult = useRef();
 
-    function displayUI() {
-        if (displayInitial === "displayweek") {
-            return (
-                <>
-                    <WeekContent initialWeek={initialWeek} initialPublicHoliday={initialPublicHoliday} />
-                </>
-            )
-        } else if (displayInitial === "displaymonth") {
-            return (
-                <>
-                    <MonthContent monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays}
-                        setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek}/>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <YearContent daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray}
-                        numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber}/>
-                </>
-            )
-        }
-    }
-
     return (
         <>
         {initialSearch === true && <SearchUserInput setSearch={setSearch} searchResult={searchResult.current} />}
@@ -305,7 +280,9 @@ export function Calendar(props) {
                     <button className="create-switch_button">Other Overlays</button>
                 </div>
             </div>
-                {displayUI()}
+            {displayInitial === "displayweek" && <WeekContent initialWeek={initialWeek} initialPublicHoliday={initialPublicHoliday} />}
+            {displayInitial === "displaymonth" && <MonthContent monthRowsObject={monthRowsObject} namesOfTheDays={namesOfTheDays} setDisplayDifferent={setDisplayDifferent} setDifferentWeek={setDifferentWeek} />}
+            {displayInitial === "displayyear" && <YearContent daysOfTheWeekArray={daysOfTheWeekArray} monthsOfTheYearArray={monthsOfTheYearArray} numberOfDaysInMonthArray={numberOfDaysInMonthArray} initialYearNumber={initialYearNumber} />}
         </div>
         </>
     )
